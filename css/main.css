@@ -1,0 +1,56 @@
+body {
+    background-color: #19364A;
+    color: #FFFFFF;
+    margin: auto;
+    width: 80%;
+}
+
+p {
+    font-family: 'Open Sans Condensed', sans-serif;
+}
+
+h1 {
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    color: #FFC701;
+    text-align: center;
+    font-size: 32px;
+}
+
+h2 {
+    color: #FFC701;
+    font-family: 'Oswald', sans-serif;
+    text-align: center;
+}
+
+/* Not implemented */
+.personal a:hover {
+    color: #FFC701;
+}
+
+#logoLeft {
+    float: left;
+    width: 50px;
+}
+
+#logoRight {
+    float: right;
+    width: 50px;
+    display: inline-block;
+}
+
+.font-white {
+    color: #FFFFFF;
+    font-family: 'Open Sans Condensed', sans-serif;
+}
+
+.personal {
+    text-align: center;
+}
+
+.personal a {
+    color: #FFFFFF;
+    text-decoration: none;
+    -webkit-transition: .3s all ease-out;
+    -moz-transition: .3s all ease-out;
+    transition: .3s all ease-out;
+}
