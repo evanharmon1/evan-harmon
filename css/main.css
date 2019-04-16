@@ -7,19 +7,24 @@ body {
 
 p {
     font-family: 'Open Sans Condensed', sans-serif;
+    color: black;
+    font-size: 13px;
+    margin-bottom: 12px;
 }
 
 h1 {
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     color: #FFC701;
     text-align: center;
-    font-size: 32px;
+    font-size: 40px;
+    margin-bottom: 25px;
 }
 
 h2 {
     color: #FFC701;
     font-family: 'Oswald', sans-serif;
     text-align: center;
+    font-size: 22px;
 }
 
 /* Not implemented */
@@ -30,17 +35,39 @@ h2 {
 #logoLeft {
     float: left;
     width: 50px;
+    margin-top: 5px;
 }
 
 #logoRight {
     float: right;
     width: 50px;
-    display: inline-block;
+    margin-top: 5px;
+}
+
+#bracesLeft {
+    float: left;
+}
+
+#bracesRight {
+    float: right;
 }
 
 .font-white {
     color: #FFFFFF;
     font-family: 'Open Sans Condensed', sans-serif;
+}
+
+.font-black {
+    color: black;
+    font-family: 'Open Sans Condensed', sans-serif;
+    font-weight: 600;
+    transition: .3s all ease-out;
+    margin: auto;   
+}
+
+.font-black:hover {
+    color: white;
+    text-decoration: none;
 }
 
 .personal {
@@ -53,4 +80,65 @@ h2 {
     -webkit-transition: .3s all ease-out;
     -moz-transition: .3s all ease-out;
     transition: .3s all ease-out;
+}
+
+span {
+    display: inline-block;
+}
+
+.card-header {
+    background-color: #19364A;
+    color: #FFFFFF;
+    border: none;
+}
+
+/* #accordion {
+    background-color: #19364A;
+    color: #FFFFFF;
+} */
+
+/* Where the pixel bug is I think */
+.card {
+    border: none;
+}
+
+h3 {
+    border: none;
+    padding: 0px;
+}
+
+.card-body {
+    color: #FFFFFF;
+    text-decoration: none;
+    background-color: #FFC701;
+    margin: 0px;
+    padding: 8px;
+    border-radius: 12px;
+}
+
+.btn-link:hover {
+    color: #FFC701;
+    text-decoration: none;
+}
+
+.btn-link {
+    border: none;
+    color: white;
+    text-decoration: none;
+}
+
+.bigger {
+    font-size: 1.5em;
+}
+
+li {
+    display: inline;
+    color: black;
+    font-family: 'Open Sans Condensed', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+ul {
+    margin-right: 25px;
 }
