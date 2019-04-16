@@ -113,6 +113,8 @@ h3 {
     background-color: #FFC701;
     margin: 0px;
     padding: 8px;
+    padding-left: 15px;
+    padding-right: 15px;
     border-radius: 12px;
 }
 
