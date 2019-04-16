@@ -3,6 +3,7 @@ body {
     color: #FFFFFF;
     margin: auto;
     width: 80%;
+    max-width: 1100px;
 }
 
 p {
