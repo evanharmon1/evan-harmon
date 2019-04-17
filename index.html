@@ -11,27 +11,41 @@
     <title>Evan Harmon</title>
 </head>
 
-<body>
-    <div class="container mt-3 mb-3 content">
+<body class="content">
+
+        <header>
+                <div class="header-content">
+                    <a href="https://github.com/evanharmon1" target="_blank">GitHub</a><span>&nbsp | &nbsp</span>
+                    <a href="https://www.linkedin.com/in/evanharmon1/" target="_blank">LinkedIn</a><span>&nbsp | &nbsp</span>
+                    <a href="https://www.linkedin.com/in/evanharmon1/" target="_blank">Resume</a><span>&nbsp | &nbsp</span>
+                    <a href="mailto:evanharmon1@gmail.com">Email</a>
+                </div>
+            </header>
+    <main>
+
+    <div >
+
+
+
     <div id="title">
-        <img src="img/logo_white.png" alt="logo" id="logoLeft">
-        <img src="img/logo_white.png" alt="logo" id="logoRight">
+        <!-- <img src="img/logo_white.png" alt="logo" id="logoLeft">
+        <img src="img/logo_white.png" alt="logo" id="logoRight"> -->
         <h1>EVAN HARMON</h1>
     </div>
+    <p id="tagline">Recent graduate of LaunchCode's LC101 webdev program looking for an entry-level backend, Java, Python, JavaScript, or DevOps position</p>
     <div id="accordion-outer">
     
-    <div><h2><button class="btn btn-link" type="button" data-toggle="collapse" data-target="#accordion" aria-expanded="true" aria-controls="accordion"><span class="font-white h2-glyph">⟐&nbsp&nbsp</span><span class="h2-title"> Technical Projects</span><span class="font-white h2-glyph">&nbsp&nbsp⟐</span></h2></button></div>
-    
-    <div class="accordion mb-3 collapse" id="accordion">
+    <div class="nowrap"><h2><button class="btn btn-link" type="button" data-toggle="collapse" data-target="#accordionOne" aria-expanded="true" aria-controls="accordionOne"><span class="font-white h2-glyph">⟐&nbsp&nbsp</span><span class="h2-title"> Technical Projects</span><span class="font-white h2-glyph">&nbsp&nbsp⟐</span></h2></button></div>  
+    <div class="accordion mb-3 collapse" id="accordionOne">
 
         <div class="card-header" id="headingOne">
             <h3 class="mb-0 text-center">
-                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" style="padding: 0px;">
+                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne" style="padding: 0px;">
                     <span class="font-white bigger">⇲&nbsp</span>NeighborShare Web App
                 </button>
             </h3>
         </div>
-        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionOne">
             <div class="card-body">
                 <div class="row">
                     <a class="col text-center font-black" href="https://www.neighbor-share.org" target="_blank"><span class="bigger" style="color: black">⦨ </span> Website</a>
@@ -62,7 +76,7 @@
                 </button>
             </h3>
         </div>
-        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionOne">
             <div class="card-body">
                 <div class="row">
                     <a class="col text-center font-black" href="https://launchcode-blogz.ddns.net/" target="_blank"><span class="bigger" style="color: black">⦨ </span> Website</a>
@@ -87,7 +101,7 @@
                 </button>
             </h3>
         </div>
-        <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+        <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionOne">
             <div class="card-body">
                 <div class="row">
                     <a class="col text-center font-black" href="https://heroku-cheese-jar.herokuapp.com/cheese" target="_blank"><span class="bigger" style="color: black">⦨ </span> Website</a>
@@ -114,7 +128,7 @@
                 </button>
             </h3>
         </div>
-        <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
+        <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordionOne">
             <div class="card-body">
                 <div class="row">
                     <a class="col text-center font-black" href="http://www.onthebaytours.com/" target="_blank"><span class="bigger" style="color: black">⦨ </span> Website</a>
@@ -127,16 +141,196 @@
     </div>
     </div>
 
+<!-- Accordion 2 -->
+    <!-- <div class="nowrap"><h2><button class="btn btn-link" type="button" data-toggle="collapse" data-target="#accordionTwo" aria-expanded="true" aria-controls="accordionTwo"><span class="font-white h2-glyph">⟐&nbsp&nbsp</span><span class="h2-title"> Contributor</span><span class="font-white h2-glyph">&nbsp&nbsp⟐</span></h2></button></div>
+    <div class="accordion mb-3 collapse" id="accordionTwo">
+
+            <div class="card-header" id="headingBOne">
+                <h3 class="mb-0 text-center">
+                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseBOne" href="#collapseBOne" aria-expanded="true" aria-controls="collapseBOne" style="padding: 0px;">
+                        <span class="font-white bigger">⇲&nbsp</span>NeighborShare Web App
+                    </button>
+                </h3>
+            </div>
+            <div id="collapseBOne" class="collapse" aria-labelledby="headingBOne" data-parent="#accordionTwo">
+                <div class="card-body">
+                    <div class="row">
+                        <a class="col text-center font-black" href="https://www.neighbor-share.org" target="_blank"><span class="bigger" style="color: black">⦨ </span> Website</a>
+                        <a class="col text-center font-black" href="https://github.com/evanharmon1/neighbor-share" target="_blank"><span style="color: black">{} </span> Code</a>
+                    </div>
+                    <p>Multi-user web app for sharing household items with neighbors, friends, and family including an email notification service and user-uploaded item images via AWS S3 API. Contact me for a demo user account to try it out.</p>
+                    <p>Deployed on an Ubuntu 18.04 Digital Ocean VM with a LAMP stack, Apache reverse proxy, secure phpMyAdmin installation, and TLS/SSL certificate for HTTPS.</p>
+                    <ul>
+                        <li>♦︎ Java &nbsp;</li>
+                        <li>♦︎ Spring Boot &nbsp;</li>
+                        <li>♦︎ Spring Data/JPA/Hibernate &nbsp;</li>
+                        <li>♦︎ MySQL &nbsp;</li>
+                        <li>♦︎ Thymeleaf &nbsp;</li>
+                        <li>♦︎ Bootstrap &nbsp;</li>
+                        <li>♦︎ Spring Security &nbsp;</li>
+                        <li>♦︎ Spring Boot Mail &nbsp;</li>
+                        <li>♦︎ Maven &nbsp;</li>
+                        <li>♦︎ MVC &nbsp;</li>
+                        <li>♦︎ OOP &nbsp;</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card-header" id="headingBTwo">
+                    <h3 class="mb-0 text-center">
+                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseBTwo" href="#collapseBTwo" aria-expanded="true" aria-controls="collapseBTwo" style="padding: 0px;">
+                            <span class="font-white bigger">⇲&nbsp</span>NeighborShare Web App
+                        </button>
+                    </h3>
+                </div>
+                <div id="collapseBTwo" class="collapse" aria-labelledby="headingBTwo" data-parent="#accordionTwo">
+                    <div class="card-body">
+                        <div class="row">
+                            <a class="col text-center font-black" href="https://www.neighbor-share.org" target="_blank"><span class="bigger" style="color: black">⦨ </span> Website</a>
+                            <a class="col text-center font-black" href="https://github.com/evanharmon1/neighbor-share" target="_blank"><span style="color: black">{} </span> Code</a>
+                        </div>
+                        <p>Multi-user web app for sharing household items with neighbors, friends, and family including an email notification service and user-uploaded item images via AWS S3 API. Contact me for a demo user account to try it out.</p>
+                        <p>Deployed on an Ubuntu 18.04 Digital Ocean VM with a LAMP stack, Apache reverse proxy, secure phpMyAdmin installation, and TLS/SSL certificate for HTTPS.</p>
+                        <ul>
+                            <li>♦︎ Java &nbsp;</li>
+                            <li>♦︎ Spring Boot &nbsp;</li>
+                            <li>♦︎ Spring Data/JPA/Hibernate &nbsp;</li>
+                            <li>♦︎ MySQL &nbsp;</li>
+                            <li>♦︎ Thymeleaf &nbsp;</li>
+                            <li>♦︎ Bootstrap &nbsp;</li>
+                            <li>♦︎ Spring Security &nbsp;</li>
+                            <li>♦︎ Spring Boot Mail &nbsp;</li>
+                            <li>♦︎ Maven &nbsp;</li>
+                            <li>♦︎ MVC &nbsp;</li>
+                            <li>♦︎ OOP &nbsp;</li>
+                        </ul>
+                    </div>
+                </div>
+
+        </div> -->
+
+        <div class="nowrap"><h2><button class="btn btn-link" type="button" data-toggle="collapse" data-target="#accordionThree" aria-expanded="true" aria-controls="accordionThree"><span class="font-white h2-glyph">⟐&nbsp&nbsp</span><span class="h2-title"> Volunteering</span><span class="font-white h2-glyph">&nbsp&nbsp⟐</span></h2></button></div>
+
+        <div class="accordion mb-3 collapse" id="accordionThree">
+
+                <div class="card-header" id="headingCOne">
+                    <h3 class="mb-0 text-center">
+                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseCOne" href="#collapseCOne" aria-expanded="true" aria-controls="collapseCOne" style="padding: 0px;">
+                            <span class="font-white bigger">⇲&nbsp</span>Tech Coach/Mentor
+                        </button>
+                    </h3>
+                </div>
+                <div id="collapseCOne" class="collapse" aria-labelledby="headingCOne" data-parent="#accordionThree">
+                    <div class="card-body">
+                        <span class="text-center col">
+                            <a class="font-black big" href="https://www.kclibrary.org/launchcode-discovery-mentors" target="_blank">LaunchCode Discovery</a>
+                        </span>
+                        <p>I volunteer as a tech coach and mentor for a partnership between the Kansas City Public Library and the LaunchCode Discovery program that aims to reduce the digital divide by providing free access to educational resources and tech mentors for anyone interested in learning to code.</p>
+                    </div>
+                </div>
+        
+                <div class="card-header" id="headingCTwo">
+                        <h3 class="mb-0 text-center">
+                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseCTwo" href="#collapseCTwo" aria-expanded="true" aria-controls="collapseCTwo" style="padding: 0px;">
+                                <span class="font-white bigger">⇲&nbsp</span>Contributor
+                            </button>
+                        </h3>
+                    </div>
+                    <div id="collapseCTwo" class="collapse" aria-labelledby="headingCTwo" data-parent="#accordionThree">
+                            <div class="card-body">
+                                <span class="text-center col">
+                                    <a class="font-black big" href="https://codeforkc.org/" target="_blank">Code for KC</a>
+                                </span>
+                                <p>I volunteer my tech skills to Code for KC which is the local chapter of Code for America. We're a group of civic-minded geeks who volunteer our talents to projects that improve how our local governments and community organizations use the web. We strive for principles of open data and technology advocacy for civic good and are supported by our host organization, <a class="font-black" href="https://www.kcdigitaldrive.org/" target="_blank">KC Digital Drive</a>. The Brigade is about action, so join us at a Hack Night where we’ll commit code to make a difference in our city!</p>
+                            </div>
+                        </div>
+        
+            </div>
+
+            <!-- Accordion 4 -->
+            <!-- <div class="nowrap"><h2><button class="btn btn-link" type="button" data-toggle="collapse" data-target="#accordionFour" aria-expanded="true" aria-controls="accordionFour"><span class="font-white h2-glyph">⟐&nbsp&nbsp</span><span class="h2-title"> Skills</span><span class="font-white h2-glyph">&nbsp&nbsp⟐</span></h2></button></div>
+    <div class="accordion mb-3 collapse" id="accordionFour">
+
+        <div class="card-header" id="headingDOne">
+            <h3 class="mb-0 text-center">
+                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseDOne" href="#collapseDOne" aria-expanded="true" aria-controls="collapseDOne" style="padding: 0px;">
+                    <span class="font-white bigger">⇲&nbsp</span>NeighborShare Web App
+                </button>
+            </h3>
+        </div>
+
+        <div id="collapseDOne" class="collapse" aria-labelledby="headingDOne" data-parent="#accordionFour">
+            <div class="card-body">
+                <div class="row">
+                    <a class="col text-center font-black" href="https://www.neighbor-share.org" target="_blank"><span class="bigger" style="color: black">⦨ </span> Website</a>
+                    <a class="col text-center font-black" href="https://github.com/evanharmon1/neighbor-share" target="_blank"><span style="color: black">{} </span> Code</a>
+                </div>
+                <p>Multi-user web app for sharing household items with neighbors, friends, and family including an email notification service and user-uploaded item images via AWS S3 API. Contact me for a demo user account to try it out.</p>
+                <p>Deployed on an Ubuntu 18.04 Digital Ocean VM with a LAMP stack, Apache reverse proxy, secure phpMyAdmin installation, and TLS/SSL certificate for HTTPS.</p>
+                <ul>
+                    <li>♦︎ Java &nbsp;</li>
+                    <li>♦︎ Spring Boot &nbsp;</li>
+                    <li>♦︎ Spring Data/JPA/Hibernate &nbsp;</li>
+                    <li>♦︎ MySQL &nbsp;</li>
+                    <li>♦︎ Thymeleaf &nbsp;</li>
+                    <li>♦︎ Bootstrap &nbsp;</li>
+                    <li>♦︎ Spring Security &nbsp;</li>
+                    <li>♦︎ Spring Boot Mail &nbsp;</li>
+                    <li>♦︎ Maven &nbsp;</li>
+                    <li>♦︎ MVC &nbsp;</li>
+                    <li>♦︎ OOP &nbsp;</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card-header" id="headingDTwo">
+                <h3 class="mb-0 text-center">
+                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseDTwo" href="#collapseDTwo" aria-expanded="true" aria-controls="collapseDTwo" style="padding: 0px;">
+                        <span class="font-white bigger">⇲&nbsp</span>NeighborShare Web App
+                    </button>
+                </h3>
+            </div>
+    
+            <div id="collapseDTwo" class="collapse" aria-labelledby="headingDTwo" data-parent="#accordionFour">
+                <div class="card-body">
+                    <div class="row">
+                        <a class="col text-center font-black" href="https://www.neighbor-share.org" target="_blank"><span class="bigger" style="color: black">⦨ </span> Website</a>
+                        <a class="col text-center font-black" href="https://github.com/evanharmon1/neighbor-share" target="_blank"><span style="color: black">{} </span> Code</a>
+                    </div>
+                    <p>Multi-user web app for sharing household items with neighbors, friends, and family including an email notification service and user-uploaded item images via AWS S3 API. Contact me for a demo user account to try it out.</p>
+                    <p>Deployed on an Ubuntu 18.04 Digital Ocean VM with a LAMP stack, Apache reverse proxy, secure phpMyAdmin installation, and TLS/SSL certificate for HTTPS.</p>
+                    <ul>
+                        <li>♦︎ Java &nbsp;</li>
+                        <li>♦︎ Spring Boot &nbsp;</li>
+                        <li>♦︎ Spring Data/JPA/Hibernate &nbsp;</li>
+                        <li>♦︎ MySQL &nbsp;</li>
+                        <li>♦︎ Thymeleaf &nbsp;</li>
+                        <li>♦︎ Bootstrap &nbsp;</li>
+                        <li>♦︎ Spring Security &nbsp;</li>
+                        <li>♦︎ Spring Boot Mail &nbsp;</li>
+                        <li>♦︎ Maven &nbsp;</li>
+                        <li>♦︎ MVC &nbsp;</li>
+                        <li>♦︎ OOP &nbsp;</li>
+                    </ul>
+                </div>
+            </div>
+
+    </div> -->
+
 
 
     </div>
-    <footer class="footer">
+
+
+    </main>
+        <!-- <footer class="footer">
         <div class="personal">
             <a href="https://github.com/evanharmon1" class="font-white personal" target="_blank">GitHub</a><span>&nbsp | &nbsp</span>
             <a href="https://www.linkedin.com/in/evanharmon1/" class="font-white personal" target="_blank">LinkedIn</a><span>&nbsp | &nbsp</span>
+            <a href="https://www.linkedin.com/in/evanharmon1/" class="font-white personal" target="_blank">Resume</a><span>&nbsp | &nbsp</span>
             <a href="mailto:evanharmon1@gmail.com" class="font-white personal">Email</a>
         </div>
-    </footer>
+    </footer> -->
 
     <!-- Bootstrap -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
