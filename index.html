@@ -12,15 +12,17 @@
 </head>
 
 <body>
-    <div class="container mt-3 mb-3">
+    <div class="container mt-3 mb-3 content">
     <div id="title">
         <img src="img/logo_white.png" alt="logo" id="logoLeft">
         <img src="img/logo_white.png" alt="logo" id="logoRight">
         <h1>EVAN HARMON</h1>
     </div>
-    <div><h2><span class="font-white">⟐&nbsp&nbsp</span>Technical Projects<span class="font-white">&nbsp&nbsp⟐</span></h2></div>
+    <div id="accordion-outer">
     
-    <div class="accordion mb-3" id="accordion">
+    <div><h2><button class="btn btn-link" type="button" data-toggle="collapse" data-target="#accordion" aria-expanded="true" aria-controls="accordion"><span class="font-white h2-glyph">⟐&nbsp&nbsp</span><span class="h2-title"> Technical Projects</span><span class="font-white h2-glyph">&nbsp&nbsp⟐</span></h2></button></div>
+    
+    <div class="accordion mb-3 collapse" id="accordion">
 
         <div class="card-header" id="headingOne">
             <h3 class="mb-0 text-center">
@@ -123,15 +125,18 @@
         </div>
 
     </div>
+    </div>
 
 
-    <h2><span class="font-white">⟐&nbsp&nbsp</span> Personal <span class="font-white">&nbsp&nbsp⟐</span></h2>
-    <div class="personal">
-        <a href="https://github.com/evanharmon1" class="font-white personal" target="_blank">GitHub</a><span>&nbsp | &nbsp</span>
-        <a href="https://www.linkedin.com/in/evanharmon1/" class="font-white personal" target="_blank">LinkedIn</a><span>&nbsp | &nbsp</span>
-        <a href="mailto:evanharmon1@gmail.com" class="font-white personal">Email</a>
+
     </div>
-    </div>
+    <footer class="footer">
+        <div class="personal">
+            <a href="https://github.com/evanharmon1" class="font-white personal" target="_blank">GitHub</a><span>&nbsp | &nbsp</span>
+            <a href="https://www.linkedin.com/in/evanharmon1/" class="font-white personal" target="_blank">LinkedIn</a><span>&nbsp | &nbsp</span>
+            <a href="mailto:evanharmon1@gmail.com" class="font-white personal">Email</a>
+        </div>
+    </footer>
 
     <!-- Bootstrap -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
