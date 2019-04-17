@@ -6,6 +6,12 @@ body {
     max-width: 1100px;
 }
 
+#title {
+    margin: auto;
+    min-width: 200px;
+    max-width: 310px;
+}
+
 p {
     font-family: 'Open Sans Condensed', sans-serif;
     color: black;
@@ -14,10 +20,10 @@ p {
 }
 
 h1 {
-    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-family: 'Anton', sans-serif;
     color: #FFC701;
     text-align: center;
-    font-size: 40px;
+    font-size: 42px;
     margin-bottom: 25px;
 }
 
@@ -35,14 +41,16 @@ h2 {
 
 #logoLeft {
     float: left;
-    width: 50px;
-    margin-top: 5px;
+    width: 30px;
+    margin-top: 9px;
+    margin-right: 10px;
 }
 
 #logoRight {
     float: right;
-    width: 50px;
-    margin-top: 5px;
+    width: 30px;
+    margin-top: 9px;
+    margin-left: 10px;
 }
 
 #bracesLeft {
@@ -91,6 +99,7 @@ span {
     background-color: #19364A;
     color: #FFFFFF;
     border: none;
+    padding: 0px;
 }
 
 /* #accordion {
@@ -140,6 +149,7 @@ li {
     font-family: 'Open Sans Condensed', sans-serif;
     font-size: 14px;
     font-weight: 600;
+    white-space: nowrap;
 }
 
 ul {
