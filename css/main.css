@@ -180,7 +180,7 @@ li {
 }
 
 ul {
-    margin-right: 25px;
+    margin-right: 22px;
 }
 
 .h2-title {
@@ -238,10 +238,11 @@ header {
 
 #tagline {
     color: white;
-    max-width: 450px;
+    max-width: 500px;
     margin: auto;
     padding-left: 7px;
     margin-bottom: 20px;
+    font-size: 14px;
 }
 
 .margin-auto {
