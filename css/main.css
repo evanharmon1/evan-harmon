@@ -39,7 +39,7 @@ p {
     font-family: 'Open Sans Condensed', sans-serif;
     color: black;
     font-size: 13px;
-    margin-bottom: 12px;
+    margin-bottom: 2px;
 }
 
 h1 {
@@ -181,6 +181,8 @@ li {
 
 ul {
     margin-right: 22px;
+    margin-bottom: 2px;
+    text-align: center;
 }
 
 .h2-title {
