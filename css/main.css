@@ -73,9 +73,9 @@ h2 {
 }
 
 #logoRight {
-    float: right;
+    /* float: right; */
     width: 30px;
-    margin-top: 9px;
+    /* margin-top: 9px; */
     margin-left: 10px;
 }
 
@@ -88,7 +88,7 @@ h2 {
     color: black;
     font-family: 'Open Sans Condensed', sans-serif;
     font-weight: 600;
-    transition: .3s all ease-out;
+    transition: .2s all ease-out;
     margin: auto;   
 }
 
@@ -104,9 +104,9 @@ h2 {
 .personal a {
     color: #FFFFFF;
     text-decoration: none;
-    -webkit-transition: .3s all ease-out;
-    -moz-transition: .3s all ease-out;
-    transition: .3s all ease-out;
+    -webkit-transition: .2s all ease-out;
+    -moz-transition: .2s all ease-out;
+    transition: .2s all ease-out;
     font-size: 16px;
 }
 
@@ -189,6 +189,13 @@ ul {
     color:  #FFC701;
     font-size: 22px;
     font-family: 'Oswald', sans-serif;
+    transition: .2s all ease-out;
+    font-family: 'Anton', sans-serif;
+}
+
+.h2-title:hover {
+    color: white;
+    text-decoration: none;
 }
 
 .h2-glyph {
@@ -221,7 +228,7 @@ header {
 .header-content a {
     color: black;
     text-align: right;
-    transition: .3s all ease-out;
+    transition: .2s all ease-out;
 }
 
 .header-content a:hover {
