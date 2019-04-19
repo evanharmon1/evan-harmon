@@ -189,13 +189,7 @@ ul {
     color:  #FFC701;
     font-size: 22px;
     /* font-family: 'Oswald', sans-serif; */
-    transition: .2s all ease-out;
     font-family: 'Anton', sans-serif;
-}
-
-.h2-title:hover {
-    color: white;
-    text-decoration: none;
 }
 
 .h2-glyph {
