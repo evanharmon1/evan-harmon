@@ -1,5 +1,5 @@
-# evan-harmon
-My personal website. Static HTML/CSS and Bootstrap with responsive design.
+# Evan-Harmon.com
+My personal website. Static HTML/CSS and Bootstrap with mobile-first, responsive design.
 
 | Phone | Desktop |
 | ----- | ------- |

@@ -24,10 +24,6 @@ main {
 
 }
 
-.footer {
-    margin-bottom: 15px;
-    color: white;
-}
 
 #title {
     margin: auto;
@@ -57,13 +53,6 @@ h2 {
     text-align: center;
     font-size: 22px;
 }
-
-/* Not implemented */
-.personal a:hover {
-    color: #FFC701;
-}
-
-
 
 #logoLeft {
     float: left;
@@ -209,6 +198,18 @@ header {
     top: 0;
 }
 
+footer {
+    background-color:  #FFC701;
+    width: 100%;
+    height: 6%;
+    min-height: 25px;
+
+    display: flex; 
+    position: -webkit-sticky;
+    position: sticky;
+    bottom: 0;
+}
+
 .header-content {
     margin-top: auto;
     margin-bottom: auto;
@@ -226,6 +227,24 @@ header {
 }
 
 .header-content a:hover {
+    color: white;
+    text-decoration: none;
+}
+
+.footer-content {
+    margin: auto;
+    color: black;
+    font-family: 'Anton', sans-serif;
+    font-size: 18px;
+}
+
+.footer-content a {
+    color: black;
+    text-align: right;
+    transition: .2s all ease-out;
+}
+
+.footer-content a:hover {
     color: white;
     text-decoration: none;
 }
