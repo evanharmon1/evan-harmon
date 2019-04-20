@@ -171,7 +171,7 @@ li {
 ul {
     margin-right: 22px;
     margin-bottom: 2px;
-    text-align: center;
+    /* text-align: center; */
 }
 
 .h2-title {
@@ -272,5 +272,5 @@ footer {
 }
 
 #bottom-space {
-    height: 10px;
+    height: 20px;
 }
