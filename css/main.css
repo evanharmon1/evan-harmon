@@ -263,10 +263,14 @@ footer {
     max-width: 500px;
     margin: auto;
     padding-left: 7px;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
     font-size: 14px;
 }
 
 .margin-auto {
     margin: auto;
+}
+
+#bottom-space {
+    height: 10px;
 }
