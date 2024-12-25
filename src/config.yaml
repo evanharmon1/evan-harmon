@@ -65,4 +65,4 @@ analytics:
       id: null # or "G-XXXXXXXXXX" #TODO
 
 ui:
-  theme: 'system' # Values: "system" | "light" | "dark" | "light:only" | "dark:only"
+  theme: 'dark' # Values: "system" | "light" | "dark" | "light:only" | "dark:only"

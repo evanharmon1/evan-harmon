@@ -2,7 +2,7 @@
 publishDate: 2022-09-12T00:00:00Z
 title: How to setup git to use a different git commit identity based on the repo's directory
 excerpt: Automatically update your git config based on what folder the repo is in, so you can have a dedicated folder for your work repos and maks sure your git commits always use the correct git identity.
-image: https://images.unsplash.com/photo-1546984575-757f4f7c13cf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80
+image: https://images.unsplash.com/photo-1556075798-4825dfaaf498?q=80&w=2676&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D
 tags:
   - development
   - automation
