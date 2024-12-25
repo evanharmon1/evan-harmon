@@ -12,8 +12,11 @@ tags:
 metadata:
   canonical: https://evanharmon.com/how-to-setup-git-to-use-a-different-git-commit-identity-based-on-the-repos-directory
 ---
+
 I use my personal Mac as my work computer so it was a chore to change my git config whenever switching between personal and work coding projects. And if I forgot, my personal git commit identity would be committed to my work repos. However, there is a way to automatically update your git config based on what folder the repo is in, so you can have a dedicated folder for your work repos, and your git commits for work will never use your personal git commit identity or vice versa.
+
 ## Setup
+
 In your global `.gitconfig` file (normally in the `~/` directory on Mac and Linux), add a section like this:
 
 ```bash
