@@ -2,7 +2,7 @@
 publishDate: 2023-06-30T00:00:00Z
 title: The Phoenix Project Book Summary
 excerpt: The book makes the case that any company not making their technology and IT practices one of their core competencies is taking an ill-advised existential risk.
-image: https://images.unsplash.com/photo-1546984575-757f4f7c13cf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80
+image: https://miro.medium.com/v2/resize:fit:743/1*Bb9qaSbMvs1t1oOz1vR--w.png
 tags:
   - book
   - development
@@ -19,7 +19,6 @@ metadata:
 Authors: Gene Kim, Kevin Behr, and George Spafford
 
 Amazon: <https://www.amazon.com/Phoenix-Project-DevOps-Helping-Business/dp/0988262592>
-![rw-book-cover](https://images-na.ssl-images-amazon.com/images/I/51zDZ1s4hCL._SL200_.jpg)
 
 ## The Gist
 
