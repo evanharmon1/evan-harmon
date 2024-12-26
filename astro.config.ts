@@ -44,6 +44,7 @@ export default defineConfig({
           'mind-map',
           'heat-map',
           'binoculars',
+          'capacitor',
         ],
       },
     }),
