@@ -15,6 +15,10 @@ export const headerData = {
       href: 'https://fantastical.app/evanharmon',
     },
     {
+      text: 'Now',
+      href: '/now',
+    },
+    {
       text: 'Blog',
       links: [
         {
@@ -37,13 +41,15 @@ export const footerData = {
     { text: 'Contact', href: '/contact' },
     { text: 'Meet', href: '/meet' },
     { text: 'Blog', href: '/blog' },
+    { text: 'Now', href: '/now' },
     { text: 'Privacy Policy', href: getPermalink('/privacy') },
   ],
   socialLinks: [
-    { ariaLabel: 'Github', icon: 'tabler:brand-github', href: 'https://github.com/evanharmon1' },
+    { ariaLabel: 'GitHub', icon: 'tabler:brand-github', href: 'https://github.com/evanharmon1' },
     { ariaLabel: 'Mastodon', icon: 'tabler:brand-mastodon', href: 'https://mastodon.social/@evanharmon' },
-    { ariaLabel: 'Bluesky', icon: 'tabler:brand-bluesky', href: 'https://bsky.app/profile/evanharmon.bsky.social' },
+    { ariaLabel: 'BlueSky', icon: 'tabler:brand-bluesky', href: 'https://bsky.app/profile/evanharmon.bsky.social' },
     { ariaLabel: 'LinkedIn', icon: 'tabler:brand-linkedin', href: 'https://www.linkedin.com/in/evanharmon1' },
+    { ariaLabel: 'omg.lol', icon: 'tabler:heart-handshake', href: 'https://evanharmon.omg.lol' },
     { ariaLabel: 'Meetup', icon: 'tabler:brand-meetup', href: 'https://www.meetup.com/kctechbookclub/' },
     { ariaLabel: 'RSS', icon: 'tabler:rss', href: getAsset('/rss.xml') },
   ],

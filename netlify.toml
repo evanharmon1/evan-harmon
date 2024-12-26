@@ -12,3 +12,8 @@
   to = "https://publish.obsidian.md/serve?url=evanharmon.com/memex/:splat"
   status = 200
   force = true
+[[redirects]]
+  from = "https://evanharmon.com/now/*"
+  to = "https://evanharmon.omg.lol/now/"
+  status = 200
+  force = true
