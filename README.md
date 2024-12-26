@@ -1,6 +1,6 @@
 # Evan Harmon Website
 
-My personal website built with Astro and Tailwind CSS with the AstroWind starter template.
+My personal website built with Astro and Tailwind CSS with the AstroWind starter template and built with [Harmon Stack](https://github.com/evanharmon1/harmon-stack).
 
 <https://evanharmon.com>
 

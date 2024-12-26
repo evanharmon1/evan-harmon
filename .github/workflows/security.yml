@@ -2,7 +2,7 @@ name: Security Test
 run-name: ${{ github.actor }} is running Security Actions
 on: [pull_request]
 jobs:
-  security:
+  secrets:
     runs-on: ubuntu-latest
     steps:
       - run: echo "Triggered by a ${{ github.event_name }} event."
@@ -27,3 +27,17 @@ jobs:
           name: scan_results
           path: /tmp/scan_output.json
           retention-days: 7
+  sast:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          command: test
+          args: >
+            --file=package.json
+            --severity-threshold=high
+            --show-vulnerable-paths=all
