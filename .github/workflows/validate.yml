@@ -2,7 +2,7 @@ name: Validate Code
 run-name: ${{ github.actor }} is running Validate Actions
 on: [pull_request]
 jobs:
-  validate:
+  preCommit:
     runs-on: ubuntu-latest
     steps:
       - run: echo "Triggered by a ${{ github.event_name }} event."

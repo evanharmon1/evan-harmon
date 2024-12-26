@@ -13,22 +13,38 @@ tasks:
     silent: true
   validate:
     cmds:
-      - pre-commit run --all-files
-      # - shellcheck osConfig/mac/updateMac.sh
-      # - shellcheck osConfig/mac/setupMac.sh
-      # - shellcheck osConfig/mac/configureMacSettings.sh
+      - task: preCommit
+      - task: check
     silent: true
-  pre-commit:
+  preCommit:
     cmds:
       - pre-commit run --all-files
+    silent: true
+  check:
+    cmds:
+      - npm run check:astro
+      - npm run check:eslint
+      - cmd: npm run check:prettier
+        # - shellcheck osConfig/mac/updateMac.sh
+        # - shellcheck osConfig/mac/setupMac.sh
+        # - shellcheck osConfig/mac/configureMacSettings.sh
+        ignore_error: true
+    silent: true
+  fix:
+    cmds:
+      - npm run fix
     silent: true
   security:
     cmds:
-      - ./check_for_pattern.sh . "*secret*"
-      - whispers --config test/whisperConfig.yml --severity BLOCKER,CRITICAL .
+      - task: secrets
       - task: snyk
     silent: true
-  snyk:
+  secrets:
+    cmds:
+      - ./check_for_pattern.sh . "*secret*"
+      - whispers --config test/whisperConfig.yml --severity BLOCKER,CRITICAL .
+    silent: true
+  sast:
     cmds:
       - snyk test --file=requirements.txt
       - snyk test --file=package.json
