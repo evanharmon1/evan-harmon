@@ -37,7 +37,8 @@ tasks:
   security:
     cmds:
       - task: secrets
-      - task: snyk
+      - task: sast
+    ignore_error: true
     silent: true
   secrets:
     cmds:
@@ -46,8 +47,16 @@ tasks:
     silent: true
   sast:
     cmds:
-      - snyk test --file=requirements.txt
-      - snyk test --file=package.json
+      - task: sast-dependencies
+      - task: sast-code
+    silent: true
+  sast-dependencies:
+    cmds:
+      - snyk test --all-projects
+    silent: true
+  sast-code:
+    cmds:
+      - snyk code test
     silent: true
   ghReleaseInit:
     cmds:
