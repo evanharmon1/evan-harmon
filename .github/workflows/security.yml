@@ -48,7 +48,7 @@ jobs:
         run: pip install -r requirements.txt
       # Snyk can scan both Node and Python dependencies
       - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/cli@master
+        uses: snyk/actions/node@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
