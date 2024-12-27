@@ -31,15 +31,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      # Setup Node.js and its dependencies
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: 'npm'
-      - name: Install dependencies
+      - name: Install Node dependencies
         run: npm ci
+      # Setup Python and its dependencies
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+      # Snyk can scan both Node and Python dependencies
       - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/node@master
+        uses: snyk/actions/cli@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
