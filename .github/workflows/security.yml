@@ -45,7 +45,7 @@ jobs:
         with:
           command: test
           args: >
-            --file=package.json
+            --all-projects
             --severity-threshold=high
             --show-vulnerable-paths=all
   sast-code:
