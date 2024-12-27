@@ -81,3 +81,7 @@ todo.md
 **/.env.*
 # Ignore any directory named .env
 .env/
+
+#             Other
+#------------------------------------------------------------------------------
+.dccache

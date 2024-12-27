@@ -27,7 +27,7 @@ jobs:
           name: scan_results
           path: /tmp/scan_output.json
           retention-days: 7
-  sast:
+  sast-dependencies:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -48,3 +48,23 @@ jobs:
             --file=package.json
             --severity-threshold=high
             --show-vulnerable-paths=all
+  sast-code:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          command: code test
+          args: >
+            --severity-threshold=high
+            --json-file-output=snyk-code-test.json
