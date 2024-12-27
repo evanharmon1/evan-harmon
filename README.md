@@ -7,6 +7,7 @@ My personal website built with Astro and Tailwind CSS with the AstroWind starter
 Author: Evan Harmon
 
 [![Validate](https://github.com/evanharmon1/evan-harmon/actions/workflows/validate.yml/badge.svg)](https://github.com/evanharmon1/evan-harmon/actions/workflows/validate.yml)
+[![Build](https://github.com/evanharmon1/evan-harmon/actions/workflows/build.yml/badge.svg)](https://github.com/evanharmon1/evan-harmon/actions/workflows/build.yml)
 [![Security](https://github.com/evanharmon1/evan-harmon/actions/workflows/security.yml/badge.svg)](https://github.com/evanharmon1/evan-harmon/actions/workflows/security.yml)
 [![License](https://img.shields.io/github/license/onwidget/astrowind?style=flat-square&color=dddddd&labelColor=000000)](https://github.com/onwidget/astrowind/blob/main/LICENSE.md)
 [![Maintained](https://img.shields.io/badge/maintained%3F-yes-brightgreen.svg?style=flat-square)](https://github.com/onwidget)

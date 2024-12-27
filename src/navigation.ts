@@ -54,6 +54,6 @@ export const footerData = {
     { ariaLabel: 'RSS', icon: 'tabler:rss', href: getAsset('/rss.xml') },
   ],
   footNote: `
-    Theme by <a class="text-blue-600 underline dark:text-muted" href="https://onwidget.com/"> OnWidget</a>
+    Based on theme by <a class="text-blue-600 underline dark:text-muted" href="https://onwidget.com/"> OnWidget</a>
   `,
 };
