@@ -45,6 +45,8 @@ export default defineConfig({
           'heat-map',
           'binoculars',
           'capacitor',
+          'circuit',
+          'shop',
         ],
       },
     }),
