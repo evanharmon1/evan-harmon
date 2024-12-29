@@ -2,6 +2,7 @@
 import Features2 from '~/components/widgets/Features2.astro';
 import CallToAction from '~/components/widgets/CallToAction.astro';
 import Layout from '~/layouts/PageLayout.astro';
+import Stats from '~/components/widgets/Stats.astro';
 
 const metadata = {
   title: 'About Me',
@@ -11,60 +12,25 @@ const metadata = {
 <Layout metadata={metadata}>
   <Features2
     title="About Me"
-    subtitle="I'm a technologist and software engineer with experience in DevOps, web development, AI, cloud engineering, technical education, and Agile project management in industries including healthcare, finance, and logistics. I have recently decided to apply my technical expertise toward entrepreneurial endeavors and consulting. I am loving the deeply diverse process of building and growing a business."
+    subtitle="I'm a technologist and software engineer with experience in DevOps, web development, AI, cloud engineering, technical education, and project management in industries including healthcare, finance, and logistics. I have recently decided to apply my technical expertise toward entrepreneurial endeavors and consulting. I am loving the highly diverse process of building and growing a business."
   >
     <Fragment slot="bg">
       <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
     </Fragment>
   </Features2>
 
-  <!-- Features2 Widget ************** -->
-
-  <Features2
-    title="Elsewhere"
-    tagline="Find Me"
-    columns={3}
-    items={[
+  <Stats
+    stats={[
+      { title: 'Contraptions', amount: '132K' },
+      { title: 'Bits', amount: '24.8K' },
+      { title: 'Qualia', amount: '10.3K' },
       {
-        title: 'GitHub',
-        description: 'evanharmon1',
-        href: 'https://github.com/evanharmon1',
-        icon: 'tabler:brand-github',
-      },
-      {
-        title: 'Mastodon',
-        description: 'evanharmon@mastodon.social',
-        href: 'https://mastodon.social/@evanharmon',
-        icon: 'tabler:brand-mastodon',
-      },
-      {
-        title: 'BlueSky',
-        description: 'evanharmon.bsky.social',
-        href: 'https://bsky.app/profile/evanharmon.bsky.social',
-        icon: 'tabler:brand-bluesky',
-      },
-      {
-        title: 'LinkedIn',
-        description: 'evanharmon1',
-        href: 'https://www.linkedin.com/in/evanharmon1',
-        icon: 'tabler:brand-linkedin',
-      },
-      {
-        title: 'omg.lol',
-        description: 'evanharmon',
-        href: 'https://evanharmon.omg.lol',
-        icon: 'tabler:heart-handshake',
-      },
-      {
-        title: 'Meetup',
-        description: 'KC Tech Enthusiasts',
-        href: 'https://meetup.com/kctechbookclub/',
-        icon: 'tabler:brand-meetup',
+        title:
+          'Number of times that people have had an interaction with me in which they have found that experience and/or me and/or their general outlook on life thereafter simply delightful',
+        amount: '48.4K',
       },
     ]}
   />
-
-  <!-- CallToAction Widget *********** -->
 
   <CallToAction
     actions={[

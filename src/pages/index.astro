@@ -4,7 +4,6 @@ import Layout from '~/layouts/PageLayout.astro';
 import Hero from '~/components/widgets/Hero.astro';
 import Features2 from '~/components/widgets/Features2.astro';
 import BlogLatestPosts from '~/components/widgets/BlogLatestPosts.astro';
-import Stats from '~/components/widgets/Stats.astro';
 import CallToAction from '~/components/widgets/CallToAction.astro';
 
 const metadata = {
@@ -42,6 +41,13 @@ const metadata = {
     id="projects"
     items={[
       {
+        title: 'Harmon Stack',
+        description:
+          'New project template to help bootstrap and streamline projects with pre-configured CI/CD, security tests, pre-commit, linting, docs, task runner, etc. Uses the python project "Copier"',
+        icon: 'flat-color-icons:capacitor',
+        href: 'https://github.com/evanharmon1/harmon-stack',
+      },
+      {
         title: 'Harmon Ops',
         description:
           'Various scripts, dotfiles, automation, and IaC for my developer environment and homelab infrastructure with self-hosted apps, Raspberry Pis, Dockerfiles, etc.',
@@ -49,16 +55,9 @@ const metadata = {
         href: 'https://github.com/evanharmon1/harmon-ops',
       },
       {
-        title: 'Harmon Stack',
-        description:
-          'New project template to help bootstrap projects with my customized readme, linting, CI/CD, docs, task runner, etc. Uses Copier project to define template variables, etc.',
-        icon: 'flat-color-icons:capacitor',
-        href: 'https://github.com/evanharmon1/harmon-stack',
-      },
-      {
         title: 'Memex',
         description:
-          "I use the Obsidian app for my day-to-day notes as a PKM/zettelkasten and share them here as a so-called 'digital garden'",
+          "I use the Obsidian markdown app for my day-to-day notes as a PKM/zettelkasten and share them here as a so-called 'digital garden'",
         icon: 'flat-color-icons:mind-map',
         href: 'https://evanharmon.com/memex',
       },
@@ -68,33 +67,25 @@ const metadata = {
         icon: 'flat-color-icons:binoculars',
         href: 'https://triplicategroup.com',
       },
-      // {
-      //   title: 'Contraption Labs',
-      //   description: 'Technology company',
-      //   icon: 'flat-color-icons:document',
-      //   href: 'https://contraptionlabs.com',
-      // },
+      {
+        title: 'Sommer Lawn & Landscape',
+        description:
+          'Founded by Cayden Sommer, I am helping revamp its technology, operations, and digital marketing strategy',
+        icon: 'flat-color-icons:shop',
+        href: 'https://sommerlawn.com',
+      },
+      {
+        title: 'Contraption Labs',
+        description: 'Coming soon...',
+        icon: 'flat-color-icons:circuit',
+        href: 'https://contraptionlabs.com',
+      },
     ]}
   >
     <Fragment slot="bg">
       <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
     </Fragment>
   </Features2>
-
-  <!-- Stats Widget ****************** -->
-
-  <Stats
-    stats={[
-      { title: 'Contraptions', amount: '132K' },
-      { title: 'Bits', amount: '24.8K' },
-      { title: 'Qualia', amount: '10.3K' },
-      {
-        title:
-          'Number of times that people have had an interaction with me in which they have found that experience and/or me and/or their general outlook on life thereafter simply delightful',
-        amount: '48.4K',
-      },
-    ]}
-  />
 
   <!-- HighlightedPosts Widget ******* -->
 
