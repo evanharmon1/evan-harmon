@@ -46,40 +46,40 @@ A speculative form of AI that would surpass human intelligence in all aspects, i
 ---
 ### Related Terms
 ---
-**Algorithm:** A set of rules that a machine follows to learn how to perform a task.
-**Machine Learning:** A subset of AI where systems learn from data without being explicitly programmed for specific tasks.
-**Neural Networks:** Computing systems inspired by the human brain’s biological neural networks, designed to recognize patterns.
+- **Algorithm:** A set of rules that a machine follows to learn how to perform a task.
+- **Machine Learning:** A subset of AI where systems learn from data without being explicitly programmed for specific tasks.
+- **Neural Networks:** Computing systems inspired by the human brain’s biological neural networks, designed to recognize patterns.
 
 ---
-**Deep Learning:** A subset of machine learning involving neural networks with many layers.
-**Generative AI:** AI that creates seemingly new content-such as text, images, and audio-based on training data.
-**Transformer Architecture:** A programming approach introduced in 2017 that turbocharged generative AI capabilities.
+- **Deep Learning:** A subset of machine learning involving neural networks with many layers.
+- **Generative AI:** AI that creates seemingly new content-such as text, images, and audio-based on training data.
+- **Transformer Architecture:** A programming approach introduced in 2017 that turbocharged generative AI capabilities.
 
 ---
-**LLM:** neural networks pre-trained with large amounts of data broken into tokens in order to "understand" and generate natural language
+- **LLM:** neural networks pre-trained with large amounts of data broken into tokens in order to "understand" and generate natural language
 
 ---
-**Context Window:** The amount of text/tokens that an LLM can consider at any time - its "working memory"
-**RAG (Retrieval Augmented Generation):** Technique that allows an LLM to incorporate data that it was not trained on originally. For example, to add new information or reference private user data. Usually done with numerical embeddings in a vector database.
+- **Context Window:** The amount of text/tokens that an LLM can consider at any time - its "working memory"
+- **RAG (Retrieval Augmented Generation):** Technique that allows an LLM to incorporate data that it was not trained on originally. For example, to add new information or reference private user data. Usually done with numerical embeddings in a vector database.
 
 ---
-**Agent:** a system or program capable of autonomously performing tasks, making decisions, and interacting with environments or tools on behalf of a user or another system
-**MCP:** protocol that enables AI agents to discover, connect to, and interact with external tools and data sources
-**A2A:** standard that defines how autonomous AI agents can discover each other, communicate, exchange information, and coordinate actions
+- **Agent:** a system or program capable of autonomously performing tasks, making decisions, and interacting with environments or tools on behalf of a user or another system
+- **MCP:** protocol that enables AI agents to discover, connect to, and interact with external tools and data sources
+- **A2A:** standard that defines how autonomous AI agents can discover each other, communicate, exchange information, and coordinate actions
 
 ---
 ## Platforms & Tools
 
 ---
 ### How Do You Want To Use AI?
-**General Users:** AI apps with related app-like/product functionality to increase usability and ease of adding to context, prompts, memory, private data/RAG, etc.
-**Power Users:** Plugins and extensions to existing apps or OS's with existing use cases such as helping to research something or rewrite an email
+- **General Users:** AI apps with related app-like/product functionality to increase usability and ease of adding to context, prompts, memory, private data/RAG, etc.
+- **Power Users:** Plugins and extensions to existing apps or OS's with existing use cases such as helping to research something or rewrite an email
 
 ---
-**Self-hosted/Private/Local:** People who want to self-host locally and not trust their data to the cloud
-**Automation Platforms that also do AI:** Workflows that need general automation and infrastructure in addition to AI
-**Developers Using AI to Code:** Not necessarily making an AI app, but using AI to help with a copilot, etc.
-**Developers Making an AI App:** Developers incorporating AI APIs, LLMs, agents, etc. that want to create an AI app
+- **Self-hosted/Private/Local:** People who want to self-host locally and not trust their data to the cloud
+- **Automation Platforms that also do AI:** Workflows that need general automation and infrastructure in addition to AI
+- **Developers Using AI to Code:** Not necessarily making an AI app, but using AI to help with a copilot, etc.
+- **Developers Making an AI App:** Developers incorporating AI APIs, LLMs, agents, etc. that want to create an AI app
 
 ---
 ### General User Tools
