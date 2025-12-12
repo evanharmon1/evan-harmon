@@ -26,6 +26,10 @@ export const headerData = {
           href: getBlogPermalink(),
         },
         {
+          text: 'KC Tech Enthusiasts Presentations',
+          href: getPermalink('kcte', 'tag'),
+        },
+        {
           text: 'DevOps Articles',
           href: getPermalink('devops', 'tag'),
         },
