@@ -1,6 +1,9 @@
 [build]
   publish = "dist"
   command = "pnpm build"
+[build.environment]
+  # Astro 5 + engines ">= 21"; Netlify auto-detects pnpm from pnpm-lock.yaml.
+  NODE_VERSION = "22"
 [build.processing.html]
   pretty_urls = false
 [[headers]]
