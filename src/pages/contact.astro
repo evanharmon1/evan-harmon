@@ -1,76 +1,133 @@
 ---
-import Layout from '~/layouts/PageLayout.astro';
-import HeroText from '~/components/widgets/HeroText.astro';
-import Features2 from '~/components/widgets/Features2.astro';
+import Layout from '~/layouts/Layout.astro';
+import Header from '~/components/almanac/Header.astro';
+import Footer from '~/components/almanac/Footer.astro';
+import PageHeading from '~/components/almanac/PageHeading.astro';
+import SocialIcon from '~/components/almanac/SocialIcon.astro';
+import RuleOrn from '~/components/almanac/RuleOrn.astro';
+import { SOCIALS, MEET_URL } from '~/data/site';
 
-const metadata = {
-  title: 'Contact',
-};
+const ways = [
+  {
+    title: 'By Electronic Mail',
+    detail: 'evan@evanharmon.com',
+    href: 'mailto:evan@evanharmon.com',
+    note: 'The surest way to reach me.',
+  },
+  {
+    title: 'In Person',
+    detail: 'Put a meeting on my calendar',
+    href: MEET_URL,
+    note: 'I am based in Kansas City and glad to meet over coffee.',
+  },
+];
 ---
 
-<Layout metadata={metadata}>
-  <HeroText tagline="Contact" title="Let's Talk!" />
+<Layout
+  title="Contact"
+  description="Get in touch with Evan Harmon — by email, in person in Kansas City, or elsewhere on the aether."
+>
+  <Header />
+  <main class="section">
+    <div class="wrap">
+      <PageHeading title="Contact" sub="An open correspondence" />
+      <div class="ways">
+        {
+          ways.map((w) => (
+            <a class="way" href={w.href} target={w.href.startsWith('http') ? '_blank' : undefined} rel="noopener">
+              <h3 class="display">
+                {w.title}
+                <span class="arw" aria-hidden="true">
+                  →
+                </span>
+              </h3>
+              <div class="detail">{w.detail}</div>
+              <p>{w.note}</p>
+            </a>
+          ))
+        }
+      </div>
 
-  <Features2
-    columns={2}
-    items={[
-      {
-        title: 'Email',
-        description: 'evan@evanharmon.com',
-        icon: 'tabler:mail',
-        href: 'mailto:evan@evanharmon.com',
-      },
-      {
-        title: 'Meet With Me',
-        description:
-          "I am based in Kansas City and available to meet over coffee. Feel free to put a meeting on my calendar and let's talk in person!",
-        icon: 'tabler:map-pin',
-        href: 'https://fantastical.app/evanharmon',
-      },
-    ]}
-  />
+      <RuleOrn style="max-width:26rem;margin:3rem auto 2rem" />
 
-  <Features2
-    title="Elsewhere"
-    tagline="Find Me"
-    columns={3}
-    items={[
-      {
-        title: 'GitHub',
-        description: 'evanharmon1',
-        href: 'https://github.com/evanharmon1',
-        icon: 'tabler:brand-github',
-      },
-      {
-        title: 'Mastodon',
-        description: 'evanharmon@mastodon.social',
-        href: 'https://mastodon.social/@evanharmon',
-        icon: 'tabler:brand-mastodon',
-      },
-      {
-        title: 'BlueSky',
-        description: 'evanharmon.bsky.social',
-        href: 'https://bsky.app/profile/evanharmon.bsky.social',
-        icon: 'tabler:brand-bluesky',
-      },
-      {
-        title: 'LinkedIn',
-        description: 'evanharmon1',
-        href: 'https://www.linkedin.com/in/evanharmon1',
-        icon: 'tabler:brand-linkedin',
-      },
-      {
-        title: 'omg.lol',
-        description: 'evanharmon',
-        href: 'https://evanharmon.omg.lol',
-        icon: 'tabler:heart-handshake',
-      },
-      {
-        title: 'Meetup',
-        description: 'KC Tech Enthusiasts',
-        href: 'https://meetup.com/kctechbookclub/',
-        icon: 'tabler:brand-meetup',
-      },
-    ]}
-  />
+      <div class="label">Elsewhere on the machines</div>
+      <div class="socials">
+        {SOCIALS.map((s) => <SocialIcon name={s.name} href={s.href} />)}
+      </div>
+    </div>
+  </main>
+  <Footer />
 </Layout>
+
+<style>
+  .ways {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+    margin-top: 1.5rem;
+    border-top: 1px solid var(--color-line);
+  }
+  .way {
+    display: block;
+    padding: 1.6rem;
+    border-bottom: 1px solid var(--color-line);
+    transition:
+      background 0.25s,
+      padding 0.25s;
+  }
+  .way:nth-child(odd) {
+    border-right: 1px solid var(--color-line);
+  }
+  .way h3 {
+    font-family: var(--font-display);
+    font-size: var(--text-h3);
+    font-weight: 600;
+    margin: 0 0 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .way h3 .arw {
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: all 0.25s ease;
+    color: var(--color-accent);
+  }
+  .way .detail {
+    font-family: var(--font-numeral);
+    font-style: italic;
+    color: var(--color-accent);
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+  }
+  .way p {
+    margin: 0;
+    color: var(--color-ink-soft);
+    font-size: 0.98rem;
+  }
+  .way:hover {
+    background: color-mix(in oklab, var(--color-paper-2) 75%, transparent);
+    padding-left: 2.2rem;
+  }
+  .way:hover h3 {
+    color: var(--color-accent);
+  }
+  .way:hover h3 .arw {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  .socials {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    margin-top: 0.8rem;
+  }
+  @media (max-width: 860px) {
+    .ways {
+      grid-template-columns: 1fr;
+    }
+    .way:nth-child(odd) {
+      border-right: 0;
+    }
+  }
+</style>

@@ -1,0 +1,30 @@
+---
+// BrandMark.astro — the gilt "EH" monogram in a circle.
+interface Props {
+  size?: number;
+  label?: string;
+}
+const { size = 32, label = 'EH' } = Astro.props;
+---
+
+<span class="brand-mark" style={`--size:${size}px`} aria-hidden="true">{label}</span>
+
+<style>
+  .brand-mark {
+    display: grid;
+    place-items: center;
+    width: var(--size, 32px);
+    height: var(--size, 32px);
+    flex: none;
+    font-family: var(--font-cover);
+    font-size: calc(var(--size, 32px) * 0.42);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--color-gold);
+    border: 1px solid color-mix(in oklab, var(--color-gold) 65%, transparent);
+    border-radius: 50%;
+    box-shadow:
+      inset 0 0 0 2px color-mix(in oklab, var(--color-paper) 70%, transparent),
+      inset 0 0 0 3px color-mix(in oklab, var(--color-gold) 22%, transparent);
+  }
+</style>

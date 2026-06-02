@@ -1,24 +1,47 @@
 ---
 import Layout from '~/layouts/Layout.astro';
-import { getHomePermalink } from '~/utils/permalinks';
-
-const title = `Error 404`;
+import Header from '~/components/almanac/Header.astro';
+import Footer from '~/components/almanac/Footer.astro';
+import RuleOrn from '~/components/almanac/RuleOrn.astro';
+import Button from '~/components/almanac/Button.astro';
 ---
 
-<Layout metadata={{ title }}>
-  <section class="flex items-center h-full p-16">
-    <div class="container flex flex-col items-center justify-center px-5 mx-auto my-8">
-      <div class="max-w-md text-center">
-        <h2 class="mb-8 font-bold text-9xl">
-          <span class="sr-only">Error</span>
-          <span class="text-primary">404</span>
-        </h2>
-        <p class="text-3xl font-semibold md:text-3xl">Sorry, we couldn't find this page.</p>
-        <p class="mt-4 mb-8 text-lg text-muted dark:text-slate-400">
-          But dont worry, you can find plenty of other things on our homepage.
-        </p>
-        <a rel="noopener noreferrer" href={getHomePermalink()} class="btn ml-4">Back to homepage</a>
-      </div>
+<Layout title="Not Found" description="This page could not be found." noindex>
+  <Header />
+  <main class="section nf">
+    <div class="wrap">
+      <span class="numeral" aria-hidden="true">404</span>
+      <h1 class="display nf-title">A page mislaid</h1>
+      <p class="nf-lede">
+        This leaf appears to have been torn from the almanac, or was never bound in. No matter — the rest of the volume
+        awaits.
+      </p>
+      <RuleOrn style="max-width:24rem;margin:1.8rem auto" />
+      <Button href="/">Return to the frontispiece</Button>
     </div>
-  </section>
+  </main>
+  <Footer />
 </Layout>
+
+<style>
+  .nf {
+    text-align: center;
+    padding-block: clamp(3rem, 9vw, 7rem);
+  }
+  .numeral {
+    font-family: var(--font-numeral);
+    font-style: italic;
+    font-size: clamp(4rem, 16vw, 9rem);
+    line-height: 1;
+    color: var(--color-accent);
+  }
+  .nf-title {
+    font-size: clamp(2rem, 5vw, 3rem);
+    margin: 0.4rem 0 0.8rem;
+  }
+  .nf-lede {
+    color: var(--color-ink-soft);
+    max-width: 46ch;
+    margin-inline: auto;
+  }
+</style>

@@ -1,0 +1,27 @@
+---
+// PostImage.astro — renders a post image from its frontmatter string source.
+// Local assets are optimized via astro:assets <Image>; remote URLs fall back to
+// a plain <img>. Renders nothing when there's no source.
+import { Image } from 'astro:assets';
+import { getLocalImage, isRemoteImage } from '~/utils/images';
+
+interface Props {
+  src?: string;
+  alt?: string;
+  class?: string;
+  widths?: number[];
+  sizes?: string;
+  width?: number;
+  loading?: 'lazy' | 'eager';
+}
+const { src, alt = '', class: cls, widths, sizes, width, loading = 'lazy' } = Astro.props;
+const localImg = getLocalImage(src);
+---
+
+{
+  localImg ? (
+    <Image src={localImg} alt={alt} class={cls} widths={widths} sizes={sizes} width={width} loading={loading} />
+  ) : isRemoteImage(src) ? (
+    <img src={src} alt={alt} class={cls} loading={loading} decoding="async" />
+  ) : null
+}

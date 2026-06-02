@@ -1,0 +1,898 @@
+/* ============================================================
+   THE ALMANAC — Tailwind v4 theme + token bridge
+   evanharmon.com design system
+   ------------------------------------------------------------
+   Canonical RUNTIME token source. (DESIGN.md is the AI-facing
+   statement of intent; when the two disagree, this file wins.)
+   Imported once from src/layouts/Layout.astro.
+
+   How it works
+   ------------
+   1. Semantic colour tokens (--c-*) are defined per theme and SWAP at runtime
+      via the `data-palette` attribute on <html>.
+   2. @theme maps those tokens onto Tailwind theme variables, so every utility
+      (bg-paper, text-accent, border-line, font-display, text-section, …) is
+      automatically theme-aware.
+   3. A thin shadcn role layer (--background/--foreground/--primary/…) is mapped
+      onto the same Almanac tokens, so shadcn/ui components render on-brand and
+      theme-aware via the very same `data-palette` switch.
+   4. Toggle the theme by setting document.documentElement.dataset.palette to
+      "parchment" (light) or "midnight" (dark).
+   ============================================================ */
+
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@plugin '@tailwindcss/typography';
+
+/* Dark variant keyed off the document attribute (use as `dark:…`).
+   This is what makes both the Almanac utilities and shadcn's `dark:` variant
+   follow the Parchment ⇄ Midnight switch. */
+@custom-variant dark (&:where([data-palette="midnight"], [data-palette="midnight"] *));
+
+/* ------------------------------------------------------------
+   1) SEMANTIC TOKENS — swap per theme
+   ------------------------------------------------------------ */
+:root,
+[data-palette='parchment'] {
+  --c-paper: #efe6d0;
+  --c-paper-2: #e5d9bb;
+  --c-paper-edge: #d7c8a2;
+  --c-ink: #181410;
+  --c-ink-soft: #443928;
+  --c-ink-faint: #8b7c5c;
+  --c-line: #c6b78d;
+  --c-rule: #9c8757;
+  --c-accent: #1d6b41; /* deep garden green */
+  --c-gold: #b08016;
+  --c-blue: #1f4f86;
+
+  /* colour-block (hero / contact) */
+  --c-cta-1: #143524;
+  --c-cta-2: #1f4b33;
+  --c-cta-line: #b08016;
+
+  /* on-block text (fixed warm whites) */
+  --c-cta-ink: #f4eedd;
+  --c-cta-body: #efe2c3;
+
+  --grain-strength: 0.36;
+
+  /* shadcn role layer → mapped onto the Almanac palette (light) */
+  --radius: 0px;
+  --background: var(--c-paper);
+  --foreground: var(--c-ink);
+  --card: var(--c-paper-2);
+  --card-foreground: var(--c-ink);
+  --popover: var(--c-paper);
+  --popover-foreground: var(--c-ink);
+  --primary: var(--c-accent);
+  --primary-foreground: #f4eedd;
+  --secondary: var(--c-paper-2);
+  --secondary-foreground: var(--c-ink);
+  --muted: var(--c-paper-2);
+  --muted-foreground: var(--c-ink-faint);
+  --accent: var(--c-paper-2);
+  --accent-foreground: var(--c-ink);
+  --destructive: oklch(0.55 0.2 25);
+  --destructive-foreground: #f4eedd;
+  --border: var(--c-line);
+  --input: var(--c-line);
+  --ring: var(--c-accent);
+}
+
+[data-palette='midnight'] {
+  --c-paper: #141925;
+  --c-paper-2: #1c2232;
+  --c-paper-edge: #293043;
+  --c-ink: #f1e6c9;
+  --c-ink-soft: #cabd98;
+  --c-ink-faint: #948966;
+  --c-line: #383d4d;
+  --c-rule: #5a5872;
+  --c-accent: #e9ad3a; /* vivid gold */
+  --c-gold: #e9ad3a;
+  --c-blue: #7fa8d8;
+
+  --c-cta-1: #101a30;
+  --c-cta-2: #18284a;
+  /* hero/contact foil = the vivid gilt gold (matches the prototype's --cover-line = --gold) */
+  --c-cta-line: #e9ad3a;
+
+  --grain-strength: 0.36;
+
+  /* shadcn role layer (dark) — neutrals inherit via --c-*; foreground on the
+     gold accent flips to dark ink for legibility */
+  --primary-foreground: #241803;
+  --destructive: oklch(0.62 0.19 25);
+}
+
+/* ------------------------------------------------------------
+   2) @theme — expose tokens to Tailwind (generates utilities)
+   ------------------------------------------------------------ */
+@theme {
+  /* colours → bg-paper, text-ink, text-accent, border-line, … */
+  --color-paper: var(--c-paper);
+  --color-paper-2: var(--c-paper-2);
+  --color-paper-edge: var(--c-paper-edge);
+  --color-ink: var(--c-ink);
+  --color-ink-soft: var(--c-ink-soft);
+  --color-ink-faint: var(--c-ink-faint);
+  --color-line: var(--c-line);
+  --color-rule: var(--c-rule);
+  --color-accent: var(--c-accent);
+  --color-gold: var(--c-gold);
+  --color-blue: var(--c-blue);
+  --color-cta-ink: var(--c-cta-ink);
+  --color-cta-body: var(--c-cta-body);
+  --color-cta-line: var(--c-cta-line);
+
+  /* fonts → font-display, font-body, font-numeral, font-cover */
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'EB Garamond', Georgia, serif;
+  --font-numeral: 'Playfair Display', Georgia, serif;
+  --font-cover: 'Old Standard TT', 'Cormorant Garamond', Georgia, serif;
+
+  /* fluid type scale → text-hero, text-cta, text-section, … */
+  --text-hero: clamp(2.8rem, 9.5vw, 7rem);
+  --text-cta: clamp(2.6rem, 7vw, 5rem);
+  --text-section: clamp(2rem, 4.4vw, 3.1rem);
+  --text-h3: 1.55rem;
+  --text-row: 1.3rem;
+  --text-numeral: 2.1rem;
+  --text-numeral-sm: 1.5rem;
+  --text-body-lg: 1.12rem;
+  --text-eyebrow: 0.72rem;
+  --text-label: 0.74rem;
+  --text-nav: 0.76rem;
+
+  /* tracking → tracking-label, tracking-nav, tracking-display */
+  --tracking-label: 0.28em;
+  --tracking-nav: 0.16em;
+  --tracking-btn: 0.14em;
+  --tracking-display: 0.004em;
+
+  /* container width helper */
+  --container-almanac: 1140px;
+
+  /* spacing — named steps on top of Tailwind's numeric scale. */
+  --spacing-flow: 1rem;
+  --spacing-rail: clamp(1.4rem, 4vw, 3.5rem);
+  --spacing-section: clamp(2.25rem, 4.5vw, 4rem);
+  --spacing-gutter: clamp(86px, 9vw, 122px);
+
+  /* breakpoints — `rail` is where the vertical section header collapses. */
+  --breakpoint-rail: 64rem;
+}
+
+/* shadcn reference layer — keeps `bg-background`, `text-foreground`,
+   `border-border`, `bg-primary`, `rounded-lg`, … flowing through the
+   theme swap. Never hard-code a value here; always a var() reference. */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent-surface: var(--accent);
+  --color-accent-surface-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) + 2px);
+  --radius-md: calc(var(--radius) + 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+/* ------------------------------------------------------------
+   3) BASE
+   ------------------------------------------------------------ */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    font-size: 1.16rem;
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+    transition:
+      background 0.3s,
+      color 0.3s;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--color-accent) 30%, transparent);
+  }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  /* keyboard focus — visible engraved ring on every interactive element. */
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-radius: 1px;
+  }
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  /* ---- form controls ---- */
+  label {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-variant: small-caps;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-label);
+    font-size: var(--text-label);
+    color: var(--color-ink-faint);
+    margin-bottom: 0.4rem;
+  }
+  input[type='text'],
+  input[type='email'],
+  input[type='search'],
+  input[type='url'],
+  input[type='tel'],
+  textarea,
+  select {
+    width: 100%;
+    font-family: var(--font-body);
+    font-size: 1.02rem;
+    color: var(--color-ink);
+    background: color-mix(in oklab, var(--color-paper-2) 50%, transparent);
+    border: 1px solid var(--color-rule);
+    border-radius: 0;
+    padding: 0.7rem 0.85rem;
+    box-shadow:
+      inset 0 0 0 2px var(--color-paper),
+      inset 0 0 0 3px color-mix(in oklab, var(--color-rule) 45%, transparent);
+    transition:
+      border-color 0.2s,
+      box-shadow 0.2s;
+  }
+  textarea {
+    min-height: 7rem;
+    resize: vertical;
+    line-height: 1.55;
+  }
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--color-ink-faint);
+    font-style: italic;
+  }
+  input:focus,
+  textarea:focus,
+  select:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow:
+      inset 0 0 0 2px var(--color-paper),
+      inset 0 0 0 3px var(--color-accent);
+  }
+  select {
+    appearance: none;
+    background-image:
+      linear-gradient(45deg, transparent 50%, var(--color-rule) 50%),
+      linear-gradient(135deg, var(--color-rule) 50%, transparent 50%);
+    background-position:
+      calc(100% - 18px) center,
+      calc(100% - 13px) center;
+    background-size:
+      5px 5px,
+      5px 5px;
+    background-repeat: no-repeat;
+  }
+
+  /* respect reduced motion globally */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+    }
+  }
+}
+
+/* ------------------------------------------------------------
+   4) UTILITIES — engraving treatments awkward as plain classes
+   ------------------------------------------------------------ */
+
+/* engraved double inset keyline (buttons, cards) */
+@utility engraved {
+  box-shadow:
+    inset 0 0 0 2px var(--color-paper),
+    inset 0 0 0 3px color-mix(in oklab, var(--color-rule) 55%, transparent);
+}
+
+/* solid (ink-filled) engraved variant */
+@utility engraved-solid {
+  background: var(--color-ink);
+  color: var(--color-paper);
+  box-shadow:
+    inset 0 0 0 2px var(--color-ink),
+    inset 0 0 0 3px color-mix(in oklab, var(--color-paper) 30%, transparent);
+}
+
+/* gilt circle — brand-mark, header icon buttons, social icons */
+@utility gilt-ring {
+  border: 1px solid color-mix(in oklab, var(--color-gold) 60%, transparent);
+  border-radius: 9999px;
+  box-shadow:
+    inset 0 0 0 2px color-mix(in oklab, var(--color-paper) 70%, transparent),
+    inset 0 0 0 3px color-mix(in oklab, var(--color-gold) 22%, transparent);
+}
+
+/* display heading treatment (emboss + balance) */
+@utility display-emboss {
+  font-family: var(--font-display);
+  line-height: 0.98;
+  letter-spacing: var(--tracking-display);
+  text-wrap: balance;
+  text-shadow: 0 1px 0 color-mix(in oklab, #fff 55%, transparent);
+}
+
+/* eyebrow / label run (small-caps, tracked) */
+@utility eyebrow {
+  font-family: var(--font-body);
+  font-variant: small-caps;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-label);
+  font-size: var(--text-eyebrow);
+  color: var(--color-accent);
+}
+
+/* centred page container */
+@utility wrap {
+  width: min(var(--container-almanac), 92vw);
+  margin-inline: auto;
+}
+
+/* tinted section band */
+@utility section-tint {
+  background: color-mix(in oklab, var(--color-paper-2) 70%, transparent);
+}
+
+/* ------------------------------------------------------------
+   5) THE PRINTED GRAIN + shared ornaments
+   ------------------------------------------------------------ */
+@layer components {
+  .grain-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 50;
+    pointer-events: none;
+    background-image: url('/grain-noise.png');
+    background-size: 400px 400px;
+    background-repeat: repeat;
+    opacity: var(--grain-strength, 0.36);
+  }
+
+  /* engraved divider:  ❧ — ❖ — ❧ */
+  .divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.85rem;
+    color: var(--color-rule);
+    padding-block: clamp(0.9rem, 2vw, 1.6rem);
+  }
+  .divider .ln {
+    flex: 1 1 auto;
+    height: 1px;
+    max-width: 12rem;
+    background: linear-gradient(90deg, transparent, var(--color-rule) 30%, var(--color-rule) 70%, transparent);
+  }
+  .divider b {
+    font-family: var(--font-display);
+    font-weight: 400;
+    line-height: 1;
+    color: var(--color-accent);
+    flex: none;
+  }
+  .divider .mid {
+    font-size: 1.5rem;
+  }
+  .divider .leaf {
+    font-size: 1.15rem;
+  }
+  .divider .l {
+    transform: scaleX(-1);
+  }
+
+  /* reveal-on-scroll — pure CSS, scroll-driven; safe default (visible) */
+  .reveal {
+    opacity: 1;
+  }
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .reveal {
+        animation: reveal-in linear both;
+        animation-timeline: view();
+        animation-range: entry 2% cover 18%;
+      }
+    }
+  }
+  @keyframes reveal-in {
+    from {
+      opacity: 0;
+      transform: translateY(26px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+/* ------------------------------------------------------------
+   BLOG PROSE — Tailwind Typography mapped onto Almanac ink/paper.
+   Deliberately UNLAYERED: unlayered rules win over the typography
+   plugin's `@layer`-ed `.prose` defaults, so the body text takes the
+   Almanac ink colours (and stays legible — AA — in Midnight) rather
+   than the plugin's default dark grey.
+   ------------------------------------------------------------ */
+.prose {
+  --tw-prose-body: var(--color-ink-soft);
+  --tw-prose-headings: var(--color-ink);
+  --tw-prose-lead: var(--color-ink-soft);
+  --tw-prose-links: var(--color-accent);
+  --tw-prose-bold: var(--color-ink);
+  --tw-prose-counters: var(--color-ink-faint);
+  --tw-prose-bullets: var(--color-rule);
+  --tw-prose-hr: var(--color-line);
+  --tw-prose-quotes: var(--color-ink);
+  --tw-prose-quote-borders: var(--color-accent);
+  --tw-prose-captions: var(--color-ink-faint);
+  --tw-prose-code: var(--color-ink);
+  --tw-prose-pre-code: var(--color-cta-body);
+  --tw-prose-pre-bg: var(--color-cta-1, #143524);
+  --tw-prose-th-borders: var(--color-rule);
+  --tw-prose-td-borders: var(--color-line);
+  color: var(--color-ink-soft);
+  font-family: var(--font-body);
+}
+.prose :is(h1, h2, h3, h4) {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: var(--tracking-display);
+  color: var(--color-ink);
+}
+.prose a {
+  color: var(--color-accent);
+  text-decoration-color: color-mix(in oklab, var(--color-accent) 45%, transparent);
+  text-underline-offset: 3px;
+}
+
+/* ------------------------------------------------------------
+   6) SECTION-LEVEL COMPONENTS (shared across Astro components,
+   so they live here rather than in any one component's scoped block)
+   ------------------------------------------------------------ */
+@layer components {
+  /* shared display + label type */
+  .display {
+    font-family: var(--font-display);
+    letter-spacing: var(--tracking-display);
+    line-height: 0.98;
+    font-weight: 600;
+    text-wrap: balance;
+    text-shadow: 0 1px 0 color-mix(in oklab, #fff 35%, transparent);
+  }
+  .label {
+    font-family: var(--font-body);
+    font-variant: small-caps;
+    letter-spacing: var(--tracking-label);
+    font-size: var(--text-label);
+    color: var(--color-ink-faint);
+    font-weight: 500;
+  }
+  .tagline {
+    font-size: clamp(1.05rem, 2.4vw, 1.4rem);
+    color: var(--color-ink-soft);
+    font-style: italic;
+    max-width: 30ch;
+  }
+
+  .section {
+    padding-block: var(--spacing-section);
+    position: relative;
+  }
+  .section--tint {
+    background: color-mix(in oklab, var(--color-paper-2) 70%, transparent);
+  }
+
+  /* ---- colour-block (hero / contact) ---- */
+  .cta {
+    text-align: center;
+    position: relative;
+  }
+  .cta h2 {
+    font-family: var(--font-display);
+    font-size: var(--text-cta);
+    font-weight: 600;
+    margin: 0 0 0.4rem;
+  }
+  .cta .links {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+  }
+  .cta--bold {
+    background: linear-gradient(162deg, var(--c-cta-2), var(--c-cta-1) 65%);
+    color: var(--color-cta-body);
+    border-block: 1px solid color-mix(in oklab, var(--color-cta-line) 38%, transparent);
+    box-shadow:
+      inset 0 3px 14px rgba(0, 0, 0, 0.4),
+      inset 0 -3px 14px rgba(0, 0, 0, 0.4);
+  }
+  .cta--bold .tagline {
+    color: color-mix(in oklab, var(--color-cta-body) 82%, var(--color-cta-line));
+  }
+  .cta-orn {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4.5vw, 3rem);
+    line-height: 1;
+    margin-bottom: 1rem;
+    color: var(--color-cta-line);
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.45);
+  }
+
+  /* foil cover title (hero wordmark) */
+  .cover-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: var(--tracking-display);
+    font-size: var(--text-hero);
+    line-height: 1;
+    margin: 0.5rem auto 0.2rem;
+    color: var(--color-cta-line);
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+  }
+  /* light theme: hero wordmark in beige paper tone rather than gilt */
+  html:not([data-palette='midnight']) #top .cover-title {
+    color: var(--color-paper);
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
+  }
+
+  /* ---- section rail: numeral + title up the left gutter (book spine) ---- */
+  .sec-grid {
+    display: grid;
+    grid-template-columns: var(--spacing-gutter) minmax(0, 1fr) var(--spacing-gutter);
+    gap: var(--spacing-rail);
+    align-items: start;
+  }
+  .sec-body {
+    min-width: 0;
+  }
+  .sec-aside {
+    align-self: center;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    white-space: nowrap;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+  }
+  .sec-eyebrow {
+    font-family: var(--font-numeral);
+    font-style: italic;
+    font-weight: 500;
+    font-size: var(--text-numeral-sm);
+    letter-spacing: 0.01em;
+    color: var(--color-accent);
+    margin: 0 0 1rem 0;
+  }
+  .sec-title {
+    font-size: var(--text-section);
+    margin: 0;
+  }
+
+  /* About: the numeral stays in the gutter, but the body reads as centred */
+  #about .sec-body {
+    text-align: center;
+  }
+  #about .bio {
+    margin-inline: auto;
+    text-align: left;
+  }
+  .bio {
+    font-size: var(--text-body-lg);
+    color: var(--color-ink-soft);
+    max-width: 52ch;
+  }
+  .bio .initial {
+    float: left;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 3.5em;
+    line-height: 0.68;
+    margin: 0.04em 0.1em 0 0;
+    color: var(--color-accent);
+  }
+  #about .bio .initial {
+    float: none;
+    font: inherit;
+    margin: 0;
+    color: inherit;
+  }
+
+  /* Contact colour-block rail: numeral gold, title sized to match the other
+     sections (the `.cta h2` rule would otherwise blow the rail title up to CTA size) */
+  #contact .sec-eyebrow {
+    color: var(--color-gold);
+    text-shadow: none;
+  }
+  #contact .sec-title {
+    font-size: var(--text-section);
+  }
+
+  /* inter-section flourish:  ❧ — ❖ — ❧ */
+  .flourish {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.7rem;
+    padding-block: clamp(0.9rem, 2vw, 1.6rem);
+    color: var(--color-accent);
+  }
+  .flourish .ln {
+    height: 1px;
+    width: clamp(2rem, 12vw, 8rem);
+    background: linear-gradient(90deg, transparent, var(--color-rule));
+  }
+  .flourish .ln:last-of-type {
+    background: linear-gradient(90deg, var(--color-rule), transparent);
+  }
+  .flourish .gl {
+    font-family: var(--font-display);
+  }
+  .flourish .gl-lg {
+    font-size: 1.5rem;
+    color: var(--color-accent);
+  }
+  .flourish .sw {
+    font-size: 1.15rem;
+    color: var(--color-accent);
+  }
+  .flourish .sw-l {
+    transform: scaleX(-1);
+  }
+
+  /* ---- Projects — engraved catalog ---- */
+  .catalog {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+    margin-top: 1.5rem;
+    border-top: 1px solid var(--color-line);
+  }
+  .entry {
+    position: relative;
+    padding: 1.6rem 1.6rem 1.7rem;
+    border-bottom: 1px solid var(--color-line);
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1.1rem;
+    transition:
+      background 0.25s ease,
+      padding 0.25s ease;
+  }
+  .catalog .entry:nth-child(odd) {
+    border-right: 1px solid var(--color-line);
+  }
+  .entry .no {
+    font-family: var(--font-numeral);
+    font-style: italic;
+    font-size: var(--text-numeral);
+    color: var(--color-accent);
+    line-height: 1;
+    min-width: 1.6ch;
+    font-weight: 500;
+  }
+  .entry h3 {
+    font-family: var(--font-display);
+    font-size: var(--text-h3);
+    margin: 0.1rem 0 0.4rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .entry h3 .arw {
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: all 0.25s ease;
+    color: var(--color-accent);
+  }
+  .entry p {
+    margin: 0;
+    color: var(--color-ink-soft);
+    font-size: 0.98rem;
+    line-height: 1.5;
+  }
+  .entry .tag {
+    margin-top: 0.7rem;
+  }
+  .entry:hover {
+    background: color-mix(in oklab, var(--color-paper-2) 75%, transparent);
+    padding-left: 2.2rem;
+  }
+  .entry:hover h3 {
+    color: var(--color-accent);
+  }
+  .entry:hover h3 .arw {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  /* the catalog seal — a gilt circle with an outbound-link arrow */
+  .entry .seal {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    width: 32px;
+    height: 32px;
+    border: 1px solid color-mix(in oklab, var(--color-gold) 55%, transparent);
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    color: var(--color-gold);
+    box-shadow:
+      inset 0 0 0 2px color-mix(in oklab, var(--color-paper) 70%, transparent),
+      inset 0 0 0 3px color-mix(in oklab, var(--color-gold) 18%, transparent);
+    transition:
+      color 0.25s ease,
+      transform 0.25s ease,
+      border-color 0.25s ease;
+  }
+  .entry .seal svg {
+    display: block;
+  }
+  .entry:hover .seal {
+    color: var(--color-accent);
+    border-color: color-mix(in oklab, var(--color-accent) 55%, transparent);
+    transform: translate(2px, -2px);
+  }
+
+  /* ---- Blog — ledger ---- */
+  .ledger {
+    margin-top: 1.5rem;
+  }
+  .ledger .row {
+    display: grid;
+    grid-template-columns: 8.5rem 1fr auto;
+    gap: 1.4rem;
+    align-items: baseline;
+    padding: 1.15rem 0.4rem;
+    border-bottom: 1px solid var(--color-line);
+    transition:
+      background 0.2s,
+      padding 0.2s;
+  }
+  .ledger .row:first-child {
+    border-top: 1px solid var(--color-line);
+  }
+  .ledger .row .date {
+    font-family: var(--font-body);
+    font-variant: small-caps;
+    letter-spacing: 0.1em;
+    color: var(--color-ink-faint);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+  }
+  .ledger .row .t {
+    font-family: var(--font-display);
+    font-size: var(--text-row);
+    font-weight: 600;
+  }
+  .ledger .row .ex {
+    grid-column: 2;
+    color: var(--color-ink-soft);
+    font-size: 0.95rem;
+    margin-top: 0.25rem;
+    max-width: 62ch;
+  }
+  .ledger .row .cat {
+    font-family: var(--font-body);
+    font-variant: small-caps;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.68rem;
+    color: var(--color-accent);
+    white-space: nowrap;
+  }
+  .ledger .row:hover {
+    background: color-mix(in oklab, var(--color-paper-2) 70%, transparent);
+    padding-inline: 1rem;
+  }
+  .ledger .row:hover .t {
+    color: var(--color-accent);
+  }
+  .blog-cta {
+    text-align: center;
+    margin-top: 2rem;
+  }
+
+  /* ---- Footer ---- */
+  .site-foot {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--color-line);
+    padding-block: 3rem 2.5rem;
+  }
+  .foot-grid {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+  .foot-grid .socials {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    max-width: 30rem;
+    margin-top: 0.8rem;
+  }
+  .foot-note {
+    text-align: center;
+    margin-top: 2.5rem;
+    color: var(--color-ink-faint);
+    font-style: italic;
+  }
+
+  /* rail collapses to a centred horizontal header below the `rail` breakpoint */
+  @media (max-width: 64rem) {
+    .sec-grid {
+      grid-template-columns: 1fr;
+      gap: 1.3rem;
+    }
+    .sec-aside {
+      writing-mode: horizontal-tb;
+      transform: none;
+      align-self: auto;
+      display: block;
+      text-align: center;
+    }
+    .sec-eyebrow {
+      display: block;
+      margin: 0 0 0.4rem 0;
+    }
+  }
+
+  @media (max-width: 860px) {
+    .catalog {
+      grid-template-columns: 1fr;
+    }
+    .catalog .entry:nth-child(odd) {
+      border-right: 0;
+    }
+    .ledger .row {
+      grid-template-columns: 1fr;
+      gap: 0.2rem;
+    }
+    .ledger .row .cat {
+      grid-row: 1;
+    }
+    .ledger .row .ex {
+      grid-column: 1;
+    }
+  }
+}

@@ -1,0 +1,1057 @@
+---
+// brand.astro — the public brand reference (/brand), the at-a-glance companion
+// to DESIGN.md and src/styles/global.css. Ported from the design's "Style Guide".
+import Layout from '~/layouts/Layout.astro';
+import Header from '~/components/almanac/Header.astro';
+import Footer from '~/components/almanac/Footer.astro';
+
+// Palette swatches — hex + OKLCH, shown verbatim as a reference (the one place
+// raw values are intentionally on display).
+const PARCHMENT = [
+  ['paper', '#efe6d0', 'oklch(92.6% 0.031 88.4)', 'Page background'],
+  ['paper-2', '#e5d9bb', 'oklch(88.7% 0.042 88.8)', 'Tinted band'],
+  ['paper-edge', '#d7c8a2', 'oklch(83.6% 0.053 89.0)', 'Deepest edge'],
+  ['ink', '#181410', 'oklch(19.5% 0.010 67.2)', 'Primary text'],
+  ['ink-soft', '#443928', 'oklch(35.1% 0.032 78.3)', 'Body text'],
+  ['ink-faint', '#8b7c5c', 'oklch(59.2% 0.049 85.7)', 'Muted meta'],
+  ['line', '#c6b78d', 'oklch(78.2% 0.059 90.7)', 'Hairline'],
+  ['rule', '#9c8757', 'oklch(63.1% 0.070 86.8)', 'Engraved keyline'],
+  ['accent', '#1d6b41', 'oklch(47.0% 0.101 155.2)', 'Garden green'],
+  ['gold', '#b08016', 'oklch(63.1% 0.125 80.7)', 'Gilt'],
+  ['blue', '#1f4f86', 'oklch(42.4% 0.105 254.0)', 'Secondary'],
+  ['cta-1', '#143524', 'oklch(29.8% 0.050 158.7)', 'Block base'],
+  ['cta-2', '#1f4b33', 'oklch(37.4% 0.064 157.3)', 'Block top'],
+];
+const MIDNIGHT = [
+  ['paper', '#141925', 'oklch(21.4% 0.025 266.8)', 'Page background'],
+  ['paper-2', '#1c2232', 'oklch(25.4% 0.032 268.3)', 'Tinted band'],
+  ['paper-edge', '#293043', 'oklch(31.1% 0.036 268.7)', 'Deepest edge'],
+  ['ink', '#f1e6c9', 'oklch(92.6% 0.040 89.7)', 'Primary text'],
+  ['ink-soft', '#cabd98', 'oklch(80.0% 0.052 91.0)', 'Body text'],
+  ['ink-faint', '#948966', 'oklch(63.1% 0.051 92.7)', 'Muted meta'],
+  ['line', '#383d4d', 'oklch(36.2% 0.029 271.4)', 'Hairline'],
+  ['rule', '#5a5872', 'oklch(47.2% 0.042 288.2)', 'Engraved keyline'],
+  ['accent', '#e9ad3a', 'oklch(78.5% 0.143 79.5)', 'Vivid gold'],
+  ['gold', '#e9ad3a', 'oklch(78.5% 0.143 79.5)', 'Gilt'],
+  ['blue', '#7fa8d8', 'oklch(72.0% 0.083 252.8)', 'Secondary'],
+  ['cta-1', '#101a30', 'oklch(22.1% 0.046 264.5)', 'Block base'],
+  ['cta-2', '#18284a', 'oklch(28.2% 0.066 263.7)', 'Block top'],
+];
+const FIXED = [
+  ['foil-1', '#f3dc9a', 'oklch(89.8% 0.088 91.1)', 'Foil light'],
+  ['foil-2', '#c89a3d', 'oklch(71.2% 0.122 81.9)', 'Foil mid'],
+  ['foil-3', '#8f6620', 'oklch(54.0% 0.099 76.6)', 'Foil dark'],
+  ['cta-ink', '#f4eedd', 'oklch(94.9% 0.023 90.8)', 'Block heading'],
+  ['cta-body', '#efe2c3', 'oklch(91.5% 0.043 88.0)', 'Block body'],
+  ['cta-line·dk', '#d8b45a', 'oklch(78.4% 0.117 87.7)', 'Gold line (dark)'],
+];
+
+type Swatch = (typeof PARCHMENT)[number];
+const Swatches = (rows: Swatch[]) => rows;
+---
+
+<Layout
+  title="Brand"
+  description="The Evan Harmon brand reference — Almanac: an aged-paper, woodcut-engraving identity with antique serifs, gilt ornaments, a printed grain, and dual Parchment & Midnight themes."
+>
+  <Header />
+  <main class="brand-page">
+    <div class="wrap">
+      <!-- INTRO -->
+      <section class="block">
+        <span class="sec-no">No. 0</span>
+        <h2 class="sec-title display">Almanac</h2>
+        <div class="bdivider">
+          <b class="leaf l">❧</b><i class="ln"></i><b class="mid">❖</b><i class="ln"></i><b class="leaf">❧</b>
+        </div>
+        <p class="lead">
+          The brand &amp; design system for <strong>evanharmon.com</strong> — an aged-paper, woodcut-engraving almanac: antique
+          serif typography, gilt ornaments, a tactile printed grain, and bold colour-block sections, in a light
+          <em>Parchment</em> theme and a dark <em>Midnight</em> theme.
+        </p>
+        <p class="note">
+          Toggle the theme top-right. This page is the at-a-glance reference; the exhaustive spec lives in
+          <strong>DESIGN.md</strong> and the canonical runtime tokens in <strong>src/styles/global.css</strong>.
+        </p>
+
+        <h3 class="sub-title">Open Graph · share card</h3>
+        <div class="asset" style="max-width:660px">
+          <img id="ogImg" src="/images/og-image.png" alt="Evan Harmon Open Graph share card" />
+          <div class="cap">
+            <span class="t" id="ogTitle">Midnight · default</span>
+            <span class="m" id="ogPath">/images/og-image.png · 1200×630</span>
+          </div>
+        </div>
+        <p class="note">
+          The card follows the theme — <strong>Midnight</strong> shows the dark default; <strong>Parchment</strong> shows
+          the green colour-block card. Serve the dark one from the site root for the live <span class="mono"
+            >og:image</span
+          > tags (dark cards read best in feeds).
+        </p>
+      </section>
+
+      <!-- BRAND & VOICE -->
+      <section class="block">
+        <span class="sec-no">No. 1</span>
+        <h2 class="sec-title display">Brand &amp; voice</h2>
+        <p class="lead">
+          A technologist's almanac — equal parts engineer's notebook and 18th-century broadsheet. Precise and literate,
+          with dry wit; it treats a personal site like a finely-printed object.
+        </p>
+        <p class="bquote">“Cantankerous contraptions &amp; philosophical piffle.”</p>
+        <p class="eyebrow" style="margin-top:1.6rem">Tone</p>
+        <div class="tone-row">
+          <span class="tone">Crafted</span><span class="tone">Antiquarian</span><span class="tone">Tactile</span>
+          <span class="tone">Confident</span><span class="tone">Quiet</span>
+        </div>
+        <div class="voice" style="margin-top:1.8rem">
+          <div class="do">
+            <h4>Do</h4>
+            <ul>
+              <li>
+                Favour the archaic register — “Send a word”, “Elsewhere on the machines”, “The full account” — never at
+                the expense of clarity.
+              </li>
+              <li>Number your sections: <span class="num">No. 1</span>, <span class="num">No. 2</span> …</li>
+              <li>Keep one accent per theme; use type, scale &amp; the tint band for rhythm.</li>
+              <li>Draw depth with engraved inset keylines.</li>
+            </ul>
+          </div>
+          <div class="dont">
+            <h4>Avoid</h4>
+            <ul>
+              <li>Startup-speak, emoji, neon gradients.</li>
+              <li>Drop-shadow card soup &amp; floating elements.</li>
+              <li>Sans-serif body text.</li>
+              <li>A second hue per section, or fixing the grain to the viewport.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- LOGO & MONOGRAM -->
+      <section class="block">
+        <span class="sec-no">No. 2</span>
+        <h2 class="sec-title display">Logo &amp; monogram</h2>
+        <div class="logo-board">
+          <div class="logo-cell">
+            <div class="wordmark-lg">Evan Harmon</div>
+            <div class="cap">Wordmark · Cormorant Garamond 600</div>
+          </div>
+          <div class="logo-cell">
+            <div class="mark-lg">EH</div>
+            <div class="cap">Monogram · Old Standard TT · gilt circle</div>
+          </div>
+          <div class="logo-cell dark">
+            <div class="mark-lg">EH</div>
+            <div class="cap">Monogram · Midnight</div>
+          </div>
+          <div class="logo-cell">
+            <div class="clearspace"><div class="mark-lg ehmark">EH</div></div>
+            <div class="cap">Clear space ≥ height of the “E”</div>
+          </div>
+        </div>
+        <p class="note">
+          Wordmark “Evan Harmon” in the display serif. The <span class="mono gold">EH</span> monogram in the cover serif (Old
+          Standard TT) inside a gilt circle with a double inset keyline — the brand-mark; 32 px in the header, also the favicon.
+        </p>
+      </section>
+
+      <!-- COLOUR -->
+      <section class="block">
+        <span class="sec-no">No. 3</span>
+        <h2 class="sec-title display">Colour</h2>
+        <p class="lead">
+          Dual-theme &amp; token-driven: semantic variables (<span class="mono">paper</span>, <span class="mono"
+            >ink</span
+          >, <span class="mono">accent</span> …) swap per theme, so one set of utilities is theme-aware. Every swatch lists
+          its <strong>hex</strong> and <strong>OKLCH</strong>.
+        </p>
+
+        <div class="pal-head first">
+          <span class="nm">Parchment</span><span class="tag">light theme · brand primary · accent carries green</span>
+        </div>
+        <div class="swatches">
+          {
+            Swatches(PARCHMENT).map(([nm, hex, ok, role]) => (
+              <div class="sw">
+                <div class="chip" style={`background:${hex}`} />
+                <div class="meta">
+                  <div class="nm">{nm}</div>
+                  <div class="hex">{hex.toUpperCase()}</div>
+                  <div class="ok">{ok}</div>
+                  <div class="role">{role}</div>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+
+        <div class="pal-head">
+          <span class="nm">Midnight</span><span class="tag">dark theme · accent carries gold</span>
+        </div>
+        <div class="swatches">
+          {
+            Swatches(MIDNIGHT).map(([nm, hex, ok, role]) => (
+              <div class="sw">
+                <div class="chip" style={`background:${hex}`} />
+                <div class="meta">
+                  <div class="nm">{nm}</div>
+                  <div class="hex">{hex.toUpperCase()}</div>
+                  <div class="ok">{ok}</div>
+                  <div class="role">{role}</div>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+
+        <div class="pal-head">
+          <span class="nm">Foil &amp; fixed</span><span class="tag">do not swap by theme</span>
+        </div>
+        <div class="swatches">
+          {
+            Swatches(FIXED).map(([nm, hex, ok, role]) => (
+              <div class="sw">
+                <div class="chip" style={`background:${hex}`} />
+                <div class="meta">
+                  <div class="nm">{nm}</div>
+                  <div class="hex">{hex.toUpperCase()}</div>
+                  <div class="ok">{ok}</div>
+                  <div class="role">{role}</div>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+
+        <p class="note">
+          <strong>One accent per theme.</strong> Green carries Parchment, gold carries Midnight. The accent is for eyebrows,
+          numerals, links, hovers &amp; ornaments only — body text stays <span class="mono">ink</span> /
+          <span class="mono">ink-soft</span>. Colour-blocks (hero &amp; contact) are the only filled surfaces.
+        </p>
+      </section>
+
+      <!-- TYPOGRAPHY -->
+      <section class="block">
+        <span class="sec-no">No. 4</span>
+        <h2 class="sec-title display">Typography</h2>
+        <p class="lead">
+          Four antique serifs, each with one job. Self-hosted with <span class="mono">@fontsource</span> in Astro.
+        </p>
+
+        <div class="fontgrid">
+          <div class="fontcard">
+            <div class="glyphs display" style="font-weight:600">Aa Gg</div>
+            <div class="fname">Cormorant Garamond <span class="frole">· Display</span></div>
+            <div class="fmeta">
+              <b>Weight 600.</b> Headings, hero, the wordmark.
+              <em>line-height ≈ 1.0, tracking 0.004em, text-wrap: balance, 1px emboss.</em>
+            </div>
+          </div>
+          <div class="fontcard">
+            <div class="glyphs" style="font-family:var(--font-body)">Aa Gg</div>
+            <div class="fname">EB Garamond <span class="frole">· Body &amp; labels</span></div>
+            <div class="fmeta">
+              <b>400 / 500 / 600 + italic.</b> Paragraphs, UI text, and — in
+              <span style="font-variant:small-caps;letter-spacing:.1em">small-caps</span> — eyebrows, nav, tags &amp; dates.
+            </div>
+          </div>
+          <div class="fontcard">
+            <div class="glyphs" style="font-family:var(--font-cover);font-weight:700">EH</div>
+            <div class="fname">Old Standard TT <span class="frole">· Cover / monogram</span></div>
+            <div class="fmeta">
+              <b>400 / 700.</b> The <span class="mono gold">EH</span> brand-mark &amp; crest only. The most antiquarian face
+              — reserve it.
+            </div>
+          </div>
+          <div class="fontcard">
+            <div class="glyphs num" style="font-size:3.2rem">No. 1</div>
+            <div class="fname">Playfair Display <span class="frole">· Numerals</span></div>
+            <div class="fmeta">
+              <b>Italic.</b> Always italic, always in the accent — section “No.” &amp; catalog numbers. Never for body.
+            </div>
+          </div>
+        </div>
+
+        <h3 class="sub-title">Specimens</h3>
+        <div class="specimen">
+          <div class="row">
+            <span class="label">Hero · Cormorant 600</span><span
+              class="display"
+              style="font-size:clamp(2.6rem,7vw,4.6rem)">Evan&nbsp;Harmon</span
+            >
+          </div>
+          <div class="row">
+            <span class="label">Section · Cormorant 600</span><span
+              class="display"
+              style="font-size:clamp(1.8rem,4vw,2.8rem)">Work &amp; Endeavours</span
+            >
+          </div>
+          <div class="row">
+            <span class="label">Numerals · Playfair italic</span><span class="num" style="font-size:2.4rem"
+              >No. 1&nbsp;&nbsp;2&nbsp;&nbsp;3&nbsp;&nbsp;4</span
+            >
+          </div>
+          <div class="row">
+            <span class="label">Body · EB Garamond</span><span style="max-width:52ch"
+              >I'm a technologist and software engineer with experience in DevOps, web development, AI, cloud
+              engineering, and project management — building and growing things in the open.</span
+            >
+          </div>
+          <div class="row">
+            <span class="label">Eyebrow · small-caps</span><span class="eyebrow">Correspondence · No. IV</span>
+          </div>
+          <div class="row">
+            <span class="label">Label / meta</span><span class="label"
+              >Template · CI/CD&nbsp;&nbsp;·&nbsp;&nbsp;Dec 2025</span
+            >
+          </div>
+        </div>
+
+        <h3 class="sub-title">Type scale</h3>
+        <table class="tbl">
+          <thead><tr><th>Token</th><th>Size</th><th>Use</th></tr></thead>
+          <tbody>
+            <tr
+              ><td class="k">hero</td><td><span class="px">clamp(2.8rem, 9.5vw, 7rem)</span></td><td>Hero wordmark</td
+              ></tr
+            >
+            <tr
+              ><td class="k">cta</td><td><span class="px">clamp(2.6rem, 7vw, 5rem)</span></td><td
+                >“Let's Talk” heading</td
+              ></tr
+            >
+            <tr
+              ><td class="k">section</td><td><span class="px">clamp(2rem, 4.4vw, 3.1rem)</span></td><td
+                >Section titles</td
+              ></tr
+            >
+            <tr><td class="k">h3</td><td><span class="px">1.55rem</span></td><td>Catalog entry titles</td></tr>
+            <tr><td class="k">body</td><td><span class="px">1.16rem</span> · lh 1.62</td><td>Default body</td></tr>
+            <tr
+              ><td class="k">numeral</td><td><span class="px">2.1rem</span> / <span class="px">1.5rem</span></td><td
+                >Catalog / section “No.”</td
+              ></tr
+            >
+            <tr
+              ><td class="k">eyebrow</td><td><span class="px">0.72rem</span> · tracking 0.28em</td><td
+                >Eyebrows (small-caps)</td
+              ></tr
+            >
+            <tr
+              ><td class="k">label / nav</td><td><span class="px">0.74rem</span> / <span class="px">0.76rem</span></td
+              ><td>Tags, dates, nav</td></tr
+            >
+          </tbody>
+        </table>
+        <p class="note">
+          <strong>Tailwind utilities:</strong>
+          <span class="mono">font-display</span>, <span class="mono">font-body</span>,
+          <span class="mono">font-cover</span>, <span class="mono">font-numeral</span>.
+        </p>
+      </section>
+
+      <!-- ORNAMENTS -->
+      <section class="block">
+        <span class="sec-no">No. 5</span>
+        <h2 class="sec-title display">Ornaments &amp; texture</h2>
+        <div class="grid2">
+          <div>
+            <p class="eyebrow" style="margin-bottom:.9rem">Engraved divider</p>
+            <div class="bdivider">
+              <b class="leaf l">❧</b><i class="ln"></i><b class="mid">❖</b><i class="ln"></i><b class="leaf">❧</b>
+            </div>
+            <p style="text-align:center;font-size:1.8rem;color:var(--accent);margin:.6rem 0">
+              ❦&nbsp;&nbsp;&nbsp;❖&nbsp;&nbsp;&nbsp;❧
+            </p>
+            <p class="note" style="text-align:center">
+              Crest ❦ · diamond ❖ · leaf ❧ — all in the display serif, accent-coloured, on a 1px emboss.
+            </p>
+          </div>
+          <div>
+            <p class="eyebrow" style="margin-bottom:.9rem">The printed grain</p>
+            <p class="note">
+              A fine monochrome noise tile (<span class="mono">grain-noise.png</span>, 400 px) laid over every surface
+              that <strong>scrolls with the page</strong> — it is part of the material, never a fixed screen filter.
+              <span class="mono">opacity ≈ 0.36</span>, <span class="mono">z-index 50</span>,
+              <span class="mono">pointer-events: none</span>.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- BUTTONS + GILT -->
+      <section class="block">
+        <span class="sec-no">No. 6</span>
+        <h2 class="sec-title display">Buttons, gilt &amp; components</h2>
+        <div class="grid2">
+          <div>
+            <p class="eyebrow" style="margin-bottom:.9rem">Buttons</p>
+            <div class="btn-row">
+              <span class="bbtn">Read more <span class="gl">→</span></span>
+              <span class="bbtn bbtn--solid"><span class="gl">❧</span> Memex</span>
+            </div>
+            <p class="note" style="margin-top:1.4rem">
+              Engraved outline by default (double inset keyline, small-caps label, trailing → in the display serif).
+              <span class="mono">.btn--solid</span> fills ink; <span class="mono">.btn--invert</span> /
+              <span class="mono">.btn--ghost</span> ride colour-blocks.
+            </p>
+          </div>
+          <div>
+            <p class="eyebrow" style="margin-bottom:.9rem">Catalog &amp; rail</p>
+            <div class="cardgrid">
+              <span class="bentry">
+                <div class="bno">1</div>
+                <div>
+                  <h4 class="display">Harmon Stack <span style="color:var(--accent)">→</span></h4>
+                  <p>
+                    A project template to bootstrap &amp; streamline new work — CI/CD, security tests, linting, docs.
+                  </p>
+                  <div class="label" style="margin-top:.7rem;color:var(--accent)">Template · CI/CD</div>
+                </div>
+                <span class="seal">❧</span>
+              </span>
+              <span class="bentry">
+                <div class="bno">2</div>
+                <div>
+                  <h4 class="display">Harmon Ops <span style="color:var(--accent)">→</span></h4>
+                  <p>Scripts, dotfiles, automation &amp; IaC for a developer environment and homelab.</p>
+                  <div class="label" style="margin-top:.7rem;color:var(--accent)">Infrastructure</div>
+                </div>
+                <span class="seal">❧</span>
+              </span>
+            </div>
+            <p class="note" style="margin-top:1rem">
+              Hover: tint + content slides inward. Numerals Playfair italic; ❧ seal top-right.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- COLOUR BLOCK -->
+      <section class="block last">
+        <span class="sec-no">No. 7</span>
+        <h2 class="sec-title display">Colour-block</h2>
+        <p class="note">
+          The only filled surfaces — green on light, blue on dark — always carrying gold foil ornaments &amp; warm-white
+          text.
+        </p>
+      </section>
+    </div>
+
+    <div class="bcta">
+      <div class="crest">❦</div>
+      <h3>Let's Talk</h3>
+      <p class="btag">Send a word</p>
+      <div class="btn-row" style="justify-content:center">
+        <a class="bbtn bbtn--invert" href="/contact">Contact Me</a>
+        <a class="bbtn bbtn--ghost" href="https://fantastical.app/evanharmon" target="_blank" rel="noopener"
+          >Meet With Me</a
+        >
+      </div>
+    </div>
+  </main>
+  <Footer />
+</Layout>
+
+<script is:inline>
+  // OG-card preview follows the theme toggle.
+  (function () {
+    const img = document.getElementById('ogImg');
+    const title = document.getElementById('ogTitle');
+    const path = document.getElementById('ogPath');
+    if (!img) return;
+    const sync = () => {
+      const dark = document.documentElement.dataset.palette === 'midnight';
+      const src = dark ? '/images/og-image.png' : '/images/og-image-light.png';
+      img.setAttribute('src', src);
+      if (title) title.textContent = dark ? 'Midnight · default' : 'Parchment · green block';
+      if (path) path.textContent = src + ' · 1200×630';
+    };
+    sync();
+    new MutationObserver(sync).observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-palette'],
+    });
+  })();
+</script>
+
+<style>
+  /* Map the Almanac runtime tokens to the short aliases this ported page uses,
+     so theme swaps still flow through. (No raw palette values live here.) */
+  .brand-page {
+    --paper: var(--color-paper);
+    --paper-2: var(--color-paper-2);
+    --paper-edge: var(--color-paper-edge);
+    --ink: var(--color-ink);
+    --ink-soft: var(--color-ink-soft);
+    --ink-faint: var(--color-ink-faint);
+    --line: var(--color-line);
+    --rule: var(--color-rule);
+    --accent: var(--color-accent);
+    --gold: var(--color-gold);
+    --blue: var(--color-blue);
+    --cta-1: var(--c-cta-1);
+    --cta-2: var(--c-cta-2);
+    --cta-ink: var(--color-cta-ink);
+    --cta-line: var(--color-cta-line);
+    display: block;
+  }
+  .brand-page .wrap {
+    width: min(1080px, 92vw);
+  }
+  .display {
+    font-family: var(--font-display);
+    font-weight: 600;
+    line-height: 1;
+    text-wrap: balance;
+  }
+  .num {
+    font-family: var(--font-numeral);
+    font-style: italic;
+    color: var(--accent);
+  }
+  .mono {
+    font-family: var(--font-numeral);
+  }
+  .mono.gold {
+    color: var(--gold);
+  }
+  .eyebrow {
+    font-family: var(--font-body);
+    font-variant: small-caps;
+    text-transform: uppercase;
+    letter-spacing: 0.28em;
+    font-size: 0.72rem;
+    color: var(--accent);
+  }
+  .label {
+    font-family: var(--font-body);
+    font-variant: small-caps;
+    letter-spacing: 0.22em;
+    font-size: 0.74rem;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+  }
+
+  section.block {
+    padding-block: clamp(2rem, 4vw, 3.4rem);
+    border-bottom: 1px solid var(--line);
+    position: relative;
+  }
+  section.block.last {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+  .sec-no {
+    font-family: var(--font-numeral);
+    font-style: italic;
+    color: var(--accent);
+    font-size: 1.1rem;
+    display: block;
+    margin-bottom: 0.2rem;
+  }
+  h2.sec-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.9rem, 4vw, 2.8rem);
+    margin: 0.1rem 0 1.2rem;
+    line-height: 1;
+  }
+  h3.sub-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.5rem;
+    margin: 2rem 0 1rem;
+  }
+  .lead {
+    font-size: 1.16rem;
+    max-width: 64ch;
+    color: var(--ink-soft);
+  }
+  .note {
+    color: var(--ink-faint);
+    font-size: 0.92rem;
+    max-width: 64ch;
+    margin-top: 0.9rem;
+  }
+  .bquote {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.6rem;
+    color: var(--accent);
+    margin: 1.2rem 0 0.2rem;
+  }
+
+  /* divider */
+  .bdivider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.85rem;
+    color: var(--rule);
+    margin: 0.5rem 0 2rem;
+  }
+  .bdivider .ln {
+    flex: 1 1 auto;
+    height: 1px;
+    max-width: 9rem;
+    background: linear-gradient(90deg, transparent, var(--rule) 30%, var(--rule) 70%, transparent);
+  }
+  .bdivider b {
+    font-family: var(--font-display);
+    font-weight: 400;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .bdivider .mid {
+    font-size: 1.5rem;
+  }
+  .bdivider .leaf {
+    font-size: 1.15rem;
+  }
+  .bdivider .l {
+    transform: scaleX(-1);
+  }
+
+  /* palette */
+  .pal-head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.8rem;
+    margin: 1.8rem 0 0.9rem;
+  }
+  .pal-head .nm {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.4rem;
+  }
+  .pal-head .tag {
+    font-style: italic;
+    color: var(--ink-faint);
+    font-size: 0.92rem;
+  }
+  .pal-head.first {
+    margin-top: 0.4rem;
+  }
+  .swatches {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(146px, 1fr));
+    gap: 0.7rem;
+  }
+  .sw {
+    border: 1px solid var(--line);
+    background: color-mix(in oklab, var(--paper-2) 40%, transparent);
+  }
+  .sw .chip {
+    height: 58px;
+    border-bottom: 1px solid color-mix(in oklab, var(--ink) 10%, transparent);
+  }
+  .sw .meta {
+    padding: 0.5rem 0.55rem 0.6rem;
+  }
+  .sw .nm {
+    font-family: var(--font-body);
+    font-variant: small-caps;
+    letter-spacing: 0.05em;
+    font-size: 0.86rem;
+    line-height: 1.1;
+  }
+  .sw .hex {
+    font-family: var(--font-numeral);
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+    margin-top: 0.1rem;
+  }
+  .sw .ok {
+    font-family: ui-monospace, Menlo, monospace;
+    font-size: 0.62rem;
+    color: var(--ink-faint);
+    margin-top: 0.12rem;
+  }
+  .sw .role {
+    font-size: 0.72rem;
+    color: var(--ink-faint);
+    font-style: italic;
+    margin-top: 0.3rem;
+  }
+
+  /* type specimens */
+  .specimen {
+    display: flex;
+    flex-direction: column;
+    gap: 1.3rem;
+  }
+  .specimen .row {
+    display: grid;
+    grid-template-columns: 8.5rem 1fr;
+    gap: 1.2rem;
+    align-items: baseline;
+    border-bottom: 1px solid color-mix(in oklab, var(--line) 60%, transparent);
+    padding-bottom: 1rem;
+  }
+  .specimen .row > .label {
+    padding-top: 0.4rem;
+  }
+
+  /* font cards */
+  .fontgrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    margin-top: 1.4rem;
+  }
+  .fontcard {
+    background: var(--paper);
+    padding: 1.4rem 1.5rem 1.5rem;
+  }
+  .fontcard .glyphs {
+    font-size: 3.2rem;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+  .fontcard .fname {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.5rem;
+  }
+  .fontcard .frole {
+    color: var(--accent);
+  }
+  .fontcard .fmeta {
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+    margin-top: 0.5rem;
+    line-height: 1.5;
+  }
+  .fontcard .fmeta b {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  /* buttons (static specimens) */
+  .btn-row {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .bbtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-body);
+    font-variant: small-caps;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 0.8rem;
+    padding: 0.7rem 1.3rem;
+    color: var(--ink);
+    border: 1px solid var(--rule);
+    white-space: nowrap;
+    box-shadow:
+      inset 0 0 0 2px var(--paper),
+      inset 0 0 0 3px color-mix(in oklab, var(--rule) 55%, transparent);
+    background: color-mix(in oklab, var(--paper-2) 60%, transparent);
+  }
+  .bbtn .gl {
+    font-family: var(--font-display);
+  }
+  .bbtn--solid {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+    box-shadow:
+      inset 0 0 0 2px var(--ink),
+      inset 0 0 0 3px color-mix(in oklab, var(--paper) 30%, transparent);
+  }
+  .bbtn--invert {
+    background: var(--cta-line);
+    color: #241803;
+    border-color: var(--cta-line);
+    box-shadow: inset 0 0 0 2px color-mix(in oklab, var(--cta-line) 70%, #000 20%);
+  }
+  .bbtn--ghost {
+    background: rgba(255, 255, 255, 0.025);
+    color: var(--cta-ink);
+    border-color: color-mix(in oklab, var(--cta-line) 60%, transparent);
+    box-shadow:
+      inset 0 0 0 2px var(--cta-1),
+      inset 0 0 0 3px color-mix(in oklab, var(--cta-line) 30%, transparent);
+  }
+
+  /* component cards */
+  .cardgrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border-top: 1px solid var(--line);
+  }
+  .bentry {
+    position: relative;
+    padding: 1.5rem 1.5rem 1.6rem;
+    border-bottom: 1px solid var(--line);
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1.1rem;
+  }
+  .bentry:nth-child(odd) {
+    border-right: 1px solid var(--line);
+  }
+  .bentry .bno {
+    font-family: var(--font-numeral);
+    font-style: italic;
+    font-size: 2.1rem;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .bentry h4 {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    margin: 0.1rem 0 0.4rem;
+    font-weight: 500;
+    display: flex;
+    gap: 0.4rem;
+    align-items: center;
+  }
+  .bentry p {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: 0.96rem;
+    line-height: 1.5;
+  }
+  .bentry .seal {
+    position: absolute;
+    top: 1.4rem;
+    right: 1.4rem;
+    color: var(--accent);
+    opacity: 0.5;
+  }
+
+  /* brand & voice */
+  .tone-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    margin: 0.4rem 0 0;
+  }
+  .tone {
+    font-family: var(--font-body);
+    font-variant: small-caps;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-size: 0.74rem;
+    color: var(--accent);
+    border: 1px solid color-mix(in oklab, var(--accent) 40%, transparent);
+    padding: 0.3rem 0.8rem;
+    border-radius: 30px;
+  }
+  .voice {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem 2.4rem;
+  }
+  .voice h4 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.25rem;
+    margin: 0 0 0.3rem;
+  }
+  .voice .do h4 {
+    color: var(--accent);
+  }
+  .voice ul {
+    margin: 0.2rem 0 0;
+    padding-left: 1.1rem;
+  }
+  .voice li {
+    margin-bottom: 0.35rem;
+    color: var(--ink-soft);
+  }
+
+  /* logo / lockup */
+  .logo-board {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .logo-cell {
+    background: var(--paper);
+    padding: 2rem 1.6rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    text-align: center;
+    min-height: 200px;
+    justify-content: center;
+  }
+  .logo-cell.dark {
+    background: #141925;
+    color: #f1e6c9;
+  }
+  .logo-cell .cap {
+    font-family: var(--font-body);
+    font-variant: small-caps;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-size: 0.68rem;
+    color: var(--ink-faint);
+  }
+  .logo-cell.dark .cap {
+    color: #948966;
+  }
+  .mark-lg {
+    display: grid;
+    place-items: center;
+    width: 84px;
+    height: 84px;
+    font-family: var(--font-cover);
+    font-size: 1.9rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--gold);
+    border: 1px solid color-mix(in oklab, var(--gold) 65%, transparent);
+    border-radius: 50%;
+    box-shadow:
+      inset 0 0 0 4px color-mix(in oklab, var(--paper) 70%, transparent),
+      inset 0 0 0 5px color-mix(in oklab, var(--gold) 22%, transparent);
+  }
+  .logo-cell.dark .mark-lg {
+    color: #e9ad3a;
+    box-shadow:
+      inset 0 0 0 4px color-mix(in oklab, #141925 70%, transparent),
+      inset 0 0 0 5px color-mix(in oklab, #e9ad3a 25%, transparent);
+  }
+  .wordmark-lg {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 2.4rem;
+    line-height: 1;
+    letter-spacing: 0.004em;
+  }
+  .clearspace {
+    position: relative;
+    padding: 2.2rem;
+  }
+  .clearspace::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 1px dashed color-mix(in oklab, var(--accent) 55%, transparent);
+  }
+
+  /* asset / OG showcase */
+  .asset {
+    border: 1px solid var(--line);
+    background: color-mix(in oklab, var(--paper-2) 45%, transparent);
+    padding: 1rem;
+  }
+  .asset img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid color-mix(in oklab, var(--ink) 12%, transparent);
+  }
+  .asset .cap {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    margin-top: 0.85rem;
+  }
+  .asset .cap .t {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.25rem;
+  }
+  .asset .cap .m {
+    font-family: ui-monospace, Menlo, monospace;
+    font-size: 0.72rem;
+    color: var(--ink-faint);
+  }
+
+  .grid2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+  .tbl {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.94rem;
+  }
+  .tbl th,
+  .tbl td {
+    text-align: left;
+    padding: 0.55rem 0.7rem;
+    border-bottom: 1px solid color-mix(in oklab, var(--line) 70%, transparent);
+    vertical-align: top;
+  }
+  .tbl th {
+    font-family: var(--font-body);
+    font-variant: small-caps;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    color: var(--ink-faint);
+    font-weight: 400;
+  }
+  .tbl td.k {
+    font-family: var(--font-numeral);
+    color: var(--accent);
+    white-space: nowrap;
+  }
+  .tbl td .px {
+    font-family: ui-monospace, Menlo, monospace;
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+  }
+
+  /* colour block */
+  .bcta {
+    position: relative;
+    padding: clamp(2.2rem, 5vw, 3.4rem);
+    text-align: center;
+    background: linear-gradient(162deg, var(--cta-2), var(--cta-1) 65%);
+    border-block: 1px solid color-mix(in oklab, var(--cta-line) 38%, transparent);
+    margin-top: clamp(2rem, 4vw, 3.4rem);
+  }
+  .bcta .crest {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    color: var(--cta-line);
+  }
+  .bcta h3 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    color: var(--cta-ink);
+    margin: 0.3rem 0 0.2rem;
+  }
+  .bcta .btag {
+    font-style: italic;
+    color: color-mix(in oklab, var(--cta-ink) 86%, var(--cta-line));
+    margin: 0 0 1.4rem;
+  }
+
+  @media (max-width: 780px) {
+    .grid2,
+    .fontgrid,
+    .cardgrid,
+    .voice {
+      grid-template-columns: 1fr;
+    }
+    .bentry:nth-child(odd) {
+      border-right: 0;
+    }
+    .specimen .row {
+      grid-template-columns: 1fr;
+      gap: 0.3rem;
+    }
+  }
+</style>

@@ -1,0 +1,241 @@
+---
+// Header.astro — sticky, gilt-tooled bar: brand-mark + wordmark left;
+// ❖-separated nav + theme toggle + RSS right.
+import BrandMark from './BrandMark.astro';
+import ThemeToggle from './ThemeToggle.astro';
+import { NAV } from '~/data/site';
+
+const { brandHref = '/' } = Astro.props;
+---
+
+<header class="site-head">
+  <div class="wrap bar">
+    <a class="brand" href={brandHref}>
+      <BrandMark />
+      <span class="brand-name">Evan Harmon</span>
+    </a>
+
+    <div class="bar-right">
+      <nav class="nav" aria-label="Primary">
+        {NAV.map((n) => <a href={n.href}>{n.label}</a>)}
+      </nav>
+      <div class="head-actions">
+        <ThemeToggle />
+        <a class="head-btn" href="/rss.xml" aria-label="RSS feed">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" aria-hidden="true">
+            <path
+              d="M6.18 15.64a2.18 2.18 0 1 0 0 4.36 2.18 2.18 0 0 0 0-4.36zM4 4.44v2.83c7.03 0 12.73 5.7 12.73 12.73h2.83C19.56 11.39 12.61 4.44 4 4.44zM4 9.1v2.83c4.44 0 8.04 3.6 8.04 8.04h2.83C14.87 14.05 10.05 9.1 4 9.1z"
+            ></path>
+          </svg>
+        </a>
+      </div>
+      <button class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false">
+        <svg class="ico ico-open" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+          <path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+          ></path>
+        </svg>
+        <svg class="ico ico-close" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+          ></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<style>
+  .site-head {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: color-mix(in oklab, var(--color-paper) 88%, transparent);
+    backdrop-filter: blur(7px) saturate(1.1);
+  }
+  /* a faint gilt hairline under the bar */
+  .site-head::after {
+    content: '';
+    display: block;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      color-mix(in oklab, var(--color-gold) 26%, transparent),
+      transparent
+    );
+  }
+  .bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: 0.6rem 0.5rem;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    white-space: nowrap;
+    flex: none;
+  }
+  .brand-name {
+    letter-spacing: 0.01em;
+  }
+  .bar-right {
+    display: flex;
+    align-items: center;
+    gap: clamp(0.9rem, 2vw, 1.5rem);
+  }
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  .nav a {
+    position: relative;
+    font-family: var(--font-body);
+    font-variant: small-caps;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-nav);
+    font-size: var(--text-nav);
+    color: var(--color-ink-soft);
+    padding-bottom: 2px;
+  }
+  .nav a:not(:last-child)::before {
+    content: '❖';
+    position: absolute;
+    right: -1.05rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.62rem;
+    color: color-mix(in oklab, var(--color-gold) 70%, transparent);
+    font-family: var(--font-display);
+  }
+  .nav a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    height: 1px;
+    width: 0;
+    background: var(--color-accent);
+    transition: width 0.28s ease;
+  }
+  .nav a:hover {
+    color: var(--color-accent);
+  }
+  .nav a:hover::after {
+    width: 100%;
+  }
+  .head-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex: none;
+  }
+  .head-btn {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    flex: none;
+    color: var(--color-gold);
+    background: color-mix(in oklab, var(--color-paper-2) 55%, transparent);
+    border: 1px solid color-mix(in oklab, var(--color-gold) 55%, transparent);
+    border-radius: 50%;
+    box-shadow:
+      inset 0 0 0 2px color-mix(in oklab, var(--color-paper) 70%, transparent),
+      inset 0 0 0 3px color-mix(in oklab, var(--color-gold) 20%, transparent);
+    transition:
+      color 0.2s,
+      border-color 0.2s,
+      transform 0.2s;
+  }
+  .head-btn:hover {
+    color: var(--color-accent);
+    border-color: color-mix(in oklab, var(--color-accent) 60%, transparent);
+    transform: translateY(-1px);
+  }
+
+  /* gilt circle icon button — matches the theme + RSS buttons */
+  .nav-toggle {
+    display: none;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    flex: none;
+    padding: 0;
+    color: var(--color-gold);
+    cursor: pointer;
+    background: color-mix(in oklab, var(--color-paper-2) 55%, transparent);
+    border: 1px solid color-mix(in oklab, var(--color-gold) 55%, transparent);
+    border-radius: 50%;
+    box-shadow:
+      inset 0 0 0 2px color-mix(in oklab, var(--color-paper) 70%, transparent),
+      inset 0 0 0 3px color-mix(in oklab, var(--color-gold) 20%, transparent);
+    transition:
+      color 0.2s,
+      border-color 0.2s,
+      transform 0.2s;
+  }
+  .nav-toggle:hover {
+    color: var(--color-accent);
+    border-color: color-mix(in oklab, var(--color-accent) 60%, transparent);
+    transform: translateY(-1px);
+  }
+  .nav-toggle .ico {
+    display: block;
+  }
+  .nav-toggle .ico-close {
+    display: none;
+  }
+  .nav-toggle.is-open .ico-open {
+    display: none;
+  }
+  .nav-toggle.is-open .ico-close {
+    display: block;
+  }
+
+  @media (max-width: 860px) {
+    .nav {
+      display: none;
+    }
+    .nav.open {
+      display: flex;
+      position: absolute;
+      top: 100%;
+      right: 0;
+      left: 0;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0;
+      background: var(--color-paper);
+      border-bottom: 1px solid var(--color-line);
+      padding: 0.5rem 0;
+    }
+    .nav.open a {
+      width: 100%;
+      padding: 0.7rem 5vw;
+    }
+    .nav.open a:not(:last-child)::before {
+      content: none;
+    }
+    .nav-toggle {
+      display: grid;
+    }
+  }
+</style>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('.nav-toggle');
+  const nav = document.querySelector<HTMLElement>('.site-head .nav');
+  const setOpen = (open: boolean) => {
+    nav?.classList.toggle('open', open);
+    toggle?.classList.toggle('is-open', open);
+    toggle?.setAttribute('aria-expanded', String(open));
+    toggle?.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  };
+  toggle?.addEventListener('click', () => setOpen(!nav?.classList.contains('open')));
+  nav?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+</script>

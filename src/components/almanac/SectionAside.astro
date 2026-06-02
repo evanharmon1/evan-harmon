@@ -1,0 +1,15 @@
+---
+// SectionAside.astro — the numeral + title cluster that runs vertically up the
+// left gutter (book spine) on wide screens and stacks/centres on top when narrow.
+// Use as the first child of a `.sec-grid` wrapper.
+interface Props {
+  no?: string;
+  title: string;
+}
+const { no, title } = Astro.props;
+---
+
+<header class="sec-aside reveal">
+  {no && <span class="sec-eyebrow">{no}</span>}
+  <h2 class="display sec-title">{title}</h2>
+</header>

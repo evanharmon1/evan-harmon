@@ -1,0 +1,17 @@
+---
+// ThemeScript.astro
+// Sets data-palette on <html> BEFORE first paint to avoid a light↔dark flash.
+// Render in <head>, as early as possible. `is:inline` keeps Astro from deferring it.
+---
+
+<script is:inline>
+  (function () {
+    try {
+      // Midnight is the site's default; a saved choice always wins.
+      const saved = localStorage.getItem('almanac-theme');
+      document.documentElement.dataset.palette = saved || 'midnight';
+    } catch {
+      document.documentElement.dataset.palette = 'midnight';
+    }
+  })();
+</script>

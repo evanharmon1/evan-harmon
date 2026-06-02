@@ -1,0 +1,50 @@
+---
+// RuleOrn.astro — the engraved rule ornament: ❧ —rule— ❖ —rule— ❧
+// (mirrored leaf · hairline · diamond · hairline · leaf).
+interface Props {
+  style?: string;
+  class?: string;
+}
+const { style, class: cls } = Astro.props;
+---
+
+<div class:list={['rule-orn', cls]} style={style} aria-hidden="true">
+  <b class="ro-leaf ro-l">❧</b>
+  <i class="ro-ln"></i>
+  <b class="ro-mid">❖</b>
+  <i class="ro-ln"></i>
+  <b class="ro-leaf ro-r">❧</b>
+</div>
+
+<style>
+  .rule-orn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.85rem;
+    color: var(--color-rule);
+  }
+  .rule-orn .ro-ln {
+    flex: 1 1 auto;
+    height: 1px;
+    max-width: 12rem;
+    background: linear-gradient(90deg, transparent, var(--color-rule) 30%, var(--color-rule) 70%, transparent);
+  }
+  .rule-orn b {
+    font-family: var(--font-display);
+    flex: none;
+    font-weight: 400;
+    color: var(--color-accent);
+    white-space: nowrap;
+    line-height: 1;
+  }
+  .rule-orn .ro-mid {
+    font-size: 1.5rem;
+  }
+  .rule-orn .ro-leaf {
+    font-size: 1.15rem;
+  }
+  .rule-orn .ro-l {
+    transform: scaleX(-1);
+  }
+</style>

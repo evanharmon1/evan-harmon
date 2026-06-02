@@ -1,0 +1,111 @@
+---
+// SocialIcon.astro — gilt circle link with a logo (or engraved monogram)
+// and a hover tooltip naming the destination.
+interface Props {
+  name: string;
+  href: string;
+}
+const { name, href } = Astro.props;
+
+const LOGOS: Record<string, string> = {
+  GitHub: `<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>`,
+  LinkedIn: `<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13.63 13.63h-2.37V9.9c0-.89-.02-2.03-1.24-2.03-1.24 0-1.43.97-1.43 1.97v3.79H6.22V6h2.28v1.04h.03c.32-.6 1.09-1.24 2.25-1.24 2.4 0 2.85 1.58 2.85 3.64v4.19zM3.56 4.96a1.38 1.38 0 1 1 0-2.76 1.38 1.38 0 0 1 0 2.76zM4.75 13.63H2.37V6h2.38v7.63zM14.82 0H1.18C.53 0 0 .52 0 1.16v13.68C0 15.48.53 16 1.18 16h13.64c.65 0 1.18-.52 1.18-1.16V1.16C16 .52 15.47 0 14.82 0z"/></svg>`,
+  Bluesky: `<svg viewBox="0 0 600 530" aria-hidden="true"><path d="M135.72 44.03C202.216 93.951 273.74 195.17 300 249.49c26.262-54.316 97.782-155.54 164.28-205.46C512.26 8.009 590-19.862 590 68.825c0 17.712-10.155 148.79-16.111 170.07-20.703 73.984-96.144 92.854-163.25 81.433 117.3 19.964 147.14 86.092 82.697 152.22-122.39 125.59-175.91-31.511-189.63-71.766-2.514-7.38-3.69-10.832-3.708-7.896-.017-2.936-1.193.516-3.707 7.896-13.714 40.255-67.233 197.36-189.63 71.766-64.444-66.128-34.605-132.26 82.697-152.22-67.108 11.421-142.55-7.45-163.25-81.433C20.156 217.616 10 86.536 10 68.825c0-88.687 77.742-60.816 125.72-24.795z"/></svg>`,
+  Mastodon: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.268 5.313c-.35-2.578-2.617-4.61-5.304-5.004C17.51.242 15.792 0 11.813 0h-.03c-3.98 0-4.835.242-5.288.309C3.882.692 1.496 2.518.917 5.127.64 6.412.61 7.837.661 9.143c.074 1.874.088 3.745.26 5.611.118 1.24.325 2.47.62 3.68.55 2.237 2.777 4.098 4.96 4.857 2.336.792 4.849.923 7.256.38.265-.061.527-.132.786-.213.585-.184 1.27-.39 1.774-.753a.057.057 0 0 0 .023-.043v-1.809a.052.052 0 0 0-.066-.051 20.282 20.282 0 0 1-4.709.545c-2.73 0-3.463-1.284-3.674-1.818a5.593 5.593 0 0 1-.319-1.433.053.053 0 0 1 .066-.054c1.517.363 3.072.546 4.632.546.376 0 .75 0 1.125-.01 1.57-.044 3.224-.124 4.768-.422.038-.008.077-.015.11-.024 2.435-.464 4.753-1.92 4.989-5.604.008-.145.03-1.52.03-1.67.002-.512.167-3.63-.024-5.545zm-3.748 9.195h-2.561V8.29c0-1.309-.55-1.976-1.67-1.976-1.23 0-1.846.79-1.846 2.35v3.403h-2.546V8.663c0-1.56-.617-2.35-1.848-2.35-1.112 0-1.668.668-1.67 1.977v6.218H4.822V8.102c0-1.31.337-2.35 1.011-3.12.696-.77 1.608-1.164 2.74-1.164 1.311 0 2.302.5 2.962 1.498l.638 1.06.638-1.06c.66-.999 1.65-1.498 2.96-1.498 1.13 0 2.043.395 2.74 1.164.675.77 1.012 1.81 1.012 3.12v6.406z"/></svg>`,
+  Memex: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.074 0C12.586 1.374 10.1 2.749 7.613 4.124l.823 4.266 6.365-5.015zm.172.059l-.269 3.314 4.497 2.752zm-.353 3.466L8.487 8.576l7.39 15.367 1.177-2.359L19.58 6.4c-.012-.009-4.688-2.875-4.688-2.875zm-7.425.779l-3.05 6.594L9.033 21.51l-.74-12.934-.012-.064zm1.025 4.688l.73 12.784L15.71 24Z"/></svg>`,
+  'omg.lol': `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`,
+};
+const GLYPHS: Record<string, string> = { Meetup: 'm' };
+
+const svg = LOGOS[name];
+const glyph = GLYPHS[name];
+---
+
+<a class="social" href={href} target="_blank" rel="noopener" aria-label={name}>
+  {svg ? <Fragment set:html={svg} /> : <span class="glyph">{glyph}</span>}
+  <span class="tip" aria-hidden="true">{name}</span>
+</a>
+
+<style>
+  .social {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    flex: none;
+    color: var(--color-ink-soft);
+    background: color-mix(in oklab, var(--color-paper-2) 55%, transparent);
+    border: 1px solid color-mix(in oklab, var(--color-gold) 50%, transparent);
+    border-radius: 50%;
+    box-shadow:
+      inset 0 0 0 2px color-mix(in oklab, var(--color-paper) 70%, transparent),
+      inset 0 0 0 3px color-mix(in oklab, var(--color-gold) 18%, transparent);
+    transition:
+      color 0.2s,
+      border-color 0.2s,
+      transform 0.2s;
+  }
+  .social:hover {
+    color: var(--color-accent);
+    border-color: color-mix(in oklab, var(--color-accent) 60%, transparent);
+    transform: translateY(-2px);
+  }
+  .social :global(svg) {
+    display: block;
+    width: 17px;
+    height: 17px;
+    fill: currentColor;
+  }
+  .glyph {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    line-height: 1;
+    font-style: italic;
+  }
+
+  .tip {
+    position: absolute;
+    bottom: calc(100% + 9px);
+    left: 50%;
+    transform: translateX(-50%) translateY(4px);
+    padding: 0.32rem 0.55rem;
+    font-family: var(--font-body);
+    font-variant: small-caps;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 0.64rem;
+    line-height: 1;
+    white-space: nowrap;
+    color: var(--color-paper);
+    background: var(--color-ink);
+    border: 1px solid color-mix(in oklab, var(--color-gold) 55%, transparent);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.28);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    z-index: 60;
+    transition:
+      opacity 0.18s,
+      transform 0.18s,
+      visibility 0.18s;
+  }
+  .tip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    width: 7px;
+    height: 7px;
+    margin-top: -4px;
+    background: var(--color-ink);
+    border-right: 1px solid color-mix(in oklab, var(--color-gold) 55%, transparent);
+    border-bottom: 1px solid color-mix(in oklab, var(--color-gold) 55%, transparent);
+    transform: translateX(-50%) rotate(45deg);
+  }
+  .social:hover .tip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+  }
+</style>

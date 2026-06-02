@@ -1,0 +1,272 @@
+---
+import Layout from '~/layouts/Layout.astro';
+import Header from '~/components/almanac/Header.astro';
+import Footer from '~/components/almanac/Footer.astro';
+import PageHeading from '~/components/almanac/PageHeading.astro';
+import PostImage from '~/components/almanac/PostImage.astro';
+import RuleOrn from '~/components/almanac/RuleOrn.astro';
+---
+
+<Layout title="Now" description="What Evan Harmon is reading, doing, making, and enjoying right now.">
+  <Header />
+  <main class="section">
+    <div class="wrap now">
+      <PageHeading title="Now" sub="What I'm up to lately" />
+
+      <figure class="now-figure">
+        <PostImage
+          src="~/assets/images/flammarion.jpeg"
+          alt="The Flammarion engraving — a traveller peers through the edge of the firmament"
+          widths={[320, 462]}
+          sizes="(max-width: 540px) 80vw, 420px"
+          loading="eager"
+        />
+      </figure>
+
+      <p class="now-intro">
+        This is a <a href="https://nownownow.com/about" target="_blank" rel="noopener">now page</a>, and if you have
+        your own site you should make one too.
+      </p>
+
+      <RuleOrn style="max-width:24rem;margin:0 auto 2.4rem" />
+
+      <article class="prose now-body">
+        <h3>Reading</h3>
+        <ul>
+          <li>
+            <a href="https://en.wikipedia.org/wiki/Brief_Interviews_with_Hideous_Men" target="_blank" rel="noopener"
+              >Brief Interviews with Hideous Men by David Foster Wallace</a
+            >
+          </li>
+          <li>
+            <a
+              href="https://people.bu.edu/wwildman/tillich/resources/review_tillich-paul_couragetobe.htm"
+              target="_blank"
+              rel="noopener">The Courage To Be by Paul Tillich</a
+            >
+          </li>
+          <li>
+            <a href="https://www.alaindebotton.com/literature/" target="_blank" rel="noopener"
+              >How Proust Can Change Your Life by Alain de Botton</a
+            >
+          </li>
+        </ul>
+
+        <h4>Recently read</h4>
+        <ul>
+          <li>
+            Re-read <a
+              href="https://en.wikipedia.org/wiki/A_Heartbreaking_Work_of_Staggering_Genius"
+              target="_blank"
+              rel="noopener">A Heartbreaking Work of Staggering Genius by Dave Eggers</a
+            >: Feels like my generation's <a
+              href="https://en.wikipedia.org/wiki/The_Catcher_in_the_Rye"
+              target="_blank"
+              rel="noopener">The Catcher in the Rye</a
+            >
+          </li>
+          <li>
+            <a href="https://www.markmanson.net" target="_blank" rel="noopener"
+              >The Subtle Art of Not Giving a Fuck by Mark Manson</a
+            >
+          </li>
+          <li>
+            <a href="https://www.goodreads.com/book/show/58312014-invisible-storm" target="_blank" rel="noopener"
+              >Invisible Storm: A Soldier's Memoir of Politics and PTSD</a
+            > by <a href="https://en.m.wikipedia.org/wiki/Jason_Kander" target="_blank" rel="noopener">Jason Kander</a>:
+            This is a really well-done way to talk about mental health. And Jason Kander has a pretty interesting story
+            to tell.
+          </li>
+        </ul>
+
+        <h3>Doing</h3>
+        <ul>
+          <li>
+            Using <a href="https://obsidian.md/" target="_blank" rel="noopener">Obsidian</a> as my <a
+              href="https://www.buildingasecondbrain.com/"
+              target="_blank"
+              rel="noopener">second brain</a
+            > and <a href="https://nesslabs.com/digital-garden-set-up" target="_blank" rel="noopener">digital garden</a
+            >. I call mine <a href="https://publish.obsidian.md/evanharmon/Memex" target="_blank" rel="noopener"
+              >Memex</a
+            >
+          </li>
+          <li>Coding</li>
+          <li>
+            Revamping my <a href="https://linuxhandbook.com/homelab/" target="_blank" rel="noopener">homelab</a> and self-hosted
+            infrastructure
+          </li>
+          <li>
+            Decluttering, minimizing, simplifying, and practicing the <a
+              href="https://www.imdb.com/title/tt19401412/"
+              target="_blank"
+              rel="noopener">Gentle Art of Swedish Death Cleaning</a
+            >
+          </li>
+        </ul>
+
+        <h4>Making</h4>
+        <ul>
+          <li>I want to reverse-engineer some wood benches I have</li>
+        </ul>
+
+        <h4>Learning</h4>
+        <ul>
+          <li>
+            <a href="https://en.wikipedia.org/wiki/IndieWeb" target="_blank" rel="noopener">The IndieWeb</a>: (like this
+            /now page and <a href="https://home.omg.lol/" target="_blank" rel="noopener">omg.lol</a>!)
+          </li>
+          <li><a href="https://astro.build/" target="_blank" rel="noopener">Astro Web Framework</a></li>
+          <li>Privacy-preserving AI architectures: (local LLMs, RAG, distributed pipelines)</li>
+          <li>
+            Sustainable living/permaculture and sustainable computing/<a
+              href="https://permacomputing.net/"
+              target="_blank"
+              rel="noopener">permacomputing</a
+            >
+          </li>
+        </ul>
+
+        <h3>Listening</h3>
+        <ul>
+          <li>
+            <a
+              href="https://music.apple.com/us/album/kaleidoscope-feat-crystalline/1450404652?i=1450404813"
+              target="_blank"
+              rel="noopener">Champagne Drip — Kaleidoscope</a
+            >
+          </li>
+          <li>
+            <a href="https://www.youtube.com/watch?v=y115_2h4a68" target="_blank" rel="noopener"
+              >Jesse Morris: Sunday Morning Coming Down</a
+            >
+          </li>
+          <li>
+            <a href="https://www.youtube.com/watch?v=y115_2h4a68" target="_blank" rel="noopener"
+              >Milky Edwards &amp; The Chamberlings — Starman</a
+            >
+          </li>
+        </ul>
+
+        <h3>Laughing</h3>
+        <ul>
+          <li>
+            <a
+              href="https://www.youtube.com/watch?v=VFevH5vP32s&list=PLYSaCq9q-ciQaKzbpx1VAUmzLV-BHkJ8o&index=75"
+              target="_blank"
+              rel="noopener">Orson Welles drunk outtakes for a wine commercial</a
+            >
+          </li>
+          <li>
+            <a
+              href="https://www.youtube.com/watch?v=ZLyNWMI1rEk&list=PLYSaCq9q-ciQaKzbpx1VAUmzLV-BHkJ8o&index=53"
+              target="_blank"
+              rel="noopener">A Normal Person Explains Cryptocurrency</a
+            >
+          </li>
+          <li>
+            <a
+              href="https://www.youtube.com/watch?v=0O95kvMKPeQ&list=PLYSaCq9q-ciQaKzbpx1VAUmzLV-BHkJ8o&index=68"
+              target="_blank"
+              rel="noopener">You Expect Me To Believe That?!? (Ft. Tim Robinson)</a
+            >
+          </li>
+        </ul>
+
+        <h3>Watching</h3>
+        <ul>
+          <li>
+            Old Norm MacDonald <a
+              href="https://www.youtube.com/watch?v=1hu2tJtmCfw&list=PLYSaCq9q-ciQaKzbpx1VAUmzLV-BHkJ8o&index=25"
+              target="_blank"
+              rel="noopener">clips</a
+            >. Love that ol' <a href="https://www.youtube.com/watch?v=-3AqPMV7TWE" target="_blank" rel="noopener"
+              >chunk a coal</a
+            >
+          </li>
+          <li>🤷‍♂️ Modern pulp on my TV as background noise</li>
+          <li>
+            <a
+              href="https://en.wikipedia.org/wiki/The_Secret_Life_of_Walter_Mitty_(2013_film)"
+              target="_blank"
+              rel="noopener">The Secret Life of Walter Mitty</a
+            >
+          </li>
+        </ul>
+
+        <h3>Playing</h3>
+        <ul>
+          <li>
+            <a href="https://www.valheimgame.com" target="_blank" rel="noopener">Valheim</a>: I got a dedicated server
+            on my homelab going
+          </li>
+          <li>
+            <a href="https://dead-cells.com/" target="_blank" rel="noopener">Dead Cells</a>: Finally found a rogue-like
+            I enjoy
+          </li>
+          <li>
+            <a
+              href="https://store.steampowered.com/app/1172620/Sea_of_Thieves_2023_Edition/"
+              target="_blank"
+              rel="noopener">Sea of Thieves</a
+            >: Great, fun, simple co-op
+          </li>
+        </ul>
+
+        <h3>Enjoying</h3>
+        <ul>
+          <li>Time with friends and family, talking, reminiscing</li>
+          <li>Making terrible approximations of Coca-Cola with my new SodaStream machine</li>
+        </ul>
+      </article>
+
+      <p class="now-updated">Last updated 3 August 2024.</p>
+    </div>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .now {
+    max-width: min(72ch, 92vw);
+  }
+  .now-figure {
+    margin: 0 auto 1.6rem;
+    max-width: 420px;
+  }
+  .now-figure :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--color-rule);
+    box-shadow:
+      inset 0 0 0 3px var(--color-paper),
+      inset 0 0 0 4px color-mix(in oklab, var(--color-rule) 45%, transparent);
+  }
+  .now-intro {
+    text-align: center;
+    font-style: italic;
+    color: var(--color-ink-faint);
+    max-width: 48ch;
+    margin: 0 auto;
+  }
+  .now-intro a {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-decoration-color: color-mix(in oklab, var(--color-accent) 45%, transparent);
+    text-underline-offset: 3px;
+    transition: text-decoration-color 0.2s;
+  }
+  .now-intro a:hover {
+    text-decoration-color: var(--color-accent);
+  }
+  .now-updated {
+    font-family: var(--font-body);
+    font-variant: small-caps;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-label);
+    font-size: var(--text-label);
+    color: var(--color-ink-faint);
+    margin-top: 2.5rem;
+  }
+</style>

@@ -2,3 +2,9 @@ dist
 node_modules
 .github
 .changeset
+
+# Authored blog content — don't let Prettier reflow prose / markdown
+src/data/post
+
+# Transient Claude Design handoff bundle (reference only; not source)
+docs/design
