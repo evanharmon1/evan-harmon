@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Personal website for Evan Harmon (<https://evanharmon.com>) — **"The Almanac"**, an aged-paper /
 woodcut-engraving brand with dual **Parchment** (light) and **Midnight** (dark) themes. Built on
-**Astro 5 + Tailwind CSS v4 + TypeScript**, with **React + shadcn/ui** available for interactive
+**Astro 6 + Tailwind CSS v4 + TypeScript**, with **React + shadcn/ui** available for interactive
 islands. Output is fully `static` (SSG). Package manager is **pnpm**.
 
 The design is documented in **`DESIGN.md`** (AI-facing intent). The **canonical runtime token source
@@ -53,7 +53,7 @@ its config-driven `astrowind:config` integration, and `tailwind.config.js` are g
 ### Content & blog
 
 - Blog posts live in **`src/data/post/`** as `.md`/`.mdx`. The content collection is defined in
-  `src/content/config.ts` (Astro `glob` loader + Zod schema: `title`, `publishDate`, `category`,
+  `src/content.config.ts` (Astro `glob` loader + Zod schema: `title`, `publishDate`, `category`,
   `tags`, `excerpt`, `image`, `metadata`, `draft`, …). Frontmatter must satisfy the schema or the
   build fails.
 - Blog routing: **`src/pages/blog/index.astro`** (the ledger) and **`src/pages/blog/[...slug].astro`**

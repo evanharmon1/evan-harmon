@@ -2,8 +2,13 @@
   publish = "dist"
   command = "pnpm build"
 [build.environment]
-  # Astro 5 + engines ">= 21"; Netlify auto-detects pnpm from pnpm-lock.yaml.
+  # Astro 6 + engines ">= 21"; Netlify auto-detects pnpm from pnpm-lock.yaml.
   NODE_VERSION = "22"
+  # Netlify auto-runs `pip install -r requirements.txt` (whispers, for CI secret
+  # scanning — not needed for the build). Pin Python to a version with a prebuilt
+  # `jellyfish` wheel so pip doesn't try to compile it from Rust source (no Cargo
+  # on the build image). 3.14 (the image default) has no wheel.
+  PYTHON_VERSION = "3.12"
 [build.processing.html]
   pretty_urls = false
 [[headers]]

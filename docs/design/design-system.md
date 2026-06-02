@@ -5,7 +5,7 @@ build-facing [`DESIGN.md`](../../DESIGN.md) and the live reference at **`/brand`
 
 ## Stack
 
-Astro 5 · Tailwind CSS v4 (CSS-first) · TypeScript · React + shadcn/ui (available
+Astro 6 · Tailwind CSS v4 (CSS-first) · TypeScript · React + shadcn/ui (available
 for interactive islands) · self-hosted `@fontsource` fonts · deploys static.
 
 ## Tokens & theming
