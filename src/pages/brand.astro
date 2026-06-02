@@ -59,384 +59,417 @@ const Swatches = (rows: Swatch[]) => rows;
     <div class="wrap">
       <!-- INTRO -->
       <section class="block">
-        <span class="sec-no">No. 0</span>
-        <h2 class="sec-title display">Almanac</h2>
-        <div class="bdivider">
-          <b class="leaf l">❧</b><i class="ln"></i><b class="mid">❖</b><i class="ln"></i><b class="leaf">❧</b>
+        <div class="block-rail">
+          <span class="sec-no">No. 0</span>
+          <h2 class="sec-title display">Almanac</h2>
         </div>
-        <p class="lead">
-          The brand &amp; design system for <strong>evanharmon.com</strong> — an aged-paper, woodcut-engraving almanac: antique
-          serif typography, gilt ornaments, a tactile printed grain, and bold colour-block sections, in a light
-          <em>Parchment</em> theme and a dark <em>Midnight</em> theme.
-        </p>
-        <p class="note">
-          Toggle the theme top-right. This page is the at-a-glance reference; the exhaustive spec lives in
-          <strong>DESIGN.md</strong> and the canonical runtime tokens in <strong>src/styles/global.css</strong>.
-        </p>
-
-        <h3 class="sub-title">Open Graph · share card</h3>
-        <div class="asset" style="max-width:660px">
-          <img id="ogImg" src="/images/og-image.png" alt="Evan Harmon Open Graph share card" />
-          <div class="cap">
-            <span class="t" id="ogTitle">Midnight · default</span>
-            <span class="m" id="ogPath">/images/og-image.png · 1200×630</span>
+        <div class="block-body">
+          <div class="bdivider">
+            <b class="leaf l">❧</b><i class="ln"></i><b class="mid">❖</b><i class="ln"></i><b class="leaf">❧</b>
           </div>
+          <p class="lead">
+            The brand &amp; design system for <strong>evanharmon.com</strong> — an aged-paper, woodcut-engraving almanac:
+            antique serif typography, gilt ornaments, a tactile printed grain, and bold colour-block sections, in a light
+            <em>Parchment</em> theme and a dark <em>Midnight</em> theme.
+          </p>
+          <p class="note">
+            Toggle the theme top-right. This page is the at-a-glance reference; the exhaustive spec lives in
+            <strong>DESIGN.md</strong> and the canonical runtime tokens in <strong>src/styles/global.css</strong>.
+          </p>
+
+          <h3 class="sub-title">Open Graph · share card</h3>
+          <div class="asset" style="max-width:660px">
+            <img id="ogImg" src="/images/og-image.png" alt="Evan Harmon Open Graph share card" />
+            <div class="cap">
+              <span class="t" id="ogTitle">Midnight · default</span>
+              <span class="m" id="ogPath">/images/og-image.png · 1200×630</span>
+            </div>
+          </div>
+          <p class="note">
+            The card follows the theme — <strong>Midnight</strong> shows the dark default; <strong>Parchment</strong> shows
+            the green colour-block card. Serve the dark one from the site root for the live <span class="mono"
+              >og:image</span
+            > tags (dark cards read best in feeds).
+          </p>
         </div>
-        <p class="note">
-          The card follows the theme — <strong>Midnight</strong> shows the dark default; <strong>Parchment</strong> shows
-          the green colour-block card. Serve the dark one from the site root for the live <span class="mono"
-            >og:image</span
-          > tags (dark cards read best in feeds).
-        </p>
       </section>
 
       <!-- BRAND & VOICE -->
       <section class="block">
-        <span class="sec-no">No. 1</span>
-        <h2 class="sec-title display">Brand &amp; voice</h2>
-        <p class="lead">
-          A technologist's almanac — equal parts engineer's notebook and 18th-century broadsheet. Precise and literate,
-          with dry wit; it treats a personal site like a finely-printed object.
-        </p>
-        <p class="bquote">“Cantankerous contraptions &amp; philosophical piffle.”</p>
-        <p class="eyebrow" style="margin-top:1.6rem">Tone</p>
-        <div class="tone-row">
-          <span class="tone">Crafted</span><span class="tone">Antiquarian</span><span class="tone">Tactile</span>
-          <span class="tone">Confident</span><span class="tone">Quiet</span>
+        <div class="block-rail">
+          <span class="sec-no">No. 1</span>
+          <h2 class="sec-title display">Brand &amp; voice</h2>
         </div>
-        <div class="voice" style="margin-top:1.8rem">
-          <div class="do">
-            <h4>Do</h4>
-            <ul>
-              <li>
-                Favour the archaic register — “Send a word”, “Elsewhere on the machines”, “The full account” — never at
-                the expense of clarity.
-              </li>
-              <li>Number your sections: <span class="num">No. 1</span>, <span class="num">No. 2</span> …</li>
-              <li>Keep one accent per theme; use type, scale &amp; the tint band for rhythm.</li>
-              <li>Draw depth with engraved inset keylines.</li>
-            </ul>
+        <div class="block-body">
+          <p class="lead">
+            A technologist's almanac — equal parts engineer's notebook and 18th-century broadsheet. Precise and
+            literate, with dry wit; it treats a personal site like a finely-printed object.
+          </p>
+          <p class="bquote">“Cantankerous contraptions &amp; philosophical piffle.”</p>
+          <p class="eyebrow" style="margin-top:1.6rem">Tone</p>
+          <div class="tone-row">
+            <span class="tone">Crafted</span><span class="tone">Antiquarian</span><span class="tone">Tactile</span>
+            <span class="tone">Confident</span><span class="tone">Quiet</span>
           </div>
-          <div class="dont">
-            <h4>Avoid</h4>
-            <ul>
-              <li>Startup-speak, emoji, neon gradients.</li>
-              <li>Drop-shadow card soup &amp; floating elements.</li>
-              <li>Sans-serif body text.</li>
-              <li>A second hue per section, or fixing the grain to the viewport.</li>
-            </ul>
+          <div class="voice" style="margin-top:1.8rem">
+            <div class="do">
+              <h4>Do</h4>
+              <ul>
+                <li>
+                  Favour the archaic register — “Send a word”, “Elsewhere on the machines”, “The full account” — never
+                  at the expense of clarity.
+                </li>
+                <li>Number your sections: <span class="num">No. 1</span>, <span class="num">No. 2</span> …</li>
+                <li>Keep one accent per theme; use type, scale &amp; the tint band for rhythm.</li>
+                <li>Draw depth with engraved inset keylines.</li>
+              </ul>
+            </div>
+            <div class="dont">
+              <h4>Avoid</h4>
+              <ul>
+                <li>Startup-speak, emoji, neon gradients.</li>
+                <li>Drop-shadow card soup &amp; floating elements.</li>
+                <li>Sans-serif body text.</li>
+                <li>A second hue per section, or fixing the grain to the viewport.</li>
+              </ul>
+            </div>
           </div>
         </div>
       </section>
 
       <!-- LOGO & MONOGRAM -->
       <section class="block">
-        <span class="sec-no">No. 2</span>
-        <h2 class="sec-title display">Logo &amp; monogram</h2>
-        <div class="logo-board">
-          <div class="logo-cell">
-            <div class="wordmark-lg">Evan Harmon</div>
-            <div class="cap">Wordmark · Cormorant Garamond 600</div>
-          </div>
-          <div class="logo-cell">
-            <div class="mark-lg">EH</div>
-            <div class="cap">Monogram · Old Standard TT · gilt circle</div>
-          </div>
-          <div class="logo-cell dark">
-            <div class="mark-lg">EH</div>
-            <div class="cap">Monogram · Midnight</div>
-          </div>
-          <div class="logo-cell">
-            <div class="clearspace"><div class="mark-lg ehmark">EH</div></div>
-            <div class="cap">Clear space ≥ height of the “E”</div>
-          </div>
+        <div class="block-rail">
+          <span class="sec-no">No. 2</span>
+          <h2 class="sec-title display">Logo &amp; monogram</h2>
         </div>
-        <p class="note">
-          Wordmark “Evan Harmon” in the display serif. The <span class="mono gold">EH</span> monogram in the cover serif (Old
-          Standard TT) inside a gilt circle with a double inset keyline — the brand-mark; 32 px in the header, also the favicon.
-        </p>
+        <div class="block-body">
+          <div class="logo-board">
+            <div class="logo-cell">
+              <div class="wordmark-lg">Evan Harmon</div>
+              <div class="cap">Wordmark · Cormorant Garamond 600</div>
+            </div>
+            <div class="logo-cell">
+              <div class="mark-lg">EH</div>
+              <div class="cap">Monogram · Old Standard TT · gilt circle</div>
+            </div>
+            <div class="logo-cell dark">
+              <div class="mark-lg">EH</div>
+              <div class="cap">Monogram · Midnight</div>
+            </div>
+            <div class="logo-cell">
+              <div class="clearspace"><div class="mark-lg ehmark">EH</div></div>
+              <div class="cap">Clear space ≥ height of the “E”</div>
+            </div>
+          </div>
+          <p class="note">
+            Wordmark “Evan Harmon” in the display serif. The <span class="mono gold">EH</span> monogram in the cover serif
+            (Old Standard TT) inside a gilt circle with a double inset keyline — the brand-mark; 32 px in the header, also
+            the favicon.
+          </p>
+        </div>
       </section>
 
       <!-- COLOUR -->
       <section class="block">
-        <span class="sec-no">No. 3</span>
-        <h2 class="sec-title display">Colour</h2>
-        <p class="lead">
-          Dual-theme &amp; token-driven: semantic variables (<span class="mono">paper</span>, <span class="mono"
-            >ink</span
-          >, <span class="mono">accent</span> …) swap per theme, so one set of utilities is theme-aware. Every swatch lists
-          its <strong>hex</strong> and <strong>OKLCH</strong>.
-        </p>
-
-        <div class="pal-head first">
-          <span class="nm">Parchment</span><span class="tag">light theme · brand primary · accent carries green</span>
+        <div class="block-rail">
+          <span class="sec-no">No. 3</span>
+          <h2 class="sec-title display">Colour</h2>
         </div>
-        <div class="swatches">
-          {
-            Swatches(PARCHMENT).map(([nm, hex, ok, role]) => (
-              <div class="sw">
-                <div class="chip" style={`background:${hex}`} />
-                <div class="meta">
-                  <div class="nm">{nm}</div>
-                  <div class="hex">{hex.toUpperCase()}</div>
-                  <div class="ok">{ok}</div>
-                  <div class="role">{role}</div>
+        <div class="block-body">
+          <p class="lead">
+            Dual-theme &amp; token-driven: semantic variables (<span class="mono">paper</span>, <span class="mono"
+              >ink</span
+            >, <span class="mono">accent</span> …) swap per theme, so one set of utilities is theme-aware. Every swatch lists
+            its <strong>hex</strong> and <strong>OKLCH</strong>.
+          </p>
+
+          <div class="pal-head first">
+            <span class="nm">Parchment</span><span class="tag">light theme · brand primary · accent carries green</span>
+          </div>
+          <div class="swatches">
+            {
+              Swatches(PARCHMENT).map(([nm, hex, ok, role]) => (
+                <div class="sw">
+                  <div class="chip" style={`background:${hex}`} />
+                  <div class="meta">
+                    <div class="nm">{nm}</div>
+                    <div class="hex">{hex.toUpperCase()}</div>
+                    <div class="ok">{ok}</div>
+                    <div class="role">{role}</div>
+                  </div>
                 </div>
-              </div>
-            ))
-          }
-        </div>
+              ))
+            }
+          </div>
 
-        <div class="pal-head">
-          <span class="nm">Midnight</span><span class="tag">dark theme · accent carries gold</span>
-        </div>
-        <div class="swatches">
-          {
-            Swatches(MIDNIGHT).map(([nm, hex, ok, role]) => (
-              <div class="sw">
-                <div class="chip" style={`background:${hex}`} />
-                <div class="meta">
-                  <div class="nm">{nm}</div>
-                  <div class="hex">{hex.toUpperCase()}</div>
-                  <div class="ok">{ok}</div>
-                  <div class="role">{role}</div>
+          <div class="pal-head">
+            <span class="nm">Midnight</span><span class="tag">dark theme · accent carries gold</span>
+          </div>
+          <div class="swatches">
+            {
+              Swatches(MIDNIGHT).map(([nm, hex, ok, role]) => (
+                <div class="sw">
+                  <div class="chip" style={`background:${hex}`} />
+                  <div class="meta">
+                    <div class="nm">{nm}</div>
+                    <div class="hex">{hex.toUpperCase()}</div>
+                    <div class="ok">{ok}</div>
+                    <div class="role">{role}</div>
+                  </div>
                 </div>
-              </div>
-            ))
-          }
-        </div>
+              ))
+            }
+          </div>
 
-        <div class="pal-head">
-          <span class="nm">Foil &amp; fixed</span><span class="tag">do not swap by theme</span>
-        </div>
-        <div class="swatches">
-          {
-            Swatches(FIXED).map(([nm, hex, ok, role]) => (
-              <div class="sw">
-                <div class="chip" style={`background:${hex}`} />
-                <div class="meta">
-                  <div class="nm">{nm}</div>
-                  <div class="hex">{hex.toUpperCase()}</div>
-                  <div class="ok">{ok}</div>
-                  <div class="role">{role}</div>
+          <div class="pal-head">
+            <span class="nm">Foil &amp; fixed</span><span class="tag">do not swap by theme</span>
+          </div>
+          <div class="swatches">
+            {
+              Swatches(FIXED).map(([nm, hex, ok, role]) => (
+                <div class="sw">
+                  <div class="chip" style={`background:${hex}`} />
+                  <div class="meta">
+                    <div class="nm">{nm}</div>
+                    <div class="hex">{hex.toUpperCase()}</div>
+                    <div class="ok">{ok}</div>
+                    <div class="role">{role}</div>
+                  </div>
                 </div>
-              </div>
-            ))
-          }
-        </div>
+              ))
+            }
+          </div>
 
-        <p class="note">
-          <strong>One accent per theme.</strong> Green carries Parchment, gold carries Midnight. The accent is for eyebrows,
-          numerals, links, hovers &amp; ornaments only — body text stays <span class="mono">ink</span> /
-          <span class="mono">ink-soft</span>. Colour-blocks (hero &amp; contact) are the only filled surfaces.
-        </p>
+          <p class="note">
+            <strong>One accent per theme.</strong> Green carries Parchment, gold carries Midnight. The accent is for eyebrows,
+            numerals, links, hovers &amp; ornaments only — body text stays <span class="mono">ink</span> /
+            <span class="mono">ink-soft</span>. Colour-blocks (hero &amp; contact) are the only filled surfaces.
+          </p>
+        </div>
       </section>
 
       <!-- TYPOGRAPHY -->
       <section class="block">
-        <span class="sec-no">No. 4</span>
-        <h2 class="sec-title display">Typography</h2>
-        <p class="lead">
-          Four antique serifs, each with one job. Self-hosted with <span class="mono">@fontsource</span> in Astro.
-        </p>
-
-        <div class="fontgrid">
-          <div class="fontcard">
-            <div class="glyphs display" style="font-weight:600">Aa Gg</div>
-            <div class="fname">Cormorant Garamond <span class="frole">· Display</span></div>
-            <div class="fmeta">
-              <b>Weight 600.</b> Headings, hero, the wordmark.
-              <em>line-height ≈ 1.0, tracking 0.004em, text-wrap: balance, 1px emboss.</em>
-            </div>
-          </div>
-          <div class="fontcard">
-            <div class="glyphs" style="font-family:var(--font-body)">Aa Gg</div>
-            <div class="fname">EB Garamond <span class="frole">· Body &amp; labels</span></div>
-            <div class="fmeta">
-              <b>400 / 500 / 600 + italic.</b> Paragraphs, UI text, and — in
-              <span style="font-variant:small-caps;letter-spacing:.1em">small-caps</span> — eyebrows, nav, tags &amp; dates.
-            </div>
-          </div>
-          <div class="fontcard">
-            <div class="glyphs" style="font-family:var(--font-cover);font-weight:700">EH</div>
-            <div class="fname">Old Standard TT <span class="frole">· Cover / monogram</span></div>
-            <div class="fmeta">
-              <b>400 / 700.</b> The <span class="mono gold">EH</span> brand-mark &amp; crest only. The most antiquarian face
-              — reserve it.
-            </div>
-          </div>
-          <div class="fontcard">
-            <div class="glyphs num" style="font-size:3.2rem">No. 1</div>
-            <div class="fname">Playfair Display <span class="frole">· Numerals</span></div>
-            <div class="fmeta">
-              <b>Italic.</b> Always italic, always in the accent — section “No.” &amp; catalog numbers. Never for body.
-            </div>
-          </div>
+        <div class="block-rail">
+          <span class="sec-no">No. 4</span>
+          <h2 class="sec-title display">Typography</h2>
         </div>
+        <div class="block-body">
+          <p class="lead">
+            Four antique serifs, each with one job. Self-hosted with <span class="mono">@fontsource</span> in Astro.
+          </p>
 
-        <h3 class="sub-title">Specimens</h3>
-        <div class="specimen">
-          <div class="row">
-            <span class="label">Hero · Cormorant 600</span><span
-              class="display"
-              style="font-size:clamp(2.6rem,7vw,4.6rem)">Evan&nbsp;Harmon</span
-            >
+          <div class="fontgrid">
+            <div class="fontcard">
+              <div class="glyphs display" style="font-weight:600">Aa Gg</div>
+              <div class="fname">Cormorant Garamond <span class="frole">· Display</span></div>
+              <div class="fmeta">
+                <b>Weight 600.</b> Headings, hero, the wordmark.
+                <em>line-height ≈ 1.0, tracking 0.004em, text-wrap: balance, 1px emboss.</em>
+              </div>
+            </div>
+            <div class="fontcard">
+              <div class="glyphs" style="font-family:var(--font-body)">Aa Gg</div>
+              <div class="fname">EB Garamond <span class="frole">· Body &amp; labels</span></div>
+              <div class="fmeta">
+                <b>400 / 500 / 600 + italic.</b> Paragraphs, UI text, and — in
+                <span style="font-variant:small-caps;letter-spacing:.1em">small-caps</span> — eyebrows, nav, tags &amp; dates.
+              </div>
+            </div>
+            <div class="fontcard">
+              <div class="glyphs" style="font-family:var(--font-cover);font-weight:700">EH</div>
+              <div class="fname">Old Standard TT <span class="frole">· Cover / monogram</span></div>
+              <div class="fmeta">
+                <b>400 / 700.</b> The <span class="mono gold">EH</span> brand-mark &amp; crest only. The most antiquarian
+                face — reserve it.
+              </div>
+            </div>
+            <div class="fontcard">
+              <div class="glyphs num" style="font-size:3.2rem">No. 1</div>
+              <div class="fname">Playfair Display <span class="frole">· Numerals</span></div>
+              <div class="fmeta">
+                <b>Italic.</b> Always italic, always in the accent — section “No.” &amp; catalog numbers. Never for body.
+              </div>
+            </div>
           </div>
-          <div class="row">
-            <span class="label">Section · Cormorant 600</span><span
-              class="display"
-              style="font-size:clamp(1.8rem,4vw,2.8rem)">Work &amp; Endeavours</span
-            >
+
+          <h3 class="sub-title">Specimens</h3>
+          <div class="specimen">
+            <div class="row">
+              <span class="label">Hero · Cormorant 600</span><span
+                class="display"
+                style="font-size:clamp(2.6rem,7vw,4.6rem)">Evan&nbsp;Harmon</span
+              >
+            </div>
+            <div class="row">
+              <span class="label">Section · Cormorant 600</span><span
+                class="display"
+                style="font-size:clamp(1.8rem,4vw,2.8rem)">Work &amp; Endeavours</span
+              >
+            </div>
+            <div class="row">
+              <span class="label">Numerals · Playfair italic</span><span class="num" style="font-size:2.4rem"
+                >No. 1&nbsp;&nbsp;2&nbsp;&nbsp;3&nbsp;&nbsp;4</span
+              >
+            </div>
+            <div class="row">
+              <span class="label">Body · EB Garamond</span><span style="max-width:52ch"
+                >I'm a technologist and software engineer with experience in DevOps, web development, AI, cloud
+                engineering, and project management — building and growing things in the open.</span
+              >
+            </div>
+            <div class="row">
+              <span class="label">Eyebrow · small-caps</span><span class="eyebrow">Correspondence · No. IV</span>
+            </div>
+            <div class="row">
+              <span class="label">Label / meta</span><span class="label"
+                >Template · CI/CD&nbsp;&nbsp;·&nbsp;&nbsp;Dec 2025</span
+              >
+            </div>
           </div>
-          <div class="row">
-            <span class="label">Numerals · Playfair italic</span><span class="num" style="font-size:2.4rem"
-              >No. 1&nbsp;&nbsp;2&nbsp;&nbsp;3&nbsp;&nbsp;4</span
-            >
-          </div>
-          <div class="row">
-            <span class="label">Body · EB Garamond</span><span style="max-width:52ch"
-              >I'm a technologist and software engineer with experience in DevOps, web development, AI, cloud
-              engineering, and project management — building and growing things in the open.</span
-            >
-          </div>
-          <div class="row">
-            <span class="label">Eyebrow · small-caps</span><span class="eyebrow">Correspondence · No. IV</span>
-          </div>
-          <div class="row">
-            <span class="label">Label / meta</span><span class="label"
-              >Template · CI/CD&nbsp;&nbsp;·&nbsp;&nbsp;Dec 2025</span
-            >
-          </div>
+
+          <h3 class="sub-title">Type scale</h3>
+          <table class="tbl">
+            <thead><tr><th>Token</th><th>Size</th><th>Use</th></tr></thead>
+            <tbody>
+              <tr
+                ><td class="k">hero</td><td><span class="px">clamp(2.8rem, 9.5vw, 7rem)</span></td><td>Hero wordmark</td
+                ></tr
+              >
+              <tr
+                ><td class="k">cta</td><td><span class="px">clamp(2.6rem, 7vw, 5rem)</span></td><td
+                  >“Let's Talk” heading</td
+                ></tr
+              >
+              <tr
+                ><td class="k">section</td><td><span class="px">clamp(2rem, 4.4vw, 3.1rem)</span></td><td
+                  >Section titles</td
+                ></tr
+              >
+              <tr><td class="k">h3</td><td><span class="px">1.55rem</span></td><td>Catalog entry titles</td></tr>
+              <tr><td class="k">body</td><td><span class="px">1.16rem</span> · lh 1.62</td><td>Default body</td></tr>
+              <tr
+                ><td class="k">numeral</td><td><span class="px">2.1rem</span> / <span class="px">1.5rem</span></td><td
+                  >Catalog / section “No.”</td
+                ></tr
+              >
+              <tr
+                ><td class="k">eyebrow</td><td><span class="px">0.72rem</span> · tracking 0.28em</td><td
+                  >Eyebrows (small-caps)</td
+                ></tr
+              >
+              <tr
+                ><td class="k">label / nav</td><td><span class="px">0.74rem</span> / <span class="px">0.76rem</span></td
+                ><td>Tags, dates, nav</td></tr
+              >
+            </tbody>
+          </table>
+          <p class="note">
+            <strong>Tailwind utilities:</strong>
+            <span class="mono">font-display</span>, <span class="mono">font-body</span>,
+            <span class="mono">font-cover</span>, <span class="mono">font-numeral</span>.
+          </p>
         </div>
-
-        <h3 class="sub-title">Type scale</h3>
-        <table class="tbl">
-          <thead><tr><th>Token</th><th>Size</th><th>Use</th></tr></thead>
-          <tbody>
-            <tr
-              ><td class="k">hero</td><td><span class="px">clamp(2.8rem, 9.5vw, 7rem)</span></td><td>Hero wordmark</td
-              ></tr
-            >
-            <tr
-              ><td class="k">cta</td><td><span class="px">clamp(2.6rem, 7vw, 5rem)</span></td><td
-                >“Let's Talk” heading</td
-              ></tr
-            >
-            <tr
-              ><td class="k">section</td><td><span class="px">clamp(2rem, 4.4vw, 3.1rem)</span></td><td
-                >Section titles</td
-              ></tr
-            >
-            <tr><td class="k">h3</td><td><span class="px">1.55rem</span></td><td>Catalog entry titles</td></tr>
-            <tr><td class="k">body</td><td><span class="px">1.16rem</span> · lh 1.62</td><td>Default body</td></tr>
-            <tr
-              ><td class="k">numeral</td><td><span class="px">2.1rem</span> / <span class="px">1.5rem</span></td><td
-                >Catalog / section “No.”</td
-              ></tr
-            >
-            <tr
-              ><td class="k">eyebrow</td><td><span class="px">0.72rem</span> · tracking 0.28em</td><td
-                >Eyebrows (small-caps)</td
-              ></tr
-            >
-            <tr
-              ><td class="k">label / nav</td><td><span class="px">0.74rem</span> / <span class="px">0.76rem</span></td
-              ><td>Tags, dates, nav</td></tr
-            >
-          </tbody>
-        </table>
-        <p class="note">
-          <strong>Tailwind utilities:</strong>
-          <span class="mono">font-display</span>, <span class="mono">font-body</span>,
-          <span class="mono">font-cover</span>, <span class="mono">font-numeral</span>.
-        </p>
       </section>
 
       <!-- ORNAMENTS -->
       <section class="block">
-        <span class="sec-no">No. 5</span>
-        <h2 class="sec-title display">Ornaments &amp; texture</h2>
-        <div class="grid2">
-          <div>
-            <p class="eyebrow" style="margin-bottom:.9rem">Engraved divider</p>
-            <div class="bdivider">
-              <b class="leaf l">❧</b><i class="ln"></i><b class="mid">❖</b><i class="ln"></i><b class="leaf">❧</b>
+        <div class="block-rail">
+          <span class="sec-no">No. 5</span>
+          <h2 class="sec-title display">Ornaments &amp; texture</h2>
+        </div>
+        <div class="block-body">
+          <div class="grid2">
+            <div>
+              <p class="eyebrow" style="margin-bottom:.9rem">Engraved divider</p>
+              <div class="bdivider">
+                <b class="leaf l">❧</b><i class="ln"></i><b class="mid">❖</b><i class="ln"></i><b class="leaf">❧</b>
+              </div>
+              <p style="text-align:center;font-size:1.8rem;color:var(--accent);margin:.6rem 0">
+                ❦&nbsp;&nbsp;&nbsp;❖&nbsp;&nbsp;&nbsp;❧
+              </p>
+              <p class="note" style="text-align:center">
+                Crest ❦ · diamond ❖ · leaf ❧ — all in the display serif, accent-coloured, on a 1px emboss.
+              </p>
             </div>
-            <p style="text-align:center;font-size:1.8rem;color:var(--accent);margin:.6rem 0">
-              ❦&nbsp;&nbsp;&nbsp;❖&nbsp;&nbsp;&nbsp;❧
-            </p>
-            <p class="note" style="text-align:center">
-              Crest ❦ · diamond ❖ · leaf ❧ — all in the display serif, accent-coloured, on a 1px emboss.
-            </p>
-          </div>
-          <div>
-            <p class="eyebrow" style="margin-bottom:.9rem">The printed grain</p>
-            <p class="note">
-              A fine monochrome noise tile (<span class="mono">grain-noise.png</span>, 400 px) laid over every surface
-              that <strong>scrolls with the page</strong> — it is part of the material, never a fixed screen filter.
-              <span class="mono">opacity ≈ 0.36</span>, <span class="mono">z-index 50</span>,
-              <span class="mono">pointer-events: none</span>.
-            </p>
+            <div>
+              <p class="eyebrow" style="margin-bottom:.9rem">The printed grain</p>
+              <p class="note">
+                A fine monochrome noise tile (<span class="mono">grain-noise.png</span>, 400 px) laid over every surface
+                that <strong>scrolls with the page</strong> — it is part of the material, never a fixed screen filter.
+                <span class="mono">opacity ≈ 0.36</span>, <span class="mono">z-index 50</span>,
+                <span class="mono">pointer-events: none</span>.
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
       <!-- BUTTONS + GILT -->
       <section class="block">
-        <span class="sec-no">No. 6</span>
-        <h2 class="sec-title display">Buttons, gilt &amp; components</h2>
-        <div class="grid2">
-          <div>
-            <p class="eyebrow" style="margin-bottom:.9rem">Buttons</p>
-            <div class="btn-row">
-              <span class="bbtn">Read more <span class="gl">→</span></span>
-              <span class="bbtn bbtn--solid"><span class="gl">❧</span> Memex</span>
+        <div class="block-rail">
+          <span class="sec-no">No. 6</span>
+          <h2 class="sec-title display">Buttons, gilt &amp; components</h2>
+        </div>
+        <div class="block-body">
+          <div class="grid2">
+            <div>
+              <p class="eyebrow" style="margin-bottom:.9rem">Buttons</p>
+              <div class="btn-row">
+                <span class="bbtn">Read more <span class="gl">→</span></span>
+                <span class="bbtn bbtn--solid"><span class="gl">❧</span> Memex</span>
+              </div>
+              <p class="note" style="margin-top:1.4rem">
+                Engraved outline by default (double inset keyline, small-caps label, trailing → in the display serif).
+                <span class="mono">.btn--solid</span> fills ink; <span class="mono">.btn--invert</span> /
+                <span class="mono">.btn--ghost</span> ride colour-blocks.
+              </p>
             </div>
-            <p class="note" style="margin-top:1.4rem">
-              Engraved outline by default (double inset keyline, small-caps label, trailing → in the display serif).
-              <span class="mono">.btn--solid</span> fills ink; <span class="mono">.btn--invert</span> /
-              <span class="mono">.btn--ghost</span> ride colour-blocks.
-            </p>
-          </div>
-          <div>
-            <p class="eyebrow" style="margin-bottom:.9rem">Catalog &amp; rail</p>
-            <div class="cardgrid">
-              <span class="bentry">
-                <div class="bno">1</div>
-                <div>
-                  <h4 class="display">Harmon Stack <span style="color:var(--accent)">→</span></h4>
-                  <p>
-                    A project template to bootstrap &amp; streamline new work — CI/CD, security tests, linting, docs.
-                  </p>
-                  <div class="label" style="margin-top:.7rem;color:var(--accent)">Template · CI/CD</div>
-                </div>
-                <span class="seal">❧</span>
-              </span>
-              <span class="bentry">
-                <div class="bno">2</div>
-                <div>
-                  <h4 class="display">Harmon Ops <span style="color:var(--accent)">→</span></h4>
-                  <p>Scripts, dotfiles, automation &amp; IaC for a developer environment and homelab.</p>
-                  <div class="label" style="margin-top:.7rem;color:var(--accent)">Infrastructure</div>
-                </div>
-                <span class="seal">❧</span>
-              </span>
+            <div>
+              <p class="eyebrow" style="margin-bottom:.9rem">Catalog &amp; rail</p>
+              <div class="cardgrid">
+                <span class="bentry">
+                  <div class="bno">1</div>
+                  <div>
+                    <h4 class="display">Harmon Stack <span style="color:var(--accent)">→</span></h4>
+                    <p>
+                      A project template to bootstrap &amp; streamline new work — CI/CD, security tests, linting, docs.
+                    </p>
+                    <div class="label" style="margin-top:.7rem;color:var(--accent)">Template · CI/CD</div>
+                  </div>
+                  <span class="seal">❧</span>
+                </span>
+                <span class="bentry">
+                  <div class="bno">2</div>
+                  <div>
+                    <h4 class="display">Harmon Ops <span style="color:var(--accent)">→</span></h4>
+                    <p>Scripts, dotfiles, automation &amp; IaC for a developer environment and homelab.</p>
+                    <div class="label" style="margin-top:.7rem;color:var(--accent)">Infrastructure</div>
+                  </div>
+                  <span class="seal">❧</span>
+                </span>
+              </div>
+              <p class="note" style="margin-top:1rem">
+                Hover: tint + content slides inward. Numerals Playfair italic; ❧ seal top-right.
+              </p>
             </div>
-            <p class="note" style="margin-top:1rem">
-              Hover: tint + content slides inward. Numerals Playfair italic; ❧ seal top-right.
-            </p>
           </div>
         </div>
       </section>
 
       <!-- COLOUR BLOCK -->
       <section class="block last">
-        <span class="sec-no">No. 7</span>
-        <h2 class="sec-title display">Colour-block</h2>
-        <p class="note">
-          The only filled surfaces — green on light, blue on dark — always carrying gold foil ornaments &amp; warm-white
-          text.
-        </p>
+        <div class="block-rail">
+          <span class="sec-no">No. 7</span>
+          <h2 class="sec-title display">Colour-block</h2>
+        </div>
+        <div class="block-body">
+          <p class="note">
+            The only filled surfaces — green on light, blue on dark — always carrying gold foil ornaments &amp;
+            warm-white text.
+          </p>
+        </div>
       </section>
     </div>
 
@@ -539,25 +572,60 @@ const Swatches = (rows: Swatch[]) => rows;
     padding-block: clamp(2rem, 4vw, 3.4rem);
     border-bottom: 1px solid var(--line);
     position: relative;
+    display: grid;
+    grid-template-columns: var(--spacing-gutter) minmax(0, 1fr);
+    gap: var(--spacing-rail);
+    align-items: start;
   }
   section.block.last {
     border-bottom: 0;
     padding-bottom: 0;
   }
+  .block-body {
+    min-width: 0;
+  }
+  /* numeral + title run vertically up the gutter, as on the homepage rail */
+  .block-rail {
+    align-self: center;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    white-space: nowrap;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+  }
   .sec-no {
     font-family: var(--font-numeral);
     font-style: italic;
     color: var(--accent);
-    font-size: 1.1rem;
+    font-size: var(--text-numeral-sm);
     display: block;
-    margin-bottom: 0.2rem;
+    margin: 0 0 1rem 0;
   }
   h2.sec-title {
     font-family: var(--font-display);
     font-weight: 600;
-    font-size: clamp(1.9rem, 4vw, 2.8rem);
-    margin: 0.1rem 0 1.2rem;
+    font-size: var(--text-section);
+    margin: 0;
     line-height: 1;
+  }
+
+  /* rail collapses to a centred horizontal header below the rail breakpoint */
+  @media (max-width: 64rem) {
+    section.block {
+      grid-template-columns: 1fr;
+      gap: 1.1rem;
+    }
+    .block-rail {
+      writing-mode: horizontal-tb;
+      transform: none;
+      align-self: auto;
+      display: block;
+      text-align: center;
+    }
+    .sec-no {
+      margin: 0 0 0.3rem 0;
+    }
   }
   h3.sub-title {
     font-family: var(--font-display);

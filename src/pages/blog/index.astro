@@ -13,7 +13,7 @@ const posts = (await getPosts()).map((p) => toLedger(p, { withDay: true }));
   <Header />
   <main class="section">
     <div class="wrap">
-      <PageHeading title="Blog" sub="Dispatches & marginalia" />
+      <PageHeading title="Blog" sub="Dispatches & marginalia" center />
       <Ledger posts={posts} withImages />
     </div>
   </main>
