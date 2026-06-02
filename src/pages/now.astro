@@ -11,7 +11,7 @@ import RuleOrn from '~/components/almanac/RuleOrn.astro';
   <Header />
   <main class="section">
     <div class="wrap now">
-      <PageHeading title="Now" sub="What I'm up to lately" />
+      <PageHeading title="Now" sub="What I'm up to lately" center />
 
       <figure class="now-figure">
         <PostImage
@@ -34,20 +34,13 @@ import RuleOrn from '~/components/almanac/RuleOrn.astro';
         <h3>Reading</h3>
         <ul>
           <li>
-            <a href="https://en.wikipedia.org/wiki/Brief_Interviews_with_Hideous_Men" target="_blank" rel="noopener"
-              >Brief Interviews with Hideous Men by David Foster Wallace</a
+            <a href="https://en.wikipedia.org/wiki/Dune_Messiah" target="_blank" rel="noopener"
+              >Dune Messiah by Frank Herbert</a
             >
           </li>
           <li>
-            <a
-              href="https://people.bu.edu/wwildman/tillich/resources/review_tillich-paul_couragetobe.htm"
-              target="_blank"
-              rel="noopener">The Courage To Be by Paul Tillich</a
-            >
-          </li>
-          <li>
-            <a href="https://www.alaindebotton.com/literature/" target="_blank" rel="noopener"
-              >How Proust Can Change Your Life by Alain de Botton</a
+            <a href="https://calnewport.com/my-new-book-slow-productivity/" target="_blank" rel="noopener"
+              >Slow Productivity by Cal Newport</a
             >
           </li>
         </ul>
@@ -65,18 +58,6 @@ import RuleOrn from '~/components/almanac/RuleOrn.astro';
               rel="noopener">The Catcher in the Rye</a
             >
           </li>
-          <li>
-            <a href="https://www.markmanson.net" target="_blank" rel="noopener"
-              >The Subtle Art of Not Giving a Fuck by Mark Manson</a
-            >
-          </li>
-          <li>
-            <a href="https://www.goodreads.com/book/show/58312014-invisible-storm" target="_blank" rel="noopener"
-              >Invisible Storm: A Soldier's Memoir of Politics and PTSD</a
-            > by <a href="https://en.m.wikipedia.org/wiki/Jason_Kander" target="_blank" rel="noopener">Jason Kander</a>:
-            This is a really well-done way to talk about mental health. And Jason Kander has a pretty interesting story
-            to tell.
-          </li>
         </ul>
 
         <h3>Doing</h3>
@@ -91,23 +72,26 @@ import RuleOrn from '~/components/almanac/RuleOrn.astro';
               >Memex</a
             >
           </li>
-          <li>Coding</li>
+          <li>
+            Coding for <a href="https://ponderous.dev" target="_blank" rel="noopener">Ponderous Development</a>
+          </li>
+          <li>Working on <a href="https://sommerlawn.com" target="_blank" rel="noopener">Sommer Lawn</a></li>
           <li>
             Revamping my <a href="https://linuxhandbook.com/homelab/" target="_blank" rel="noopener">homelab</a> and self-hosted
             infrastructure
-          </li>
-          <li>
-            Decluttering, minimizing, simplifying, and practicing the <a
-              href="https://www.imdb.com/title/tt19401412/"
-              target="_blank"
-              rel="noopener">Gentle Art of Swedish Death Cleaning</a
-            >
           </li>
         </ul>
 
         <h4>Making</h4>
         <ul>
-          <li>I want to reverse-engineer some wood benches I have</li>
+          <li>Building and upgrading my PCs</li>
+          <li>
+            Building a <a
+              href="https://the-diy-life.com/introducing-lab-rax-a-3d-printable-modular-10-rack-system/"
+              target="_blank"
+              rel="noopener">LabRax homelab server</a
+            >
+          </li>
         </ul>
 
         <h4>Learning</h4>
@@ -117,14 +101,8 @@ import RuleOrn from '~/components/almanac/RuleOrn.astro';
             /now page and <a href="https://home.omg.lol/" target="_blank" rel="noopener">omg.lol</a>!)
           </li>
           <li><a href="https://astro.build/" target="_blank" rel="noopener">Astro Web Framework</a></li>
-          <li>Privacy-preserving AI architectures: (local LLMs, RAG, distributed pipelines)</li>
-          <li>
-            Sustainable living/permaculture and sustainable computing/<a
-              href="https://permacomputing.net/"
-              target="_blank"
-              rel="noopener">permacomputing</a
-            >
-          </li>
+          <li><a href="https://tanstack.com/" target="_blank" rel="noopener">TanStack</a></li>
+          <li>Design</li>
         </ul>
 
         <h3>Listening</h3>
@@ -141,11 +119,26 @@ import RuleOrn from '~/components/almanac/RuleOrn.astro';
               >Jesse Morris: Sunday Morning Coming Down</a
             >
           </li>
+        </ul>
+
+        <h3>Playing</h3>
+        <ul>
+          <li>Arc Raiders</li>
+        </ul>
+
+        <h3>Watching</h3>
+        <ul>
           <li>
-            <a href="https://www.youtube.com/watch?v=y115_2h4a68" target="_blank" rel="noopener"
-              >Milky Edwards &amp; The Chamberlings — Starman</a
+            Old Norm MacDonald <a
+              href="https://www.youtube.com/watch?v=1hu2tJtmCfw&list=PLYSaCq9q-ciQaKzbpx1VAUmzLV-BHkJ8o&index=25"
+              target="_blank"
+              rel="noopener">clips</a
+            >. Love that ol' <a href="https://www.youtube.com/watch?v=-3AqPMV7TWE" target="_blank" rel="noopener"
+              >chunk a coal</a
             >
           </li>
+          <li>Widow's Bay</li>
+          <li>Scot Squad</li>
         </ul>
 
         <h3>Laughing</h3>
@@ -173,54 +166,13 @@ import RuleOrn from '~/components/almanac/RuleOrn.astro';
           </li>
         </ul>
 
-        <h3>Watching</h3>
-        <ul>
-          <li>
-            Old Norm MacDonald <a
-              href="https://www.youtube.com/watch?v=1hu2tJtmCfw&list=PLYSaCq9q-ciQaKzbpx1VAUmzLV-BHkJ8o&index=25"
-              target="_blank"
-              rel="noopener">clips</a
-            >. Love that ol' <a href="https://www.youtube.com/watch?v=-3AqPMV7TWE" target="_blank" rel="noopener"
-              >chunk a coal</a
-            >
-          </li>
-          <li>🤷‍♂️ Modern pulp on my TV as background noise</li>
-          <li>
-            <a
-              href="https://en.wikipedia.org/wiki/The_Secret_Life_of_Walter_Mitty_(2013_film)"
-              target="_blank"
-              rel="noopener">The Secret Life of Walter Mitty</a
-            >
-          </li>
-        </ul>
-
-        <h3>Playing</h3>
-        <ul>
-          <li>
-            <a href="https://www.valheimgame.com" target="_blank" rel="noopener">Valheim</a>: I got a dedicated server
-            on my homelab going
-          </li>
-          <li>
-            <a href="https://dead-cells.com/" target="_blank" rel="noopener">Dead Cells</a>: Finally found a rogue-like
-            I enjoy
-          </li>
-          <li>
-            <a
-              href="https://store.steampowered.com/app/1172620/Sea_of_Thieves_2023_Edition/"
-              target="_blank"
-              rel="noopener">Sea of Thieves</a
-            >: Great, fun, simple co-op
-          </li>
-        </ul>
-
         <h3>Enjoying</h3>
         <ul>
           <li>Time with friends and family, talking, reminiscing</li>
-          <li>Making terrible approximations of Coca-Cola with my new SodaStream machine</li>
         </ul>
       </article>
 
-      <p class="now-updated">Last updated 3 August 2024.</p>
+      <p class="now-updated">Last updated 2 June 2026.</p>
     </div>
   </main>
   <Footer />

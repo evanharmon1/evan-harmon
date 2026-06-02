@@ -6,11 +6,12 @@ interface Props {
   title: string;
   eyebrow?: string;
   sub?: string;
+  center?: boolean;
 }
-const { title, eyebrow, sub } = Astro.props;
+const { title, eyebrow, sub, center = false } = Astro.props;
 ---
 
-<header class="page-heading reveal">
+<header class:list={['page-heading reveal', center && 'page-heading--center']}>
   <div class="sec-orn" aria-hidden="true">❧</div>
   {eyebrow && <span class="eyebrow">{eyebrow}</span>}
   <h1 class="display page-title">{title}</h1>
@@ -20,6 +21,9 @@ const { title, eyebrow, sub } = Astro.props;
 <style>
   .page-heading {
     margin-bottom: 1.8rem;
+  }
+  .page-heading--center {
+    text-align: center;
   }
   .sec-orn {
     font-family: var(--font-display);

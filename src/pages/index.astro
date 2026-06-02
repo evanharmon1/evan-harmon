@@ -9,7 +9,7 @@ import Contact from '~/components/almanac/Contact.astro';
 import Footer from '~/components/almanac/Footer.astro';
 import { getPosts, toLedger } from '~/utils/blog';
 
-const posts = (await getPosts()).slice(0, 4).map((p) => toLedger(p));
+const posts = (await getPosts()).slice(0, 4).map((p) => toLedger(p, { withDay: true }));
 ---
 
 <Layout>
