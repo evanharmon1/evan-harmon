@@ -1,37 +1,20 @@
-import { getRssString } from '@astrojs/rss';
+import rss from '@astrojs/rss';
+import type { APIContext } from 'astro';
+import { SITE } from '~/data/site';
+import { getPosts, postHref } from '~/utils/blog';
 
-import { SITE, METADATA, APP_BLOG } from 'astrowind:config';
-import { fetchPosts } from '~/utils/blog';
-import { getPermalink } from '~/utils/permalinks';
-
-export const GET = async () => {
-  if (!APP_BLOG.isEnabled) {
-    return new Response(null, {
-      status: 404,
-      statusText: 'Not found',
-    });
-  }
-
-  const posts = await fetchPosts();
-
-  const rss = await getRssString({
+export async function GET(context: APIContext) {
+  const posts = await getPosts();
+  return rss({
     title: `${SITE.name}’s Blog`,
-    description: METADATA?.description || '',
-    site: import.meta.env.SITE,
-
+    description: SITE.description,
+    site: context.site ?? SITE.url,
     items: posts.map((post) => ({
-      link: getPermalink(post.permalink, 'post'),
-      title: post.title,
-      description: post.excerpt,
-      pubDate: post.publishDate,
+      link: postHref(post),
+      title: post.data.title,
+      description: post.data.excerpt,
+      pubDate: post.data.publishDate,
     })),
-
-    trailingSlash: SITE.trailingSlash,
+    trailingSlash: false,
   });
-
-  return new Response(rss, {
-    headers: {
-      'Content-Type': 'application/xml',
-    },
-  });
-};
+}

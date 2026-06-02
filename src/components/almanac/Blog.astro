@@ -1,0 +1,27 @@
+---
+// Blog.astro — the homepage Blog section: rail header + recent posts ledger,
+// a button through to the full notebook, closed with a flourish.
+import SectionAside from './SectionAside.astro';
+import Flourish from './Flourish.astro';
+import Ledger from './Ledger.astro';
+import Button from './Button.astro';
+import type { LedgerPost } from './Ledger.astro';
+
+interface Props {
+  posts: LedgerPost[];
+}
+const { posts } = Astro.props;
+---
+
+<section class="section" id="blog">
+  <div class="wrap sec-grid">
+    <SectionAside no="No. 3" title="Blog" />
+    <div class="sec-body">
+      <Ledger posts={posts} />
+    </div>
+  </div>
+  <div class="wrap blog-cta reveal" style="margin-top:2.4rem">
+    <Button href="/blog">Full Blog</Button>
+  </div>
+  <Flourish glyph="❖" />
+</section>

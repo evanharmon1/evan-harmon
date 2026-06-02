@@ -1,0 +1,36 @@
+---
+import Layout from '~/layouts/Layout.astro';
+import Header from '~/components/almanac/Header.astro';
+import Footer from '~/components/almanac/Footer.astro';
+import PageHeading from '~/components/almanac/PageHeading.astro';
+import Ledger from '~/components/almanac/Ledger.astro';
+import Button from '~/components/almanac/Button.astro';
+import { getAllTags, getPostsByTag, toLedger } from '~/utils/blog';
+
+export async function getStaticPaths() {
+  const tags = await getAllTags();
+  return Promise.all(
+    tags.map(async ({ tag, slug }) => {
+      const posts = (await getPostsByTag(tag)).map((p) => toLedger(p, { withDay: true }));
+      return { params: { tag: slug }, props: { tag, posts } };
+    })
+  );
+}
+
+const { tag, posts } = Astro.props;
+const count = posts.length;
+---
+
+<Layout title={`Tagged “${tag}”`} description={`Blog articles by Evan Harmon tagged “${tag}”.`}>
+  <Header />
+  <main class="section">
+    <div class="wrap">
+      <PageHeading title={tag} eyebrow="Tagged" sub={`${count} ${count === 1 ? 'article' : 'articles'}`} />
+      <Ledger posts={posts} withImages />
+      <div class="blog-cta reveal" style="margin-top:2.4rem">
+        <Button href="/blog">All articles</Button>
+      </div>
+    </div>
+  </main>
+  <Footer />
+</Layout>

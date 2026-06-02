@@ -1,28 +1,34 @@
 ---
-import Layout from '~/layouts/PageLayout.astro';
-
-import type { MetaData } from '~/types';
-
-export interface Props {
-  frontmatter: {
-    title?: string;
-  };
-}
+// MarkdownLayout.astro — standalone markdown pages (privacy, terms, …).
+// Used via frontmatter:  layout: '~/layouts/MarkdownLayout.astro'
+import Layout from '~/layouts/Layout.astro';
+import Header from '~/components/almanac/Header.astro';
+import Footer from '~/components/almanac/Footer.astro';
+import RuleOrn from '~/components/almanac/RuleOrn.astro';
 
 const { frontmatter } = Astro.props;
-
-const metadata: MetaData = {
-  title: frontmatter?.title,
-};
+const title = frontmatter?.title ?? 'Document';
 ---
 
-<Layout metadata={metadata}>
-  <section class="px-4 py-16 sm:px-6 mx-auto lg:px-8 lg:py-20 max-w-4xl">
-    <h1 class="font-bold font-heading text-4xl md:text-5xl leading-tighter tracking-tighter">{frontmatter.title}</h1>
-    <div
-      class="mx-auto prose prose-lg max-w-4xl dark:prose-invert dark:prose-headings:text-slate-300 prose-md prose-headings:font-heading prose-headings:leading-tighter prose-headings:tracking-tighter prose-headings:font-bold prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-img:rounded-md prose-img:shadow-lg mt-8"
-    >
+<Layout title={title} noindex>
+  <Header />
+  <main class="wrap doc">
+    <h1 class="display doc-title">{title}</h1>
+    <RuleOrn style="max-width:24rem;margin:1.4rem auto 2.2rem" />
+    <article class="prose">
       <slot />
-    </div>
-  </section>
+    </article>
+  </main>
+  <Footer />
 </Layout>
+
+<style>
+  .doc {
+    padding-block: clamp(1.6rem, 4vw, 3rem) 4rem;
+    max-width: min(72ch, 92vw);
+  }
+  .doc-title {
+    font-size: clamp(2.2rem, 5vw, 3.2rem);
+    margin: 0;
+  }
+</style>

@@ -2,3 +2,12 @@ dist
 node_modules
 .github
 .changeset
+
+# Lockfiles are tool-generated — never reformat
+pnpm-lock.yaml
+
+# Authored blog content — don't let Prettier reflow prose / markdown
+src/data/post
+
+# Transient Claude Design handoff bundle (reference only; not source)
+docs/design

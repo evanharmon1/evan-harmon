@@ -1,48 +1,75 @@
 ---
-import '~/assets/styles/tailwind.css';
+// Layout.astro — root layout for The Almanac.
+// Wires fonts, the no-flash theme script, the global stylesheet, SEO meta,
+// and the document-spanning printed-grain overlay.
+import ThemeScript from '~/components/almanac/ThemeScript.astro';
+import { SITE } from '~/data/site';
+import '~/styles/global.css';
 
-import { I18N } from 'astrowind:config';
+// Self-hosted OFL fonts (see DESIGN.md §6 / global.css @theme font roles).
+import '@fontsource/cormorant-garamond/400.css';
+import '@fontsource/cormorant-garamond/500.css';
+import '@fontsource/cormorant-garamond/600.css';
+import '@fontsource/eb-garamond/400.css';
+import '@fontsource/eb-garamond/500.css';
+import '@fontsource/eb-garamond/400-italic.css';
+import '@fontsource/old-standard-tt/400.css';
+import '@fontsource/old-standard-tt/700.css';
+import '@fontsource/playfair-display/400-italic.css';
+import '@fontsource/playfair-display/500-italic.css';
 
-import CommonMeta from '~/components/common/CommonMeta.astro';
-import Favicons from '~/components/Favicons.astro';
-import CustomStyles from '~/components/CustomStyles.astro';
-import ApplyColorMode from '~/components/common/ApplyColorMode.astro';
-import Metadata from '~/components/common/Metadata.astro';
-import SiteVerification from '~/components/common/SiteVerification.astro';
-import Analytics from '~/components/common/Analytics.astro';
-import BasicScripts from '~/components/common/BasicScripts.astro';
-
-// Comment the line below to disable View Transitions
-import { ClientRouter } from 'astro:transitions';
-
-import type { MetaData as MetaDataType } from '~/types';
-
-export interface Props {
-  metadata?: MetaDataType;
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  noindex?: boolean;
 }
 
-const { metadata = {} } = Astro.props;
-const { language, textDirection } = I18N;
+const { title, description = SITE.description, image = '/images/og-image.png', noindex = false } = Astro.props;
+
+const fullTitle = title ? `${title} — ${SITE.name}` : `${SITE.name} — Almanac`;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? SITE.url).toString();
+const ogImage = new URL(image, Astro.site ?? SITE.url).toString();
 ---
 
 <!doctype html>
-<html lang={language} dir={textDirection} class="2xl:text-[20px]">
+<html lang="en">
   <head>
-    <CommonMeta />
-    <Favicons />
-    <CustomStyles />
-    <ApplyColorMode />
-    <Metadata {...metadata} />
-    <SiteVerification />
-    <Analytics />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <ThemeScript />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="alternate" type="application/rss+xml" title={`${SITE.name}’s Blog`} href="/rss.xml" />
 
-    <!-- Comment the line below to disable View Transitions -->
-    <ClientRouter fallback="swap" />
+    <!-- Open Graph / Twitter -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
   </head>
-
-  <body class="antialiased text-default bg-page tracking-tight">
-    <slot />
-
-    <BasicScripts />
+  <body>
+    <!-- position:relative wrapper so the absolute grain spans the whole document -->
+    <div class="page">
+      <div class="grain-overlay" aria-hidden="true"></div>
+      <slot />
+    </div>
   </body>
 </html>
+
+<style>
+  .page {
+    position: relative;
+    min-height: 100svh;
+  }
+</style>

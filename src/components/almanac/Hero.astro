@@ -1,0 +1,34 @@
+---
+// Hero.astro — the "Celestial" direction: a full-bleed colour-block band with
+// the large foil wordmark, tagline, and Memex / Work actions.
+import Button from './Button.astro';
+import { SITE } from '~/data/site';
+---
+
+<section class="hero section cta cta--bold" id="top">
+  <div class="wrap" style="position:relative">
+    <div class="reveal">
+      <div class="cta-orn" aria-hidden="true">❦</div>
+      <h1 class="cover-title">Evan&nbsp;Harmon</h1>
+      <p class="tagline">{SITE.tagline}</p>
+      <div class="links">
+        <Button href="https://www.evanharmon.com/memex" variant="invert" arrow={false} leaf>Memex</Button>
+        <Button href="#projects" variant="ghost" arrow={false}>Work</Button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    padding-block: clamp(2.4rem, 5vw, 4rem);
+  }
+  .hero .cover-title {
+    margin-top: 0.1rem;
+  }
+  .hero .tagline {
+    margin: 1rem auto 0;
+    max-width: 32ch;
+  }
+</style>

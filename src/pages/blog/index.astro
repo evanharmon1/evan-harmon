@@ -1,0 +1,21 @@
+---
+import Layout from '~/layouts/Layout.astro';
+import Header from '~/components/almanac/Header.astro';
+import Footer from '~/components/almanac/Footer.astro';
+import PageHeading from '~/components/almanac/PageHeading.astro';
+import Ledger from '~/components/almanac/Ledger.astro';
+import { getPosts, toLedger } from '~/utils/blog';
+
+const posts = (await getPosts()).map((p) => toLedger(p, { withDay: true }));
+---
+
+<Layout title="Blog" description="Writing, talks, and marginalia by Evan Harmon.">
+  <Header />
+  <main class="section">
+    <div class="wrap">
+      <PageHeading title="Blog" sub="Dispatches & marginalia" />
+      <Ledger posts={posts} withImages />
+    </div>
+  </main>
+  <Footer />
+</Layout>

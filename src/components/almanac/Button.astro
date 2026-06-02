@@ -1,0 +1,115 @@
+---
+// Button.astro — engraved action button.
+// Props:
+//   href?    — renders an <a> when set, otherwise a <button>
+//   variant? — "default" | "solid" | "invert" | "ghost"
+//   arrow?   — append the display-serif "→" glyph (default true for links)
+//   leaf?    — prepend a "❧" glyph
+// `invert` / `ghost` are for use on the colour-block (hero / contact).
+interface Props {
+  href?: string;
+  variant?: 'default' | 'solid' | 'invert' | 'ghost';
+  arrow?: boolean;
+  leaf?: boolean;
+  target?: string;
+  rel?: string;
+  [key: string]: unknown;
+}
+const { href, variant = 'default', arrow = !!href, leaf = false, ...rest } = Astro.props;
+const Tag = href ? 'a' : 'button';
+---
+
+<Tag class:list={['btn', `btn--${variant}`]} href={href} {...rest}>
+  {
+    leaf && (
+      <span class="gl" aria-hidden="true">
+        ❧
+      </span>
+    )
+  }
+  <slot />
+  {
+    arrow && (
+      <span class="gl" aria-hidden="true">
+        →
+      </span>
+    )
+  }
+</Tag>
+
+<style>
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-body);
+    font-variant: small-caps;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-btn);
+    font-size: 0.8rem;
+    padding: 0.7rem 1.3rem;
+    white-space: nowrap;
+    cursor: pointer;
+    color: var(--color-ink);
+    border: 1px solid var(--color-rule);
+    background: color-mix(in oklab, var(--color-paper-2) 60%, transparent);
+    box-shadow:
+      inset 0 0 0 2px var(--color-paper),
+      inset 0 0 0 3px color-mix(in oklab, var(--color-rule) 55%, transparent);
+    transition:
+      transform 0.2s ease,
+      color 0.2s,
+      box-shadow 0.2s,
+      background 0.2s;
+  }
+  .btn .gl {
+    font-family: var(--font-display);
+  }
+  .btn:hover {
+    color: var(--color-accent);
+    transform: translateY(-2px);
+    box-shadow:
+      inset 0 0 0 2px var(--color-paper),
+      inset 0 0 0 3px var(--color-accent),
+      0 6px 18px -10px rgba(0, 0, 0, 0.4);
+  }
+
+  .btn--solid {
+    background: var(--color-ink);
+    color: var(--color-paper);
+    border-color: var(--color-ink);
+    box-shadow:
+      inset 0 0 0 2px var(--color-ink),
+      inset 0 0 0 3px color-mix(in oklab, var(--color-paper) 30%, transparent);
+  }
+  .btn--solid:hover {
+    color: var(--color-paper);
+    background: color-mix(in oklab, var(--color-ink) 88%, var(--color-accent));
+  }
+
+  /* on the colour-block (hero / contact) */
+  .btn--invert {
+    background: var(--color-cta-line);
+    color: #241803;
+    border-color: var(--color-cta-line);
+    box-shadow: inset 0 0 0 2px color-mix(in oklab, var(--color-cta-line) 70%, #000 20%);
+  }
+  .btn--invert:hover {
+    color: #241803;
+    background: color-mix(in oklab, var(--color-cta-line) 86%, #fff);
+    transform: translateY(-2px);
+  }
+  .btn--ghost {
+    background: rgba(255, 255, 255, 0.025);
+    color: var(--color-cta-ink);
+    border-color: color-mix(in oklab, var(--color-cta-line) 60%, transparent);
+    box-shadow:
+      inset 0 0 0 2px var(--color-cta-1),
+      inset 0 0 0 3px color-mix(in oklab, var(--color-cta-line) 30%, transparent);
+  }
+  .btn--ghost:hover {
+    color: var(--color-cta-line);
+    border-color: var(--color-cta-line);
+    transform: translateY(-2px);
+  }
+</style>

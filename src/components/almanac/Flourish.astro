@@ -1,0 +1,15 @@
+---
+// Flourish.astro — ornate inter-section divider: ❧ —rule— ❖ —rule— ❧
+interface Props {
+  glyph?: string;
+}
+const { glyph = '❖' } = Astro.props;
+---
+
+<div class="flourish" aria-hidden="true">
+  <span class="sw sw-l">❧</span>
+  <i class="ln"></i>
+  <span class="gl gl-lg">{glyph}</span>
+  <i class="ln"></i>
+  <span class="sw sw-r">❧</span>
+</div>

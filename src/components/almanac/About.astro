@@ -1,0 +1,22 @@
+---
+// About.astro — bio in the rail layout (numeral up the left gutter), closed
+// with an engraved rule ornament. No register; no CTA (per the current design).
+import SectionAside from './SectionAside.astro';
+import RuleOrn from './RuleOrn.astro';
+import { BIO } from '~/data/site';
+
+const initial = BIO.charAt(0);
+const rest = BIO.slice(1);
+---
+
+<section class="section" id="about">
+  <div class="wrap sec-grid">
+    <SectionAside no="No. 1" title="About Me" />
+    <div class="sec-body">
+      <div class="reveal">
+        <p class="bio"><span class="initial" aria-hidden="true">{initial}</span>{rest}</p>
+        <RuleOrn style="max-width:22rem;margin:2.4rem auto 0" />
+      </div>
+    </div>
+  </div>
+</section>

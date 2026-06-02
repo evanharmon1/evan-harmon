@@ -1,0 +1,68 @@
+---
+// Ledger.astro — the blog as an engraved ledger: date | title+excerpt | category.
+// With `withImages`, a small thumbnail sits directly under the date. Section
+// chrome (header, flourish) is the caller's job.
+import PostImage from './PostImage.astro';
+
+export interface LedgerPost {
+  date: string;
+  cat: string;
+  href: string;
+  title: string;
+  excerpt: string;
+  image?: string;
+}
+
+interface Props {
+  posts: LedgerPost[];
+  withImages?: boolean;
+}
+const { posts, withImages = false } = Astro.props;
+---
+
+<div class:list={['ledger', withImages && 'ledger--media']}>
+  {
+    posts.map((b) => (
+      <a class="row reveal" href={b.href}>
+        <div class="lead">
+          <div class="date">{b.date}</div>
+          {withImages && b.image && (
+            <span class="thumb" aria-hidden="true">
+              <PostImage src={b.image} alt="" width={220} />
+            </span>
+          )}
+        </div>
+        <div>
+          <div class="t display">{b.title}</div>
+          <div class="ex">{b.excerpt}</div>
+        </div>
+        <div class="cat">{b.cat}</div>
+      </a>
+    ))
+  }
+</div>
+
+<style>
+  /* keep the date/thumb cell top-aligned with the title */
+  .ledger--media .row {
+    align-items: start;
+  }
+  /* small engraved thumbnail, tucked under the date — a grace note, not a banner */
+  .thumb {
+    display: block;
+    width: 7rem;
+    height: 4.6rem;
+    margin-top: 0.65rem;
+    overflow: hidden;
+    border: 1px solid var(--color-line);
+    background: color-mix(in oklab, var(--color-paper-2) 50%, transparent);
+    box-shadow: inset 0 0 0 2px var(--color-paper);
+  }
+  .thumb :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: saturate(0.92) contrast(0.98);
+  }
+</style>

@@ -1,0 +1,54 @@
+---
+// PageHeading.astro — a top-aligned page header (leaf ornament, optional eyebrow,
+// display title, optional italic sub). Use for standalone index pages (/blog,
+// tag archives) where the rail aside isn't wanted.
+interface Props {
+  title: string;
+  eyebrow?: string;
+  sub?: string;
+}
+const { title, eyebrow, sub } = Astro.props;
+---
+
+<header class="page-heading reveal">
+  <div class="sec-orn" aria-hidden="true">❧</div>
+  {eyebrow && <span class="eyebrow">{eyebrow}</span>}
+  <h1 class="display page-title">{title}</h1>
+  {sub && <p class="page-sub">{sub}</p>}
+</header>
+
+<style>
+  .page-heading {
+    margin-bottom: 1.8rem;
+  }
+  .sec-orn {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    line-height: 1;
+    color: var(--color-accent);
+    margin-bottom: 0.4rem;
+  }
+  .eyebrow {
+    display: block;
+    font-family: var(--font-body);
+    font-variant: small-caps;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-label);
+    font-size: var(--text-eyebrow);
+    color: var(--color-accent);
+    margin-bottom: 0.5rem;
+  }
+  .page-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(2.4rem, 6vw, 3.8rem);
+    line-height: 0.98;
+    letter-spacing: var(--tracking-display);
+    margin: 0;
+  }
+  .page-sub {
+    font-style: italic;
+    color: var(--color-ink-faint);
+    margin: 0.5rem 0 0;
+  }
+</style>
