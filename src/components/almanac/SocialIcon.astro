@@ -15,7 +15,8 @@ const LOGOS: Record<string, string> = {
   Memex: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.074 0C12.586 1.374 10.1 2.749 7.613 4.124l.823 4.266 6.365-5.015zm.172.059l-.269 3.314 4.497 2.752zm-.353 3.466L8.487 8.576l7.39 15.367 1.177-2.359L19.58 6.4c-.012-.009-4.688-2.875-4.688-2.875zm-7.425.779l-3.05 6.594L9.033 21.51l-.74-12.934-.012-.064zm1.025 4.688l.73 12.784L15.71 24Z"/></svg>`,
   'omg.lol': `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`,
 };
-const GLYPHS: Record<string, string> = { Meetup: 'm' };
+// engraved-monogram fallback for any social without an SVG logo
+const GLYPHS: Record<string, string> = {};
 
 const svg = LOGOS[name];
 const glyph = GLYPHS[name];

@@ -34,9 +34,6 @@ There is **no unit-test suite** — "testing" here means `task validate` / `task
 
 ## Architecture
 
-This is a hand-built Astro site (it was rebuilt off the AstroWind starter — that scaffolding,
-its config-driven `astrowind:config` integration, and `tailwind.config.js` are gone).
-
 - **Tailwind v4 is CSS-first.** There is **no** `@astrojs/tailwind` integration; it's the Vite
   plugin (`@tailwindcss/vite` in `astro.config.ts`) plus `@import "tailwindcss"` inside
   `src/styles/global.css`, imported once from `src/layouts/Layout.astro`.

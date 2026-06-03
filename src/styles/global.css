@@ -585,7 +585,6 @@
   .sec-aside {
     align-self: center;
     writing-mode: vertical-rl;
-    transform: rotate(180deg);
     white-space: nowrap;
     line-height: 1;
     display: flex;
@@ -693,7 +692,7 @@
     gap: 1.1rem;
     transition:
       background 0.25s ease,
-      padding 0.25s ease;
+      box-shadow 0.25s ease;
   }
   .catalog .entry:nth-child(odd) {
     border-right: 1px solid var(--color-line);
@@ -712,15 +711,8 @@
     font-size: var(--text-h3);
     margin: 0.1rem 0 0.4rem;
     font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  .entry h3 .arw {
-    opacity: 0;
-    transform: translateX(-4px);
-    transition: all 0.25s ease;
-    color: var(--color-accent);
+    /* keep the title clear of the gilt seal in the top-right corner */
+    padding-right: 2.4rem;
   }
   .entry p {
     margin: 0;
@@ -731,19 +723,22 @@
   .entry .tag {
     margin-top: 0.7rem;
   }
+  /* hover marks the entry with a left accent keyline + tint — no padding change,
+     so the title never re-wraps or jumps */
   .entry:hover {
     background: color-mix(in oklab, var(--color-paper-2) 75%, transparent);
-    padding-left: 2.2rem;
+    box-shadow: inset 2px 0 0 var(--color-accent);
   }
   .entry:hover h3 {
     color: var(--color-accent);
   }
-  .entry:hover h3 .arw {
-    opacity: 1;
-    transform: translateX(0);
-  }
-  /* the catalog seal — a gilt circle with an outbound-link arrow */
-  .entry .seal {
+
+  /* ---- External-link seal ----
+     A gilt circle with an outbound (↗) arrow that marks links leaving the site.
+     Drop it in as a direct child of the link (the only arrow these listings
+     carry — no second horizontal →); the parent link's :hover lifts it. Shared
+     by the Work catalog, the Contact ways, and the Brand reference. */
+  .seal {
     position: absolute;
     top: 1.5rem;
     right: 1.5rem;
@@ -759,16 +754,17 @@
       inset 0 0 0 3px color-mix(in oklab, var(--color-gold) 18%, transparent);
     transition:
       color 0.25s ease,
-      transform 0.25s ease,
+      transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
       border-color 0.25s ease;
   }
-  .entry .seal svg {
+  .seal svg {
     display: block;
   }
-  .entry:hover .seal {
+  /* the link lifts the seal up-and-out on hover */
+  a:hover > .seal {
     color: var(--color-accent);
     border-color: color-mix(in oklab, var(--color-accent) 55%, transparent);
-    transform: translate(2px, -2px);
+    transform: translate(3px, -3px) scale(1.08);
   }
 
   /* ---- Blog — ledger ---- */
@@ -777,14 +773,16 @@
   }
   .ledger .row {
     display: grid;
-    grid-template-columns: 8.5rem 1fr auto;
+    /* fixed date + category columns so every title starts and wraps at the same
+       place (no row hugs the category to a different width) */
+    grid-template-columns: 8.5rem minmax(0, 1fr) 7rem;
     gap: 1.4rem;
     align-items: baseline;
-    padding: 1.15rem 0.4rem;
+    padding: 1.15rem 1rem;
     border-bottom: 1px solid var(--color-line);
     transition:
-      background 0.2s,
-      padding 0.2s;
+      background 0.2s ease,
+      box-shadow 0.2s ease;
   }
   .ledger .row:first-child {
     border-top: 1px solid var(--color-line);
@@ -818,9 +816,11 @@
     color: var(--color-accent);
     white-space: nowrap;
   }
+  /* hover marks the row with a left accent keyline + tint — no padding change,
+     so the title never re-wraps or jumps */
   .ledger .row:hover {
     background: color-mix(in oklab, var(--color-paper-2) 70%, transparent);
-    padding-inline: 1rem;
+    box-shadow: inset 2px 0 0 var(--color-accent);
   }
   .ledger .row:hover .t {
     color: var(--color-accent);
