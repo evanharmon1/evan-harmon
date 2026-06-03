@@ -4,6 +4,7 @@
 import Layout from '~/layouts/Layout.astro';
 import Header from '~/components/almanac/Header.astro';
 import Footer from '~/components/almanac/Footer.astro';
+import ExternalSeal from '~/components/almanac/ExternalSeal.astro';
 
 // Palette swatches — hex + OKLCH, shown verbatim as a reference (the one place
 // raw values are intentionally on display).
@@ -432,26 +433,27 @@ const Swatches = (rows: Swatch[]) => rows;
                 <span class="bentry">
                   <div class="bno">1</div>
                   <div>
-                    <h4 class="display">Harmon Stack <span style="color:var(--accent)">→</span></h4>
+                    <h4 class="display">Harmon Stack</h4>
                     <p>
                       A project template to bootstrap &amp; streamline new work — CI/CD, security tests, linting, docs.
                     </p>
                     <div class="label" style="margin-top:.7rem;color:var(--accent)">Template · CI/CD</div>
                   </div>
-                  <span class="seal">❧</span>
+                  <ExternalSeal />
                 </span>
                 <span class="bentry">
                   <div class="bno">2</div>
                   <div>
-                    <h4 class="display">Harmon Ops <span style="color:var(--accent)">→</span></h4>
+                    <h4 class="display">Harmon Ops</h4>
                     <p>Scripts, dotfiles, automation &amp; IaC for a developer environment and homelab.</p>
                     <div class="label" style="margin-top:.7rem;color:var(--accent)">Infrastructure</div>
                   </div>
-                  <span class="seal">❧</span>
+                  <ExternalSeal />
                 </span>
               </div>
               <p class="note" style="margin-top:1rem">
-                Hover: tint + content slides inward. Numerals Playfair italic; ❧ seal top-right.
+                Hover: tint + content slides inward. Numerals Playfair italic. A single emblem only — the gilt ↗ seal,
+                top-right, marking links that leave the site (it lifts on hover); no second horizontal arrow.
               </p>
             </div>
           </div>
@@ -465,24 +467,23 @@ const Swatches = (rows: Swatch[]) => rows;
           <h2 class="sec-title display">Colour-block</h2>
         </div>
         <div class="block-body">
-          <p class="note">
+          <p class="note" style="margin-top:0">
             The only filled surfaces — green on light, blue on dark — always carrying gold foil ornaments &amp;
-            warm-white text.
+            warm-white text. The closing “Let's Talk” block below is the canonical example.
           </p>
+          <div class="bcta">
+            <div class="crest">❦</div>
+            <h3>Let's Talk</h3>
+            <p class="btag">Send a word</p>
+            <div class="btn-row" style="justify-content:center">
+              <a class="bbtn bbtn--invert" href="/contact">Contact Me</a>
+              <a class="bbtn bbtn--ghost" href="https://fantastical.app/evanharmon" target="_blank" rel="noopener"
+                >Meet With Me</a
+              >
+            </div>
+          </div>
         </div>
       </section>
-    </div>
-
-    <div class="bcta">
-      <div class="crest">❦</div>
-      <h3>Let's Talk</h3>
-      <p class="btag">Send a word</p>
-      <div class="btn-row" style="justify-content:center">
-        <a class="bbtn bbtn--invert" href="/contact">Contact Me</a>
-        <a class="bbtn bbtn--ghost" href="https://fantastical.app/evanharmon" target="_blank" rel="noopener"
-          >Meet With Me</a
-        >
-      </div>
     </div>
   </main>
   <Footer />
@@ -584,11 +585,10 @@ const Swatches = (rows: Swatch[]) => rows;
   .block-body {
     min-width: 0;
   }
-  /* numeral + title run vertically up the gutter, as on the homepage rail */
+  /* numeral + title run vertically down the gutter, as on the homepage rail */
   .block-rail {
     align-self: center;
     writing-mode: vertical-rl;
-    transform: rotate(180deg);
     white-space: nowrap;
     line-height: 1;
     display: flex;
@@ -891,12 +891,11 @@ const Swatches = (rows: Swatch[]) => rows;
     font-size: 0.96rem;
     line-height: 1.5;
   }
-  .bentry .seal {
-    position: absolute;
-    top: 1.4rem;
-    right: 1.4rem;
+  /* the external-link seal (global `.seal`) sits top-right; demo its hover lift */
+  .bentry:hover :global(.seal) {
     color: var(--accent);
-    opacity: 0.5;
+    border-color: color-mix(in oklab, var(--accent) 55%, transparent);
+    transform: translate(3px, -3px) scale(1.08);
   }
 
   /* brand & voice */

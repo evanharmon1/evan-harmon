@@ -19,14 +19,13 @@ export const NAV: NavLink[] = [
   { label: 'Now', href: '/now' },
 ];
 
-export type SocialName = 'GitHub' | 'LinkedIn' | 'Bluesky' | 'Mastodon' | 'Meetup' | 'omg.lol' | 'Memex';
+export type SocialName = 'GitHub' | 'LinkedIn' | 'Bluesky' | 'Mastodon' | 'omg.lol' | 'Memex';
 
 export const SOCIALS: { name: SocialName; href: string }[] = [
   { name: 'GitHub', href: 'https://github.com/evanharmon1' },
   { name: 'LinkedIn', href: 'https://www.linkedin.com/in/evanharmon1' },
   { name: 'Bluesky', href: 'https://bsky.app/profile/evanharmon.com' },
   { name: 'Mastodon', href: 'https://mastodon.social/@evanharmon' },
-  { name: 'Meetup', href: 'https://www.meetup.com/kansas-city-tech-enthusiasts/' },
   { name: 'omg.lol', href: 'https://evanharmon.omg.lol' },
   { name: 'Memex', href: 'https://www.evanharmon.com/memex' },
 ];

@@ -21,6 +21,13 @@ import RuleOrn from '~/components/almanac/RuleOrn.astro';
           sizes="(max-width: 540px) 80vw, 420px"
           loading="eager"
         />
+        <figcaption class="now-figcap" role="tooltip">
+          <span class="cap-t">The Flammarion Engraving</span>
+          <span class="cap-d"
+            >Often interpreted as a symbol of curiosity, scientific discovery, or breaking through an old worldview.</span
+          >
+          <span class="cap-m">Artist unknown · 1888</span>
+        </figcaption>
       </figure>
 
       <p class="now-intro">
@@ -84,7 +91,15 @@ import RuleOrn from '~/components/almanac/RuleOrn.astro';
 
         <h4>Making</h4>
         <ul>
-          <li>Building and upgrading my PCs</li>
+          <li>
+            Building and upgrading my PCs, <a
+              href="https://pcpartpicker.com/user/telosmachina/saved/#view=nDZXYJ"
+              target="_blank"
+              rel="noopener">Contraption</a
+            > and <a href="https://pcpartpicker.com/user/telosmachina/saved/#view=qjHqBm" target="_blank" rel="noopener"
+              >TARS</a
+            >
+          </li>
           <li>
             Building a <a
               href="https://the-diy-life.com/introducing-lab-rax-a-3d-printable-modular-10-rack-system/"
@@ -101,7 +116,8 @@ import RuleOrn from '~/components/almanac/RuleOrn.astro';
             /now page and <a href="https://home.omg.lol/" target="_blank" rel="noopener">omg.lol</a>!)
           </li>
           <li><a href="https://astro.build/" target="_blank" rel="noopener">Astro Web Framework</a></li>
-          <li><a href="https://tanstack.com/" target="_blank" rel="noopener">TanStack</a></li>
+          <li><a href="https://tanstack.com/" target="_blank" rel="noopener">TanStack Application Framework</a></li>
+          <li><a href="https://www.convex.dev/" target="_blank" rel="noopener">Convex Platform</a></li>
           <li>Design</li>
         </ul>
 
@@ -115,7 +131,7 @@ import RuleOrn from '~/components/almanac/RuleOrn.astro';
             >
           </li>
           <li>
-            <a href="https://www.youtube.com/watch?v=y115_2h4a68" target="_blank" rel="noopener"
+            <a href="https://youtu.be/tX1znPfzhVI?si=1kWgKNxDego3inZL" target="_blank" rel="noopener"
               >Jesse Morris: Sunday Morning Coming Down</a
             >
           </li>
@@ -123,7 +139,7 @@ import RuleOrn from '~/components/almanac/RuleOrn.astro';
 
         <h3>Playing</h3>
         <ul>
-          <li>Arc Raiders</li>
+          <li><a href="https://arcraiders.com/" target="_blank" rel="noopener">Arc Raiders</a></li>
         </ul>
 
         <h3>Watching</h3>
@@ -137,8 +153,10 @@ import RuleOrn from '~/components/almanac/RuleOrn.astro';
               >chunk a coal</a
             >
           </li>
-          <li>Widow's Bay</li>
-          <li>Scot Squad</li>
+          <li>
+            <a href="https://en.wikipedia.org/wiki/Widow%27s_Bay" target="_blank" rel="noopener">Widow's Bay</a>
+          </li>
+          <li><a href="https://en.wikipedia.org/wiki/Scot_Squad" target="_blank" rel="noopener">Scot Squad</a></li>
         </ul>
 
         <h3>Laughing</h3>
@@ -183,6 +201,7 @@ import RuleOrn from '~/components/almanac/RuleOrn.astro';
     max-width: min(72ch, 92vw);
   }
   .now-figure {
+    position: relative;
     margin: 0 auto 1.6rem;
     max-width: 420px;
   }
@@ -194,6 +213,58 @@ import RuleOrn from '~/components/almanac/RuleOrn.astro';
     box-shadow:
       inset 0 0 0 3px var(--color-paper),
       inset 0 0 0 4px color-mix(in oklab, var(--color-rule) 45%, transparent);
+  }
+  /* floating label that fades in over the engraving on hover */
+  .now-figcap {
+    position: absolute;
+    left: 50%;
+    bottom: 0.85rem;
+    width: max-content;
+    max-width: min(90%, 22rem);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.7rem 1rem;
+    text-align: center;
+    background: color-mix(in oklab, var(--color-paper) 94%, transparent);
+    border: 1px solid var(--color-rule);
+    box-shadow:
+      inset 0 0 0 2px var(--color-paper),
+      0 8px 20px rgba(0, 0, 0, 0.22);
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, 8px);
+    transition:
+      opacity 0.22s ease,
+      transform 0.22s ease;
+  }
+  .now-figure:hover .now-figcap,
+  .now-figure:focus-within .now-figcap {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+  .now-figcap .cap-t {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.3rem;
+    line-height: 1.1;
+    color: var(--color-ink);
+  }
+  .now-figcap .cap-d {
+    font-family: var(--font-body);
+    font-style: italic;
+    font-size: 1rem;
+    line-height: 1.45;
+    color: var(--color-ink-soft);
+  }
+  .now-figcap .cap-m {
+    font-family: var(--font-body);
+    font-variant: small-caps;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-label);
+    font-size: var(--text-label);
+    color: var(--color-ink-faint);
   }
   .now-intro {
     text-align: center;

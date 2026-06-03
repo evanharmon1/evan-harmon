@@ -3,6 +3,7 @@ import Layout from '~/layouts/Layout.astro';
 import Header from '~/components/almanac/Header.astro';
 import Footer from '~/components/almanac/Footer.astro';
 import PageHeading from '~/components/almanac/PageHeading.astro';
+import ExternalSeal from '~/components/almanac/ExternalSeal.astro';
 import { MEET_URL } from '~/data/site';
 
 const ways = [
@@ -28,19 +29,15 @@ const ways = [
   <Header />
   <main class="section">
     <div class="wrap">
-      <PageHeading title="Contact" sub="An open correspondence" center />
+      <PageHeading title="Contact" sub="Open correspondence" center />
       <div class="ways">
         {
           ways.map((w) => (
             <a class="way" href={w.href} target={w.href.startsWith('http') ? '_blank' : undefined} rel="noopener">
-              <h3 class="display">
-                {w.title}
-                <span class="arw" aria-hidden="true">
-                  →
-                </span>
-              </h3>
+              <h3 class="display">{w.title}</h3>
               <div class="detail">{w.detail}</div>
               <p>{w.note}</p>
+              {w.href.startsWith('http') && <ExternalSeal />}
             </a>
           ))
         }
@@ -59,6 +56,7 @@ const ways = [
     border-top: 1px solid var(--color-line);
   }
   .way {
+    position: relative;
     display: block;
     padding: 1.6rem;
     border-bottom: 1px solid var(--color-line);
@@ -74,15 +72,6 @@ const ways = [
     font-size: var(--text-h3);
     font-weight: 600;
     margin: 0 0 0.5rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  .way h3 .arw {
-    opacity: 0;
-    transform: translateX(-4px);
-    transition: all 0.25s ease;
-    color: var(--color-accent);
   }
   .way .detail {
     font-family: var(--font-numeral);
@@ -102,10 +91,6 @@ const ways = [
   }
   .way:hover h3 {
     color: var(--color-accent);
-  }
-  .way:hover h3 .arw {
-    opacity: 1;
-    transform: translateX(0);
   }
   @media (max-width: 860px) {
     .ways {
