@@ -88,4 +88,4 @@ Then convert each to `oklch(...)`, add `--primary-foreground` (a light tone meet
 
 - Run `task lint:design` — confirms `DESIGN.md` token refs resolve and flags WCAG AA contrast failures.
 - For repeatable future syncs, prefer regenerating `task export:design` to a _scratch_ file and re-merging deltas over hand-diffing the whole file. Never let the export write directly into `globals.css`.
-- If you ever need a true multi-platform pipeline (iOS/Android, or a second brand), that's the trigger to promote `.design/tokens.json` (DTCG) to canonical and compile with Style Dictionary — out of scope for this web-only handoff.
+- If you ever need a true multi-platform pipeline (iOS/Android, or a second brand), that's the trigger to promote `.design/tokens.json` (DTCG) to canonical and compile with Style Dictionary.
