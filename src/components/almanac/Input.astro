@@ -1,0 +1,84 @@
+---
+// Input.astro — an engraved form field with an optional small-caps label.
+// Relies on the global form styling in global.css (inset keyline; focus turns
+// the keyline accent; aria-invalid turns it madder/oxblood via --c-error).
+// Set `invalid` (+ optional `error` note) for the error state. Supports
+// text-like input types and a `multiline` textarea.
+interface Props {
+  label?: string;
+  id?: string;
+  type?: 'text' | 'email' | 'search' | 'url' | 'tel' | 'password' | 'number';
+  multiline?: boolean;
+  placeholder?: string;
+  value?: string;
+  name?: string;
+  required?: boolean;
+  invalid?: boolean;
+  error?: string;
+  class?: string;
+}
+const {
+  label,
+  id,
+  type = 'text',
+  multiline = false,
+  placeholder,
+  value,
+  name,
+  required,
+  invalid = false,
+  error,
+  class: className,
+} = Astro.props;
+
+const fieldId = id || (label ? `f-${label.toLowerCase().replace(/\s+/g, '-')}` : undefined);
+const errId = error && fieldId ? `${fieldId}-err` : undefined;
+const ariaInvalid = invalid ? 'true' : undefined;
+---
+
+<div class:list={['almanac-field', className]}>
+  {
+    label && (
+      <label class="field-label" data-invalid={ariaInvalid} for={fieldId}>
+        {label}
+      </label>
+    )
+  }
+  {
+    multiline ? (
+      <textarea
+        id={fieldId}
+        name={name}
+        placeholder={placeholder}
+        required={required}
+        aria-invalid={ariaInvalid}
+        aria-describedby={errId}
+        set:text={value}
+      />
+    ) : (
+      <input
+        id={fieldId}
+        name={name}
+        type={type}
+        placeholder={placeholder}
+        value={value}
+        required={required}
+        aria-invalid={ariaInvalid}
+        aria-describedby={errId}
+      />
+    )
+  }
+  {
+    error && (
+      <div class="field-error" id={errId} role="alert">
+        {error}
+      </div>
+    )
+  }
+</div>
+
+<style>
+  .almanac-field {
+    display: block;
+  }
+</style>

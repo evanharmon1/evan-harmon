@@ -1,0 +1,112 @@
+---
+// HeroFrontispiece.astro — the "Var. I" hero: an inlaid book-cover board with a
+// rotating engraved sun, ornamental corners, a foil-stamped wordmark, an
+// engraved divider, tagline and CTAs. The most ceremonial hero.
+// Shared scaffolding (.book-cover/.cover-inlay/.sun/.corners) lives in global.css.
+import Button from '~/components/almanac/Button.astro';
+import Divider from '~/components/almanac/Divider.astro';
+
+interface Cta {
+  label: string;
+  href: string;
+  glyph?: string;
+}
+interface Props {
+  name?: string;
+  tagline?: string;
+  no?: string;
+  series?: string;
+  volume?: string;
+  primary?: Cta;
+  secondary?: Cta;
+  class?: string;
+}
+const {
+  name = 'Evan Harmon',
+  tagline = 'Cantankerous contraptions & philosophical piffle',
+  no = 'No. I',
+  series = 'A Personal Almanac',
+  volume = "Vol. '25",
+  primary = { label: 'Memex', href: '#', glyph: '❧' },
+  secondary = { label: 'Work', href: '#projects' },
+  class: className,
+} = Astro.props;
+---
+
+<section class:list={['hero hero-frontispiece section', className]}>
+  <div class="wrap">
+    <div class="book-cover">
+      <div class="cover-inlay">
+        <div class="corners" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+        <div class="sun-wrap">
+          <div class="sun" style="--sun-size:104px" aria-hidden="true">
+            <div class="rays"></div>
+            <div class="rays2"></div>
+            <div class="face"></div>
+          </div>
+        </div>
+        <div class="kicker">
+          <span class="eyebrow">{no}</span>
+          <span class="eyebrow series">{series}</span>
+          <span class="eyebrow">{volume}</span>
+        </div>
+        <h1 class="cover-title">{name}</h1>
+        <div class="hero-div"><Divider /></div>
+        <p class="tagline">{tagline}</p>
+        <div class="hero-cta">
+          {
+            primary && (
+              <Button href={primary.href} variant="solid" arrow={false} glyph={primary.glyph}>
+                {primary.label}
+              </Button>
+            )
+          }
+          {
+            secondary && (
+              <Button href={secondary.href} arrow={false}>
+                {secondary.label}
+              </Button>
+            )
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero-frontispiece {
+    padding-block: clamp(2.5rem, 6vw, 5.5rem);
+  }
+  .cover-inlay {
+    text-align: center;
+  }
+  .sun-wrap {
+    display: grid;
+    place-items: center;
+    margin-bottom: 1.3rem;
+  }
+  .kicker {
+    justify-content: center;
+    margin-bottom: 1.2rem;
+  }
+  .series {
+    font-style: italic;
+    text-transform: none;
+    letter-spacing: 0.05em;
+  }
+  .hero-div {
+    max-width: 30rem;
+    margin: 1.5rem auto;
+  }
+  .tagline {
+    margin: 0 auto;
+  }
+  .hero-cta {
+    display: flex;
+    gap: 0.8rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 2.1rem;
+  }
+</style>

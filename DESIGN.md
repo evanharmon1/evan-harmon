@@ -13,6 +13,9 @@ disagree, `global.css` wins for runtime. Stack: **Astro + Tailwind CSS v4**
 (CSS-first `@theme`), with **shadcn/ui** wired onto these tokens via a thin role
 layer, and **Lucide** for icons.
 
+**Version `1.1.0`.** Changes are recorded as Design Decision Records in
+[`docs/design/decisions/`](docs/design/decisions/).
+
 ---
 
 ## 1. Brand
@@ -74,6 +77,7 @@ theme-aware. Raw hex lives only in the theme blocks of `global.css`.
 | `accent`     | `#1d6b41`           | **Deep garden green** — eyebrows, numerals, links |
 | `gold`       | `#b08016`           | Gilt — brand-mark, icon buttons, ornaments        |
 | `blue`       | `#1f4f86`           | Secondary accent                                  |
+| `error`      | `#9e2b1e`           | Madder/oxblood — invalid fields, error notes      |
 | CTA block    | `#143524`→`#1f4b33` | Green colour-block (hero, "Let's Talk")           |
 
 ### 2.2 Midnight — dark
@@ -85,6 +89,7 @@ theme-aware. Raw hex lives only in the theme blocks of `global.css`.
 | `accent`  | `#e9ad3a`           | **Vivid gold** — eyebrows, numerals |
 | `gold`    | `#e9ad3a`           | Gilt                                |
 | `blue`    | `#7fa8d8`           | Secondary accent                    |
+| `error`   | `#e08a7a`           | Terracotta — invalid fields, notes  |
 | CTA block | `#101a30`→`#18284a` | Blue colour-block                   |
 
 (Full Midnight set lives in `global.css`.)
@@ -110,6 +115,9 @@ the token blocks:
   light, blue on dark — always carrying gold foil ornaments and warm-white text.
 - **Alternating sections:** plain `paper` → tinted `paper-2` band → plain →
   colour-block.
+- **Error is the one sanctioned non-accent hue.** `error` (madder `#9e2b1e` on
+  light, terracotta `#e08a7a` on dark) is reserved for validation — the invalid
+  field keyline and the `.field-error` note — never for decoration or emphasis.
 
 ---
 
@@ -182,6 +190,21 @@ semantic tokens:
 - **Blog** (`BlogLedger`) — the ledger of posts.
 - **Contact** — the closing `❦` colour-block.
 - **SocialIcon** — gilt circles with monochrome logos/monograms + hover tooltip.
+
+**Brand marks & specimens** (used on `/brand`, available for reuse):
+
+- **BrandMark** (`BrandMark.astro`) — the gilt `EH` monogram in a gilt-ring circle.
+- **Crest** (`Crest.astro`) — the ceremonial circular seal: curved gilt small-caps
+  text, engraved rings, `❦` finial, `EH` centre. Token-driven SVG (auto-themes).
+- **Bookplate** (`Bookplate.astro`) — the "Ex Libris" ownership plate (double
+  engraved frame + monogram + name).
+- **Divider** (`Divider.astro`) — the `❧ — ❖ — ❧` inter-section motif.
+- **Tag** (`Tag.astro`) — small-caps metadata label; `tone="faint" | "accent"`.
+- **Input** (`Input.astro`) — engraved field with optional small-caps label and the
+  `invalid` / `error` state (madder/oxblood keyline + `.field-error` note).
+- **HeroFrontispiece / HeroPlate** — two alternate page heroes (an inlaid
+  book-cover with a rotating engraved sun; a split wordmark + printer's-device
+  colophon). The live home hero is the Celestial colour-block.
 
 ### shadcn/ui
 

@@ -1,0 +1,65 @@
+---
+// Bookplate.astro — an "Ex Libris" plate: a double engraved frame around a
+// small-caps "Ex Libris", the gilt EH monogram, a hairline rule, and the full
+// name. The ownership mark for covers, about pages, and printed matter.
+// Token-driven, so it follows the theme.
+interface Props {
+  exlibris?: string;
+  monogram?: string;
+  name?: string;
+  class?: string;
+}
+const { exlibris = 'Ex Libris', monogram = 'EH', name = 'Evan Harmon', class: className } = Astro.props;
+---
+
+<div class:list={['bookplate', className]}>
+  <div class="ex">{exlibris}</div>
+  <div class="mono">{monogram}</div>
+  <div class="rule"></div>
+  <div class="nm">{name}</div>
+</div>
+
+<style>
+  .bookplate {
+    position: relative;
+    display: inline-block;
+    padding: 26px 34px;
+    text-align: center;
+    box-shadow:
+      inset 0 0 0 2px var(--color-paper),
+      inset 0 0 0 3px var(--color-rule),
+      inset 0 0 0 6px var(--color-paper),
+      inset 0 0 0 7px var(--color-line);
+  }
+  .ex {
+    font-family: var(--font-body);
+    font-variant: small-caps;
+    text-transform: uppercase;
+    letter-spacing: 0.34em;
+    font-size: 13px;
+    color: var(--color-accent);
+    margin-bottom: 10px;
+  }
+  .mono {
+    font-family: var(--font-cover);
+    font-weight: 700;
+    font-size: 40px;
+    color: var(--color-gold);
+    line-height: 1;
+    letter-spacing: 0.04em;
+  }
+  .rule {
+    margin: 10px auto;
+    width: 90px;
+    height: 1px;
+    background: var(--color-rule);
+  }
+  .nm {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 26px;
+    color: var(--color-ink);
+    line-height: 1;
+    white-space: nowrap;
+  }
+</style>

@@ -1,0 +1,126 @@
+---
+// HeroPlate.astro — the "Var. II" hero: a two-column split with the wordmark
+// and CTAs on the left and an engraved printer's-device colophon (a guilloché
+// plate framing the EH monogram roundel) on the right.
+// Shared scaffolding (.plate/.device/.monogram/.corners) lives in global.css.
+import Button from '~/components/almanac/Button.astro';
+
+interface Cta {
+  label: string;
+  href: string;
+  glyph?: string;
+}
+interface Props {
+  name?: string;
+  eyebrow?: string;
+  tagline?: string;
+  monogram?: string;
+  deviceLabel?: string;
+  capLeft?: string;
+  capRight?: string;
+  primary?: Cta;
+  secondary?: Cta;
+  class?: string;
+}
+const {
+  name = 'Evan\nHarmon',
+  eyebrow = 'Software · Contraptions · Piffle',
+  tagline = 'Cantankerous contraptions & philosophical piffle',
+  monogram = 'EH',
+  deviceLabel = "Anno '25",
+  capLeft = 'The Device',
+  capRight = 'per scientiam · per machinam',
+  primary = { label: 'Memex', href: '#', glyph: '❧' },
+  secondary = { label: 'Work', href: '#projects' },
+  class: className,
+} = Astro.props;
+
+const lines = name.split('\n');
+---
+
+<section class:list={['hero hero-plate section', className]}>
+  <div class="wrap">
+    <div class="hero-copy">
+      <div class="kicker"><span class="eyebrow">{eyebrow}</span></div>
+      <h1 class="display">
+        {
+          lines.map((l, i) => (
+            <>
+              {l}
+              {i < lines.length - 1 && <br />}
+            </>
+          ))
+        }
+      </h1>
+      <p class="tagline">{tagline}</p>
+      <div class="hero-cta">
+        {
+          primary && (
+            <Button href={primary.href} variant="solid" arrow={false} glyph={primary.glyph}>
+              {primary.label}
+            </Button>
+          )
+        }
+        {
+          secondary && (
+            <Button href={secondary.href} arrow={false}>
+              {secondary.label}
+            </Button>
+          )
+        }
+      </div>
+    </div>
+    <figure class="plate">
+      <div class="device">
+        <div class="monogram">
+          <b>{monogram}</b>
+          <i>{deviceLabel}</i>
+        </div>
+      </div>
+      <figcaption class="cap">
+        <span class="label">{capLeft}</span>
+        <span class="label cap-right">{capRight}</span>
+      </figcaption>
+      <div class="corners" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    </figure>
+  </div>
+</section>
+
+<style>
+  .hero-plate .wrap {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: clamp(2rem, 5vw, 4.5rem);
+    align-items: center;
+  }
+  .hero-plate .kicker {
+    justify-content: flex-start;
+    margin-bottom: 1.2rem;
+  }
+  .hero-plate h1 {
+    text-align: left;
+    font-size: clamp(3.2rem, 11vw, 8.5rem);
+    margin: 0;
+  }
+  .tagline {
+    margin-top: 1.6rem;
+  }
+  .hero-cta {
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+    margin-top: 2.2rem;
+  }
+  .plate {
+    margin: 0;
+  }
+  .cap-right {
+    font-style: italic;
+    text-transform: none;
+  }
+  @media (max-width: 64rem) {
+    .hero-plate .wrap {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

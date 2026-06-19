@@ -1,0 +1,29 @@
+---
+// Tag.astro — a small-caps category label. The quiet metadata mark used on
+// catalog entries, blog rows, and project kinds. `tone="faint"` (default) or
+// `tone="accent"`.
+interface Props {
+  tone?: 'faint' | 'accent';
+  class?: string;
+}
+const { tone = 'faint', class: className } = Astro.props;
+---
+
+<span class:list={['almanac-tag', `tone-${tone}`, className]}><slot /></span>
+
+<style>
+  .almanac-tag {
+    font-family: var(--font-body);
+    font-variant: small-caps;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-label);
+    font-size: var(--text-label);
+    white-space: nowrap;
+  }
+  .tone-faint {
+    color: var(--color-ink-faint);
+  }
+  .tone-accent {
+    color: var(--color-accent);
+  }
+</style>

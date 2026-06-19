@@ -75,6 +75,8 @@ const PAIRS = [
   ['cta-ink', 'cta-2', 4.5, true], // block heading on the lighter end of the block
   ['cta-body', 'cta-2', 4.5, true], // block body
   ['ink-faint', 'paper', 3.0, true], // muted meta (non-essential / large)
+  ['error', 'paper', 4.5, true], // invalid-field note text (.field-error)
+  ['error', 'paper-2', 4.5, true], // error note on the tinted band
   ['gold', 'paper', 3.0, false], // gilt accents — decorative, advisory only
 ];
 

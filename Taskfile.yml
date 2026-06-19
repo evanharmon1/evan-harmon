@@ -54,6 +54,21 @@ tasks:
       # CSS-first token source (global.css). Promote to DTCG only if a 2nd platform/brand appears.
       - pnpm build
     silent: false
+  verify:browsers:
+    desc: Cross-browser/viewport screenshot sweep (Playwright — Chromium/Firefox/WebKit + mobile Safari/iPad)
+    # Requires @playwright/test + `npx playwright install`. Builds, then runs the
+    # route × theme × engine/device sweep in test/brand-screenshots.spec.ts.
+    cmds:
+      - pnpm build
+      - npx playwright test {{.CLI_ARGS}}
+    silent: false
+  verify:
+    desc: Full verification — design gate, repo checks, and the cross-browser screenshot sweep
+    cmds:
+      - task: lint:design
+      - task: check
+      - task: verify:browsers
+    silent: false
   security:
     cmds:
       - task: secrets

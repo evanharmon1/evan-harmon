@@ -21,6 +21,9 @@ for interactive islands) · self-hosted `@fontsource` fonts · deploys static.
 - A thin **shadcn role layer** (`--background`/`--foreground`/`--primary`/…) maps
   onto the same Almanac tokens, so any shadcn component renders on-brand and
   follows the same theme switch.
+- `--c-error` (madder on light, terracotta on dark) carries form validation — the
+  invalid-field keyline and the `.field-error` note — and is the one sanctioned
+  non-accent hue.
 
 **Theme switching:** `ThemeScript.astro` sets the palette before first paint
 (defaulting to Midnight; a saved choice wins); `ThemeToggle.astro` flips and
@@ -44,6 +47,10 @@ Bespoke Astro components live in `src/components/almanac/`:
   numeral/title), `PageHeading` (top-aligned page titles).
 - **Sections:** `Hero`, `About`, `Projects` (engraved catalog), `Blog` + `Ledger`,
   `Contact`, `SocialIcon`, `PostImage`.
+- **Marks & forms** (showcased on `/brand`, available for reuse): `Crest` (the
+  ceremonial seal), `Bookplate` (the "Ex Libris" plate), `Tag`, `Input` (with the
+  `invalid`/`error` state), `Button` (`default|solid|invert|ghost`, `sm`,
+  disabled), and the two alternate heroes `HeroFrontispiece` / `HeroPlate`.
 
 Cross-cutting classes (`.catalog`, `.ledger`, `.cta--bold`, `.sec-grid`, …) live
 in `global.css`; leaf components carry their own scoped styles. shadcn primitives
