@@ -83,3 +83,8 @@ todo.md
 #             Other
 #------------------------------------------------------------------------------
 .dccache
+
+# Playwright (design-handoff verification)
+screenshots/
+test-results/
+playwright-report/

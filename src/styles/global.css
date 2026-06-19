@@ -45,6 +45,7 @@
   --c-accent: #1d6b41; /* deep garden green */
   --c-gold: #b08016;
   --c-blue: #1f4f86;
+  --c-error: #9e2b1e; /* madder / oxblood — invalid fields, error notes */
 
   /* colour-block (hero / contact) */
   --c-cta-1: #143524;
@@ -92,6 +93,7 @@
   --c-accent: #e9ad3a; /* vivid gold */
   --c-gold: #e9ad3a;
   --c-blue: #7fa8d8;
+  --c-error: #e08a7a; /* terracotta — invalid fields, error notes */
 
   --c-cta-1: #101a30;
   --c-cta-2: #18284a;
@@ -122,6 +124,7 @@
   --color-accent: var(--c-accent);
   --color-gold: var(--c-gold);
   --color-blue: var(--c-blue);
+  --color-error: var(--c-error);
   --color-cta-ink: var(--c-cta-ink);
   --color-cta-body: var(--c-cta-body);
   --color-cta-line: var(--c-cta-line);
@@ -284,6 +287,45 @@
     box-shadow:
       inset 0 0 0 2px var(--color-paper),
       inset 0 0 0 3px var(--color-accent);
+  }
+
+  /* invalid — madder/oxblood engraved keyline (uses the --c-error token) */
+  input[aria-invalid='true'],
+  textarea[aria-invalid='true'],
+  select[aria-invalid='true'] {
+    border-color: var(--color-error);
+    box-shadow:
+      inset 0 0 0 2px var(--color-paper),
+      inset 0 0 0 3px var(--color-error);
+  }
+  input[aria-invalid='true']:focus,
+  textarea[aria-invalid='true']:focus,
+  select[aria-invalid='true']:focus {
+    border-color: var(--color-error);
+    box-shadow:
+      inset 0 0 0 2px var(--color-paper),
+      inset 0 0 0 3px var(--color-error),
+      0 0 0 3px color-mix(in oklab, var(--color-error) 18%, transparent);
+  }
+  .field-label[data-invalid='true'] {
+    color: var(--color-error);
+  }
+  /* the error note beneath a field — italic, madder, with an engraver's reference mark */
+  .field-error {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    margin-top: 0.45rem;
+    font-family: var(--font-body);
+    font-style: italic;
+    font-size: 0.92rem;
+    color: var(--color-error);
+  }
+  .field-error::before {
+    content: '\203B'; /* ※ reference mark */
+    font-style: normal;
+    font-size: 0.85em;
+    line-height: 1;
   }
   select {
     appearance: none;
@@ -462,7 +504,7 @@
   --tw-prose-captions: var(--color-ink-faint);
   --tw-prose-code: var(--color-ink);
   --tw-prose-pre-code: var(--color-cta-body);
-  --tw-prose-pre-bg: var(--color-cta-1, #143524);
+  --tw-prose-pre-bg: var(--c-cta-1);
   --tw-prose-th-borders: var(--color-rule);
   --tw-prose-td-borders: var(--color-line);
   color: var(--color-ink-soft);
@@ -478,6 +520,14 @@
   color: var(--color-accent);
   text-decoration-color: color-mix(in oklab, var(--color-accent) 45%, transparent);
   text-underline-offset: 3px;
+}
+
+/* Colour-block eyebrow — UNLAYERED so it wins over the `@utility eyebrow`
+   (utilities layer beats @layer components regardless of specificity). On the
+   block, kicker text is warm-white with a foil tint so it stays legible (AA);
+   gold foil is reserved for the ornaments (divider, corners, wordmark). */
+.cover-inlay .eyebrow {
+  color: color-mix(in oklab, var(--color-cta-line) 32%, var(--color-cta-ink));
 }
 
 /* ------------------------------------------------------------
@@ -856,6 +906,399 @@
     margin-top: 2.5rem;
     color: var(--color-ink-faint);
     font-style: italic;
+  }
+
+  /* ---- Buttons — engraved action controls ----
+     Single source of truth for the `.btn` family (Button.astro is a thin
+     wrapper over these). `.btn--invert` / `.btn--ghost` ride the colour-block;
+     `.btn--sm` is the compact size; disabled dims and removes the lift. */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-body);
+    font-variant: small-caps;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-btn);
+    font-size: 0.8rem;
+    padding: 0.7rem 1.3rem;
+    white-space: nowrap;
+    cursor: pointer;
+    color: var(--color-ink);
+    border: 1px solid var(--color-rule);
+    background: color-mix(in oklab, var(--color-paper-2) 60%, transparent);
+    box-shadow:
+      inset 0 0 0 2px var(--color-paper),
+      inset 0 0 0 3px color-mix(in oklab, var(--color-rule) 55%, transparent);
+    transition:
+      transform 0.2s ease,
+      color 0.2s,
+      box-shadow 0.2s,
+      background 0.2s;
+  }
+  .btn .gl,
+  .btn .btn-gl {
+    font-family: var(--font-display);
+  }
+  .btn:hover {
+    color: var(--color-accent);
+    transform: translateY(-2px);
+    box-shadow:
+      inset 0 0 0 2px var(--color-paper),
+      inset 0 0 0 3px var(--color-accent),
+      0 6px 18px -10px rgba(0, 0, 0, 0.4);
+  }
+  .btn:active {
+    transform: translateY(0);
+  }
+  .btn:disabled,
+  .btn[aria-disabled='true'] {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    color: var(--color-ink);
+    box-shadow:
+      inset 0 0 0 2px var(--color-paper),
+      inset 0 0 0 3px color-mix(in oklab, var(--color-rule) 55%, transparent);
+  }
+  .btn--sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.72rem;
+  }
+  .btn--solid {
+    background: var(--color-ink);
+    color: var(--color-paper);
+    border-color: var(--color-ink);
+    box-shadow:
+      inset 0 0 0 2px var(--color-ink),
+      inset 0 0 0 3px color-mix(in oklab, var(--color-paper) 30%, transparent);
+  }
+  .btn--solid:hover {
+    color: var(--color-paper);
+    background: color-mix(in oklab, var(--color-ink) 88%, var(--color-accent));
+  }
+  /* on the colour-block (hero / contact) */
+  .btn--invert {
+    background: var(--color-cta-line);
+    color: #241803;
+    border-color: var(--color-cta-line);
+    box-shadow: inset 0 0 0 2px color-mix(in oklab, var(--color-cta-line) 70%, #000 20%);
+  }
+  .btn--invert:hover {
+    color: #241803;
+    background: color-mix(in oklab, var(--color-cta-line) 86%, #fff);
+    transform: translateY(-2px);
+  }
+  .btn--ghost {
+    background: rgba(255, 255, 255, 0.025);
+    color: var(--color-cta-ink);
+    border-color: color-mix(in oklab, var(--color-cta-line) 60%, transparent);
+    box-shadow:
+      inset 0 0 0 2px var(--c-cta-1),
+      inset 0 0 0 3px color-mix(in oklab, var(--color-cta-line) 30%, transparent);
+  }
+  .btn--ghost:hover {
+    color: var(--color-cta-line);
+    border-color: var(--color-cta-line);
+    transform: translateY(-2px);
+  }
+
+  /* ============================================================
+     HERO SPECIMENS — the two alternate page heroes (Frontispiece &
+     Plate). Shared scaffolding lives here so the colour-block button
+     overrides (`.cover-inlay .btn`) can reach the buttons. The live
+     homepage uses the Celestial hero; these ship for /brand + reuse.
+     ============================================================ */
+  .hero {
+    position: relative;
+  }
+  .kicker {
+    display: flex;
+    gap: 0.9rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .hero .kicker {
+    justify-content: center;
+    color: var(--color-ink-faint);
+  }
+  /* (tagline styling comes from the shared `.tagline` rule above; the
+     colour-block hero keeps its warm-tan `.cta--bold .tagline` colour) */
+
+  /* ornamental corner inlays */
+  .corners > i {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    border: 1.5px solid var(--color-rule);
+    pointer-events: none;
+  }
+  .corners > i::before {
+    content: '';
+    position: absolute;
+    inset: 5px;
+    border: 1px solid color-mix(in oklab, var(--color-rule) 50%, transparent);
+  }
+  .corners > i:nth-child(1) {
+    top: 8px;
+    left: 8px;
+    border-right: 0;
+    border-bottom: 0;
+    border-top-left-radius: 20px;
+  }
+  .corners > i:nth-child(1)::before {
+    border-right: 0;
+    border-bottom: 0;
+    border-top-left-radius: 13px;
+  }
+  .corners > i:nth-child(2) {
+    top: 8px;
+    right: 8px;
+    border-left: 0;
+    border-bottom: 0;
+    border-top-right-radius: 20px;
+  }
+  .corners > i:nth-child(2)::before {
+    border-left: 0;
+    border-bottom: 0;
+    border-top-right-radius: 13px;
+  }
+  .corners > i:nth-child(3) {
+    bottom: 8px;
+    left: 8px;
+    border-right: 0;
+    border-top: 0;
+    border-bottom-left-radius: 20px;
+  }
+  .corners > i:nth-child(3)::before {
+    border-right: 0;
+    border-top: 0;
+    border-bottom-left-radius: 13px;
+  }
+  .corners > i:nth-child(4) {
+    bottom: 8px;
+    right: 8px;
+    border-left: 0;
+    border-top: 0;
+    border-bottom-right-radius: 20px;
+  }
+  .corners > i:nth-child(4)::before {
+    border-left: 0;
+    border-top: 0;
+    border-bottom-right-radius: 13px;
+  }
+
+  /* rotating engraved sun (Frontispiece) */
+  .sun {
+    --sun-size: 120px;
+    width: var(--sun-size);
+    height: var(--sun-size);
+    position: relative;
+    flex: none;
+  }
+  .sun .rays,
+  .sun .rays2 {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: repeating-conic-gradient(from 0deg, var(--color-accent) 0deg 0.7deg, transparent 0.7deg 9deg);
+    -webkit-mask: radial-gradient(circle, transparent 30%, #000 31%, #000 49%, transparent 50%);
+    mask: radial-gradient(circle, transparent 30%, #000 31%, #000 49%, transparent 50%);
+    opacity: 0.92;
+    animation: alm-spin 90s linear infinite;
+  }
+  .sun .rays2 {
+    background: repeating-conic-gradient(from 4.5deg, var(--color-ink) 0deg 0.4deg, transparent 0.4deg 6deg);
+    -webkit-mask: radial-gradient(circle, transparent 34%, #000 35%, #000 44%, transparent 45%);
+    mask: radial-gradient(circle, transparent 34%, #000 35%, #000 44%, transparent 45%);
+    opacity: 0.55;
+    animation: alm-spin 140s linear infinite reverse;
+  }
+  .sun .face {
+    position: absolute;
+    inset: 32%;
+    border-radius: 50%;
+    border: 1.5px solid var(--color-accent);
+    background:
+      radial-gradient(
+        circle at 50% 45%,
+        transparent 40%,
+        color-mix(in oklab, var(--color-accent) 18%, transparent) 41%,
+        transparent 46%
+      ),
+      color-mix(in oklab, var(--color-accent) 16%, var(--color-paper));
+    display: grid;
+    place-items: center;
+    color: var(--color-accent);
+    font-size: calc(var(--sun-size) * 0.16);
+    font-family: var(--font-display);
+  }
+  @keyframes alm-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sun .rays,
+    .sun .rays2 {
+      animation: none;
+    }
+  }
+
+  /* Frontispiece — inlaid book cover */
+  .book-cover {
+    position: relative;
+    padding: clamp(0.7rem, 1.5vw, 1.1rem);
+    background: linear-gradient(150deg, var(--c-cta-2), var(--c-cta-1) 60%);
+    border: 1px solid color-mix(in oklab, var(--color-cta-line) 55%, #000 40%);
+    border-radius: 3px;
+    box-shadow:
+      0 36px 70px -34px rgba(0, 0, 0, 0.66),
+      0 4px 14px -8px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  }
+  .book-cover::before {
+    content: '';
+    position: absolute;
+    inset: 9px;
+    pointer-events: none;
+    border: 1px solid color-mix(in oklab, var(--color-cta-line) 78%, transparent);
+    box-shadow:
+      inset 0 0 0 3px var(--c-cta-2),
+      inset 0 0 0 4px color-mix(in oklab, var(--color-cta-line) 26%, transparent);
+    border-radius: 2px;
+  }
+  .cover-inlay {
+    position: relative;
+    z-index: 1;
+    padding: clamp(2.6rem, 5.5vw, 4.8rem) clamp(1.4rem, 4vw, 3.2rem);
+    background: radial-gradient(
+      130% 120% at 50% -8%,
+      color-mix(in oklab, var(--c-cta-2) 78%, #fff 5%) 0%,
+      var(--c-cta-1) 70%
+    );
+    border: 1px solid color-mix(in oklab, var(--color-cta-line) 40%, transparent);
+    box-shadow:
+      inset 0 3px 9px rgba(0, 0, 0, 0.55),
+      inset 0 0 0 1px rgba(0, 0, 0, 0.25),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.05);
+    --color-accent: var(--color-cta-line); /* recolour every ornament inside to foil */
+    color: var(--color-cta-body);
+  }
+  .cover-inlay .tagline {
+    color: color-mix(in oklab, var(--color-cta-body) 82%, var(--color-cta-line));
+    font-style: italic;
+  }
+  .cover-inlay .cover-title {
+    color: var(--color-cta-line);
+  }
+  .cover-inlay .divider .ln {
+    background: linear-gradient(
+      90deg,
+      transparent,
+      color-mix(in oklab, var(--color-cta-line) 70%, transparent) 30%,
+      color-mix(in oklab, var(--color-cta-line) 70%, transparent) 70%,
+      transparent
+    );
+  }
+  .cover-inlay .btn {
+    color: var(--color-cta-body);
+    border-color: color-mix(in oklab, var(--color-cta-line) 65%, transparent);
+    background: rgba(255, 255, 255, 0.025);
+    box-shadow:
+      inset 0 0 0 2px var(--c-cta-2),
+      inset 0 0 0 3px color-mix(in oklab, var(--color-cta-line) 32%, transparent);
+  }
+  .cover-inlay .btn:hover {
+    color: var(--color-cta-line);
+    border-color: var(--color-cta-line);
+    transform: translateY(-2px);
+    box-shadow:
+      inset 0 0 0 2px var(--c-cta-2),
+      inset 0 0 0 3px var(--color-cta-line),
+      0 8px 20px -12px rgba(0, 0, 0, 0.6);
+  }
+  .cover-inlay .btn--solid {
+    background: var(--color-cta-line);
+    color: #241803;
+    border-color: var(--color-cta-line);
+    box-shadow: inset 0 0 0 2px color-mix(in oklab, var(--color-cta-line) 70%, #000 20%);
+  }
+  .cover-inlay .btn--solid:hover {
+    color: #241803;
+    background: color-mix(in oklab, var(--color-cta-line) 86%, #fff);
+  }
+
+  /* Plate — printer's device */
+  .plate {
+    position: relative;
+    padding: 0.85rem;
+    background: color-mix(in oklab, var(--color-paper-2) 80%, var(--color-paper));
+  }
+  .plate .device {
+    aspect-ratio: 4 / 3;
+    border: 1px solid var(--color-rule);
+    display: grid;
+    place-items: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow:
+      inset 0 3px 10px color-mix(in oklab, var(--color-ink) 16%, transparent),
+      inset 0 1px 0 color-mix(in oklab, #fff 35%, transparent);
+    background:
+      repeating-conic-gradient(
+        from 0deg at 50% 50%,
+        color-mix(in oklab, var(--color-rule) 24%, transparent) 0deg 0.45deg,
+        transparent 0.45deg 7deg
+      ),
+      radial-gradient(60% 60% at 50% 45%, color-mix(in oklab, var(--color-paper) 92%, #fff) 0%, transparent 70%),
+      color-mix(in oklab, var(--color-paper) 82%, var(--color-paper-edge));
+  }
+  .plate .device::before {
+    content: '';
+    position: absolute;
+    inset: 14px;
+    border: 1px solid color-mix(in oklab, var(--color-rule) 60%, transparent);
+  }
+  .plate .monogram {
+    position: relative;
+    width: 44%;
+    aspect-ratio: 1;
+    border-radius: 9999px;
+    border: 2px solid var(--color-accent);
+    display: grid;
+    place-items: center;
+    background: color-mix(in oklab, var(--color-paper) 88%, transparent);
+    box-shadow:
+      0 0 0 6px color-mix(in oklab, var(--color-paper) 88%, transparent),
+      0 0 0 7px color-mix(in oklab, var(--color-accent) 45%, transparent);
+  }
+  .plate .monogram b {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(2.2rem, 7vw, 4rem);
+    color: var(--color-accent);
+    line-height: 1;
+  }
+  .plate .monogram i {
+    position: absolute;
+    bottom: -2.1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--font-body);
+    font-variant: small-caps;
+    font-style: normal;
+    text-transform: uppercase;
+    letter-spacing: 0.28em;
+    font-size: 0.62rem;
+    color: var(--color-ink-faint);
+    white-space: nowrap;
+  }
+  .plate .cap {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 1.1rem;
   }
 
   /* rail collapses to a centred horizontal header below the `rail` breakpoint */

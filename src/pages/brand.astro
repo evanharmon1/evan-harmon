@@ -5,6 +5,13 @@ import Layout from '~/layouts/Layout.astro';
 import Header from '~/components/almanac/Header.astro';
 import Footer from '~/components/almanac/Footer.astro';
 import ExternalSeal from '~/components/almanac/ExternalSeal.astro';
+import Crest from '~/components/almanac/Crest.astro';
+import Bookplate from '~/components/almanac/Bookplate.astro';
+import HeroFrontispiece from '~/components/almanac/HeroFrontispiece.astro';
+import HeroPlate from '~/components/almanac/HeroPlate.astro';
+import Button from '~/components/almanac/Button.astro';
+import Input from '~/components/almanac/Input.astro';
+import Tag from '~/components/almanac/Tag.astro';
 
 // Palette swatches — hex + OKLCH, shown verbatim as a reference (the one place
 // raw values are intentionally on display).
@@ -167,6 +174,23 @@ const Swatches = (rows: Swatch[]) => rows;
             Wordmark “Evan Harmon” in the display serif. The <span class="mono gold">EH</span> monogram in the cover serif
             (Old Standard TT) inside a gilt circle with a double inset keyline — the brand-mark; 32 px in the header, also
             the favicon.
+          </p>
+
+          <h3 class="sub-title">Ceremonial marks</h3>
+          <div class="mark-board">
+            <div class="mark-cell">
+              <Crest size={208} />
+              <div class="cap">Crest · curved gilt small-caps, engraved rings, ❦ finial &amp; EH centre</div>
+            </div>
+            <div class="mark-cell">
+              <Bookplate />
+              <div class="cap">Bookplate · the “Ex Libris” ownership plate</div>
+            </div>
+          </div>
+          <p class="note">
+            The <strong>Crest</strong> is the cover / frontispiece seal; the <strong>Bookplate</strong> is the ownership mark
+            for covers, about pages and printed matter. Both are token-driven — gilt follows the theme (gold on Midnight,
+            antique gold on Parchment).
           </p>
         </div>
       </section>
@@ -460,10 +484,97 @@ const Swatches = (rows: Swatch[]) => rows;
         </div>
       </section>
 
+      <!-- HEROES -->
+      <section class="block">
+        <div class="block-rail">
+          <span class="sec-no">No. 7</span>
+          <h2 class="sec-title display">Heroes</h2>
+        </div>
+        <div class="block-body">
+          <p class="lead">
+            Two ceremonial page heroes beyond the Celestial home hero. <strong>Frontispiece</strong> is an inlaid book-cover
+            board with a rotating engraved sun; <strong>Plate</strong> splits the wordmark against an engraved printer's-device
+            colophon. Both carry the colour-block treatment and gold foil.
+          </p>
+
+          <p class="eyebrow" style="margin:1.6rem 0 .9rem">Var. I · Frontispiece</p>
+          <div class="hero-demo">
+            <HeroFrontispiece />
+          </div>
+
+          <p class="eyebrow" style="margin:2rem 0 .9rem">Var. II · Plate</p>
+          <div class="hero-demo">
+            <HeroPlate />
+          </div>
+          <p class="note">
+            The sun's spin and all motion are gated behind <span class="mono">prefers-reduced-motion</span>. CTAs are
+            the shared <span class="mono">.btn</span> family; on the book-cover they recolour to foil automatically.
+          </p>
+        </div>
+      </section>
+
+      <!-- FORMS -->
+      <section class="block">
+        <div class="block-rail">
+          <span class="sec-no">No. 8</span>
+          <h2 class="sec-title display">Forms &amp; controls</h2>
+        </div>
+        <div class="block-body">
+          <p class="lead">
+            Engraved fields with small-caps labels; focus turns the keyline accent, and the invalid state turns it
+            madder/oxblood (the <span class="mono">--c-error</span> token). Buttons share one <span class="mono"
+              >.btn</span
+            >
+            family; tags are the quiet small-caps metadata mark.
+          </p>
+
+          <div class="grid2" style="margin-top:1.4rem">
+            <div>
+              <p class="eyebrow" style="margin-bottom:.9rem">Inputs</p>
+              <div class="field-stack">
+                <Input label="Your name" placeholder="Ada Lovelace" />
+                <Input label="Electronic mail" type="email" placeholder="ada@example.com" />
+                <Input
+                  label="Electronic mail"
+                  type="email"
+                  value="not-an-address"
+                  invalid
+                  error="Enter a valid address — e.g. name@domain.com."
+                />
+                <Input label="A word" multiline placeholder="Send a word…" />
+              </div>
+            </div>
+            <div>
+              <p class="eyebrow" style="margin-bottom:.9rem">Buttons</p>
+              <div class="btn-row">
+                <Button arrow={false}>Read more</Button>
+                <Button variant="solid" arrow={false} glyph="❧">Memex</Button>
+              </div>
+              <div class="btn-row" style="margin-top:.9rem">
+                <Button size="sm" arrow={false}>Small</Button>
+                <Button arrow={false} disabled>Disabled</Button>
+              </div>
+              <p class="note" style="margin-top:1.4rem">
+                <span class="mono">.btn</span> default · <span class="mono">--solid</span> ink ·
+                <span class="mono">--invert</span> / <span class="mono">--ghost</span> ride the colour-block ·
+                <span class="mono">--sm</span> compact · <span class="mono">[disabled]</span> dims.
+              </p>
+
+              <p class="eyebrow" style="margin:1.8rem 0 .9rem">Tags</p>
+              <div class="tag-row">
+                <Tag>Template · CI/CD</Tag>
+                <Tag tone="accent">Forthcoming</Tag>
+                <Tag>Dec 2025</Tag>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- COLOUR BLOCK -->
       <section class="block last">
         <div class="block-rail">
-          <span class="sec-no">No. 7</span>
+          <span class="sec-no">No. 9</span>
           <h2 class="sec-title display">Colour-block</h2>
         </div>
         <div class="block-body">
@@ -1011,6 +1122,64 @@ const Swatches = (rows: Swatch[]) => rows;
     position: absolute;
     inset: 0;
     border: 1px dashed color-mix(in oklab, var(--accent) 55%, transparent);
+  }
+
+  /* ceremonial marks (Crest + Bookplate) */
+  .mark-board {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    margin-top: 1.4rem;
+  }
+  .mark-cell {
+    background: var(--paper);
+    padding: 2rem 1.6rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2rem;
+    text-align: center;
+    justify-content: center;
+  }
+  .mark-cell .cap {
+    font-family: var(--font-body);
+    font-variant: small-caps;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-size: 0.68rem;
+    color: var(--ink-faint);
+    max-width: 30ch;
+  }
+
+  /* hero specimens — framed so the full-bleed heroes read as a contained demo.
+     The heroes are full-page sections whose `.wrap` is min(container, 92vw) of
+     the viewport; inside this narrow column that overflows and clips, so pin the
+     wrap to the demo box and give it its own breathing room. */
+  .hero-demo {
+    border: 1px solid var(--line);
+    background: color-mix(in oklab, var(--paper-2) 30%, transparent);
+  }
+  .hero-demo :global(.hero) {
+    padding-block: clamp(1.6rem, 4vw, 3rem);
+  }
+  .hero-demo :global(.wrap) {
+    width: 100%;
+    padding-inline: clamp(1rem, 3vw, 2.2rem);
+  }
+
+  /* forms */
+  .field-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+  }
+  .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 1.4rem;
+    align-items: baseline;
   }
 
   /* asset / OG showcase */

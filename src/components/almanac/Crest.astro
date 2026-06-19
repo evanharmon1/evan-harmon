@@ -1,0 +1,79 @@
+---
+// Crest.astro — the ceremonial circular almanac seal: curved gilt small-caps
+// text top & bottom, engraved rings, a ❦ heart finial, and the EH monogram at
+// centre. The cover / frontispiece mark. Fills are token-driven
+// (var(--color-gold)) so the crest follows the Parchment ⇄ Midnight switch.
+interface Props {
+  top?: string;
+  bottom?: string;
+  size?: number;
+  class?: string;
+}
+const { top = 'EVAN HARMON', bottom = 'SOFTWARE DEVELOPER', size = 240, class: className } = Astro.props;
+// unique ids so multiple crests on one page don't collide on their textPaths
+const uid = 'crest-' + Math.random().toString(36).slice(2, 8);
+const cx = 100;
+const cy = 100;
+const rr = 78;
+const topPath = `M ${cx - rr},${cy} A ${rr},${rr} 0 0 1 ${cx + rr},${cy}`;
+const botPath = `M ${cx - rr},${cy} A ${rr},${rr} 0 0 0 ${cx + rr},${cy}`;
+---
+
+<svg
+  class:list={['crest', className]}
+  viewBox="0 0 200 200"
+  width={size}
+  height={size}
+  role="img"
+  aria-label="Evan Harmon crest"
+>
+  <defs>
+    <path id={`${uid}-t`} d={topPath}></path>
+    <path id={`${uid}-b`} d={botPath}></path>
+  </defs>
+  <circle cx={cx} cy={cy} r="96" stroke-width="2"></circle>
+  <circle cx={cx} cy={cy} r="91" stroke-width="0.8" stroke-opacity="0.5"></circle>
+  <circle cx={cx} cy={cy} r="58" stroke-width="1" stroke-opacity="0.55"></circle>
+  <circle cx={cx} cy={cy} r="53" stroke-width="1.6"></circle>
+  <text class="sc body" font-size="15" letter-spacing="3.2">
+    <textPath href={`#${uid}-t`} startOffset="50%" text-anchor="middle">{top}</textPath>
+  </text>
+  <text class="sc body" font-size="11.5" letter-spacing="2.4">
+    <textPath href={`#${uid}-b`} startOffset="50%" text-anchor="middle">{bottom}</textPath>
+  </text>
+  <text class="disp" x="13.5" y={cy} text-anchor="middle" dominant-baseline="central" font-size="13">❖</text>
+  <text class="disp" x="186.5" y={cy} text-anchor="middle" dominant-baseline="central" font-size="13">❖</text>
+  <text class="disp" x={cx} y="50" text-anchor="middle" dominant-baseline="central" font-size="18">❦</text>
+  <text
+    class="cover"
+    x={cx}
+    y="106"
+    text-anchor="middle"
+    dominant-baseline="central"
+    font-weight="700"
+    font-size="46"
+    letter-spacing="0.5">EH</text
+  >
+</svg>
+
+<style>
+  .crest circle {
+    fill: none;
+    stroke: var(--color-gold);
+  }
+  .crest text {
+    fill: var(--color-gold);
+  }
+  .crest .body {
+    font-family: var(--font-body);
+  }
+  .crest .disp {
+    font-family: var(--font-display);
+  }
+  .crest .cover {
+    font-family: var(--font-cover);
+  }
+  .crest .sc {
+    font-variant: small-caps;
+  }
+</style>
