@@ -1,14 +1,12 @@
 # Evan Harmon Website
 
-My personal website built with Astro and Tailwind CSS with the AstroWind starter template and built with [Harmon Stack](https://github.com/evanharmon1/harmon-stack).
+My personal website built with Astro and Tailwind CSS with the AstroWind starter template, standardized with [harmon-init](https://github.com/evanharmon1/harmon-init) (harmon-platform).
 
 <https://evanharmon.com>
 
 Author: Evan Harmon
 
-[![Validate](https://github.com/evanharmon1/evan-harmon/actions/workflows/validate.yml/badge.svg)](https://github.com/evanharmon1/evan-harmon/actions/workflows/validate.yml)
 [![Build](https://github.com/evanharmon1/evan-harmon/actions/workflows/build.yml/badge.svg)](https://github.com/evanharmon1/evan-harmon/actions/workflows/build.yml)
-[![Security](https://github.com/evanharmon1/evan-harmon/actions/workflows/security.yml/badge.svg)](https://github.com/evanharmon1/evan-harmon/actions/workflows/security.yml)
 [![License](https://img.shields.io/github/license/onwidget/astrowind?style=flat-square&color=dddddd&labelColor=000000)](https://github.com/onwidget/astrowind/blob/main/LICENSE.md)
 [![Maintained](https://img.shields.io/badge/maintained%3F-yes-brightgreen.svg?style=flat-square)](https://github.com/onwidget)
 [![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat-square)](https://github.com/onwidget/astrowind#contributing)
@@ -40,9 +38,9 @@ Install required dependencies
 
 ### Testing
 
-#### Validate
+#### Verify
 
-`task validate`
+`task verify` — fast local gate (lint + typecheck + build + validate); `task ci` mirrors the full CI pipeline.
 
 #### Security
 
@@ -50,15 +48,11 @@ Install required dependencies
 
 #### Linting, Formatting, Conventions, Style Guidelines, etc
 
-- .pre-commit-config.yaml
-- .shellcheckrc
-- .ansible-lint-ignore
+Git hooks are managed by [lefthook](./lefthook.yml) and delegate to Taskfile
+targets (`task check`, `task lint:design`, …). See
+[docs/conventions.md](./docs/conventions.md).
 
 ### Building, Deploying, & CI/CD
-
-## Todo File
-
-[todo.md](./todo.md)
 
 ## AstroWind
 
@@ -70,7 +64,7 @@ In this version the template supports all the options in the `output` configurat
 
 Inside **AstroWind** template, you'll see the following folders and files:
 
-```
+```text
 /
 ├── public/
 │   ├── _headers
@@ -217,8 +211,6 @@ analytics:
 ui:
   theme: 'system' # Values: "system" | "light" | "dark" | "light:only" | "dark:only"
 ```
-
-<br>
 
 #### Customize Design
 

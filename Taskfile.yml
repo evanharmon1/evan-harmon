@@ -1,177 +1,522 @@
 # Taskfile for Evan Harmon Website
-version: '3'
+# https://taskfile.dev
+version: "3"
+
+output:
+  group:
+    begin: "::group::{{.TASK}}"
+    end: "::endgroup::"
+
+# ── Entry Points ───────────────────────────────────────────────────
 tasks:
-  boostrap:
+  default:
+    desc: Interactive task menu (tv)
     cmds:
-      - /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-      - brew install python #TODO: Might need to use a non-homebrew method
+      - task: menu-tv
+
+  menu:
+    desc: Interactive task menu (fzf)
     silent: true
-  install:
+    interactive: true
     cmds:
-      - brew bundle --file=Brewfile
-      - python install -r requirements.txt
+      - |
+        selected=$(task --list-all | fzf --reverse --header-lines=1)
+        if [ -n "$selected" ]; then
+          task_name=$(echo "$selected" | awk '{sub(/:$/, "", $2); print $2}')
+          task "$task_name"
+        fi
+
+  menu-tv:
+    desc: Interactive task menu (tv)
     silent: true
-  validate:
+    interactive: true
     cmds:
-      - task: preCommit
+      - |
+        selected=$(task --list-all | grep -v "task: Available" | grep -v "\* menu:" | tv)
+        if [ -n "$selected" ]; then
+          task_name=$(echo "$selected" | awk '{sub(/:$/, "", $2); print $2}')
+          task "$task_name"
+        fi
+
+  # ── CI / Verification Pipelines ────────────────────────────────
+  ci:
+    # Full local mirror of the CI pipeline — run before (or instead of) opening
+    # a PR to catch everything CI would, on demand, without waiting on a PR run.
+    # Builds on `verify` and adds the heavier / environment-dependent checks
+    # (the devcontainer permission assert needs a Docker daemon, like CI has).
+    desc: Full CI mirror (verify → [test:devcontainer:permissions →] test → security)
+    cmds:
+      - task: verify
+      - task: test:devcontainer:permissions
+      - task: test
+      - task: security
+
+  verify:
+    # Fast local gate (target: well under a minute) — safe for editors, git
+    # hooks, and AI agents to run on every change without getting bogged down.
+    # Add a check here ONLY if it stays fast; heavier or environment-dependent
+    # checks (test, security, the devcontainer permission assert) live in `ci`.
+    desc: Fast local gate (check → build → validate → guards)
+    cmds:
       - task: check
-    silent: true
-  preCommit:
-    cmds:
-      - pre-commit run --all-files
-    silent: true
+      - task: build
+      - task: validate
+      - task: test:tasks
+      - task: test:hooks
+
+  # ── Quality Checks ────────────────────────────────────────────
   check:
-    cmds:
-      - pnpm run check:astro
-      - pnpm run check:eslint
-      - cmd: pnpm run check:prettier
-        ignore_error: true
-    silent: true
-  fix:
-    cmds:
-      - pnpm run fix
-    silent: true
+    desc: Run all linters + typecheck (parallel)
+    deps:
+      - lint
+      - typecheck
+
+  lint:
+    desc: Run all linters in parallel
+    deps:
+      - lint:yaml
+      - lint:shell
+      - lint:markdown
+      - lint:actions
+      - lint:hygiene
+      - lint:prettier
+      - lint:eslint
+      - lint:design
+
   lint:design:
     desc: Validate the Almanac design system (canonical files, semantic tokens, token contrast)
     cmds:
-      # 1) canonical sources must exist
-      - test -f DESIGN.md || (echo "✗ DESIGN.md missing (AI-facing design intent)" && exit 1)
-      - test -f src/styles/global.css || (echo "✗ src/styles/global.css missing (runtime tokens)" && exit 1)
-      # 2) semantic tokens only — flag one-off Tailwind numbered colour utilities
-      #    (e.g. text-blue-600, bg-slate-50). These are the off-palette "AI-slop" tell.
-      #    Fixed foil/ink hex values sanctioned by DESIGN.md §2.3 are allowed.
-      - >-
-        ! grep -rEn "(bg|text|border|fill|ring|from|to|via)-(red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose|slate|gray|grey|zinc|neutral|stone)-[0-9]{2,3}"
-        src/components src/pages src/layouts
-        || (echo "✗ off-palette Tailwind colour utility found — use semantic tokens (bg-paper, text-accent, …)" && exit 1)
-      # 3) STATIC token contrast — prove the palette's fg/bg pairs meet WCAG AA in
-      #    both themes. (Necessary but NOT sufficient: it can't see runtime overrides,
-      #    so rendered contrast must also be measured on the running pages — see the
-      #    design-handoff skill's verification step.)
-      - node test/check-contrast.mjs
-      - echo "✓ design lint passed"
-      # NOTE: no export:design / Style-Dictionary step — this is a web-only handoff with a single
-      # CSS-first token source (global.css). Promote to DTCG only if a 2nd platform/brand appears.
-      - pnpm build
-    silent: false
-  verify:browsers:
-    desc: Cross-browser/viewport screenshot sweep (Playwright — Chromium/Firefox/WebKit + mobile Safari/iPad)
-    # Requires @playwright/test + `npx playwright install`. Builds, then runs the
-    # route × theme × engine/device sweep in test/brand-screenshots.spec.ts.
+      - ./scripts/lint-design.sh
+
+  lint:yaml:
+    desc: yamllint
+    cmds:
+      - yamllint {{.CLI_ARGS | default "."}}
+
+  lint:shell:
+    desc: shellcheck + shfmt
+    vars:
+      SHELL_FILES:
+        sh: git ls-files '*.sh' '*.bash' 2>/dev/null | tr '\n' ' '
+    cmds:
+      - |
+        files="{{.CLI_ARGS}}"
+        [ -z "$files" ] && files="{{.SHELL_FILES}}"
+        [ -z "$files" ] && exit 0
+        shellcheck --severity=error $files
+        shfmt -d $files
+
+  lint:markdown:
+    # Check-only (no --fix) so this is a read-only gate like lint:prettier /
+    # lint:shell: CI and the pre-commit hook fail loudly instead of silently
+    # mutating the tree (and, in CI, discarding the fix while reporting green).
+    # Auto-fix lives in `task format` / `task format:file`.
+    desc: markdownlint-cli2 (check mode)
+    cmds:
+      - |
+        if [ -n "{{.CLI_ARGS}}" ]; then
+          npx --yes markdownlint-cli2 {{.CLI_ARGS}}
+        else
+          npx --yes markdownlint-cli2 '**/*.md' '#.claude/**' '#**/node_modules/**' '#dist/**' '#.worktrees/**' '#**/.terraform/**' '#**/.venv/**' '#**/.task/**'
+        fi
+
+  lint:actions:
+    desc: actionlint on GitHub workflows
+    env:
+      # SC2016 flags '$' in single quotes, but we intentionally single-quote
+      # jq expressions that use '$var' placeholders.
+      SHELLCHECK_OPTS: --exclude=SC2016
+    cmds:
+      - actionlint
+
+  lint:hygiene:
+    desc: File hygiene (trailing whitespace, EOF newlines, merge markers, etc.)
+    cmds:
+      - ./scripts/lint-hygiene.sh {{.CLI_ARGS}}
+
+  lint:commit-msg:
+    desc: Validate commit message (conventional commits)
+    cmds:
+      - npx --yes --package @commitlint/cli --package @commitlint/config-conventional -- commitlint --edit {{.CLI_ARGS}}
+
+  lint:commit-msg:text:
+    desc: "Validate a commit message read from stdin (usage: printf '%s' <message> | task lint:commit-msg:text)"
+    cmds:
+      - npx --yes --package @commitlint/cli --package @commitlint/config-conventional -- commitlint
+
+  lint:prettier:
+    desc: Prettier (check mode)
+    cmds:
+      - npx --yes prettier --check {{.CLI_ARGS | default "."}}
+
+  lint:eslint:
+    # Skip cleanly when ESLint can't run yet -- no config (fresh scaffold) or deps
+    # not installed -- so `task check` stays green before the app is set up. Runs
+    # the project's own ESLint via `pnpm exec` so a plugin-based flat config (e.g.
+    # the web-astro eslint.config.js) resolves its plugins.
+    desc: ESLint
+    cmds:
+      - |
+        if ! find . -maxdepth 1 \( -name 'eslint.config.*' -o -name '.eslintrc.*' \) 2>/dev/null | grep -q .; then
+          echo "lint:eslint: no ESLint config yet -- skipping (add one after scaffolding the app)"
+        elif [ ! -d node_modules ]; then
+          echo "lint:eslint: deps not installed yet -- skipping (run pnpm install)"
+        else
+          pnpm exec eslint {{.CLI_ARGS | default "."}}
+        fi
+
+  typecheck:
+    desc: TypeScript / Astro type checking
+    cmds:
+      - npx astro check
+
+  # ── Validation ─────────────────────────────────────────────────
+  validate:
+    desc: Validate project config/artifacts
+    cmds:
+      - task: validate:jsonld
+      - task: validate:og
+      - task: validate:responsive
+      - task: validate:links
+
+  validate:jsonld:
+    desc: Validate JSON-LD structured data in the built site (dist/)
+    cmds:
+      - node scripts/validate-jsonld.mjs
+
+  validate:og:
+    desc: Validate Open Graph / social meta tags in the built site (dist/)
+    cmds:
+      - node scripts/validate-og.mjs
+
+  validate:responsive:
+    desc: Validate mobile/responsive viewport markers in the built site (dist/)
+    cmds:
+      - node scripts/validate-responsive.mjs
+
+  validate:links:
+    desc: Check the built site (dist/) for broken internal links (lychee, offline)
+    cmds:
+      - lychee --offline --no-progress --root-dir "{{.PWD}}/dist" ./dist
+
+  guard:no-commit-to-main:
+    desc: Block direct commits to main
+    cmds:
+      - |
+        branch=$(git rev-parse --abbrev-ref HEAD)
+        if [ "$branch" = "main" ]; then
+          echo "Direct commits to main are blocked. Use a feature branch."
+          exit 1
+        fi
+
+  format:
+    desc: Auto-format code
+    cmds:
+      - npx --yes prettier --write .
+      - |
+        files=$(git ls-files '*.sh' '*.bash')
+        [ -n "$files" ] && shfmt -w $files || true
+      # Best-effort: markdownlint --fix auto-fixes what it can but must NOT abort
+      # `format` on un-auto-fixable rule violations (e.g. MD024 duplicate heading,
+      # MD040 missing fence language) — `lint:markdown` (check-only) is the gate.
+      - npx --yes markdownlint-cli2 --fix '**/*.md' '#.claude/**' '#**/node_modules/**' '#dist/**' '#.worktrees/**' || true
+
+  format:file:
+    desc: "Format a single file by extension (usage: task format:file -- <path>)"
+    cmds:
+      - |
+        f={{.CLI_ARGS}}
+        [ -z "$f" ] && exit 0
+        [ -f "$f" ] || exit 0
+        case "$f" in
+        *.js | *.jsx | *.ts | *.tsx | *.json | *.css | *.astro) npx --yes prettier --write "$f" ;;
+        *.sh | *.bash) shfmt -w "$f" ;;
+        *.md | *.mdx) npx --yes markdownlint-cli2 --fix "$f" || true ;;
+        esac
+
+  fix:
+    desc: Format then lint
+    cmds:
+      - task: format
+      - task: lint
+
+  # ── Build ──────────────────────────────────────────────────────
+  build:
+    desc: Production build
     cmds:
       - pnpm build
+
+  build:preview:
+    desc: Preview production build locally
+    interactive: true
+    cmds:
+      - pnpm preview
+
+  dev:
+    desc: Start dev server with hot reload
+    interactive: true
+    cmds:
+      - pnpm dev
+
+  # ── Tests ──────────────────────────────────────────────────────
+  test:
+    desc: Run all tests
+    cmds:
+      - |
+        if [ -f vitest.config.ts ] || [ -f vitest.config.mts ] || [ -f vitest.config.js ]; then
+          npx vitest run
+        else
+          echo "TODO: wire tests — scaffold the framework first (see docs/CHECKLIST.md and docs/architecture/tests.md)"
+        fi
+
+  test:tasks:
+    desc: Guard the Taskfile itself (compiles; setup tasks are safe no-ops)
+    cmds:
+      - ./scripts/test-tasks.sh
+
+  test:devcontainer:root:
+    desc: Smoke test the primary (AI bot) devcontainer via the devcontainers CLI
+    cmds:
+      - ./scripts/devcontainer-smoke.sh .devcontainer/devcontainer.json
+
+  test:devcontainer:dev:
+    desc: Smoke test the dev (human) devcontainer via the devcontainers CLI
+    cmds:
+      - ./scripts/devcontainer-smoke.sh .devcontainer/dev/devcontainer.json
+
+  test:devcontainer:permissions:
+    desc: Unit-assert devcontainer permission invariants (no container needed)
+    cmds:
+      - ./scripts/devcontainer-assert.sh unit
+
+  test:hooks:
+    desc: Round-trip the Taskfile targets the Claude hooks delegate to
+    cmds:
+      - ./scripts/test-hooks.sh
+
+  test:e2e:
+    desc: Run Playwright end-to-end tests
+    cmds:
       - npx playwright test {{.CLI_ARGS}}
-    silent: false
-  verify:
-    desc: Full verification — design gate, repo checks, and the cross-browser screenshot sweep
+
+  test:e2e:screenshot:
+    desc: "Playwright screenshot (usage: task test:e2e:screenshot -- <url> <output.png>)"
     cmds:
-      - task: lint:design
-      - task: check
-      - task: verify:browsers
-    silent: false
+      - npx playwright screenshot {{.CLI_ARGS}}
+
+  test:e2e:pdf:
+    desc: "Playwright PDF export (usage: task test:e2e:pdf -- <url> <output.pdf>)"
+    cmds:
+      - npx playwright pdf {{.CLI_ARGS}}
+
+  # ── Security ───────────────────────────────────────────────────
   security:
+    desc: Run all security checks (parallel)
+    deps:
+      - security:secrets
+      - security:audit
+
+  security:secrets:
+    desc: Scan for leaked secrets (gitleaks)
     cmds:
-      - task: secrets
-      - task: sast
-    ignore_error: true
-    silent: true
-  secrets:
+      - |
+        if [ -z "$GITHUB_STEP_SUMMARY" ]; then
+          gitleaks detect --no-banner --redact --source .
+        else
+          rc=0
+          gitleaks detect --no-banner --redact --source . \
+            --report-format json --report-path /tmp/evan-harmon-gitleaks.json || rc=$?
+          node scripts/summarize-gitleaks.mjs /tmp/evan-harmon-gitleaks.json
+          exit $rc
+        fi
+
+  security:audit:
+    desc: Dependency audit
     cmds:
-      - ./check_for_pattern.sh . "*secret*"
-      - whispers --config test/whisperConfig.yml --severity BLOCKER,CRITICAL .
-    silent: true
-  sast:
+      - pnpm audit --audit-level=high
+
+  security:sast:
+    desc: "Static application security testing (Snyk) — optional/local, needs SNYK_TOKEN (not in CI or `task security`)"
     cmds:
-      - task: sast-dependencies
-      - task: sast-code
-    silent: true
-  sast-dependencies:
+      - snyk code test --exclude=.worktrees --severity-threshold=high
+
+  security:sca:
+    desc: "Software composition analysis (Snyk) — optional/local, needs SNYK_TOKEN (not in CI or `task security`)"
     cmds:
-      - snyk test --all-projects
-    silent: true
-  sast-code:
+      - snyk test --file=pnpm-lock.yaml --severity-threshold=high --show-vulnerable-paths=all
+
+  # ── Setup ──────────────────────────────────────────────────────
+  bootstrap:
+    desc: One-time machine setup (Homebrew + Node + pnpm)
     cmds:
-      - snyk code test
-    silent: true
-  ghReleaseInit:
+      # Idempotent: skip the installer when Homebrew is already present. The
+      # official installer's NONINTERACTIVE mode demands sudo up front and aborts
+      # even when there is nothing to install, so guard on `brew` existing.
+      - command -v brew >/dev/null 2>&1 || NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+      - brew install node
+      - npm install -g pnpm
+
+  install:
+    desc: Install all project dependencies and tools
     cmds:
-      - git add .
-      - git commit -m 'Initial release v0.0.1'
-      - git tag -a v0.0.1 -m "Initial release v0.0.1"
-      - git push origin main
-      - git push origin --tags
-      - gh release create
-    silent: false
-  vBumpPatch:
-    desc: Bump to the next patch version
+      # Use THIS repo's Brewfile by absolute path (never a user/global one), and
+      # don't cascade-upgrade unrelated already-installed brew dependents.
+      - HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1 brew bundle --file={{.ROOT_DIR}}/Brewfile
+      - |
+        if [ -f package.json ]; then pnpm install; fi
+      - task: install:hooks
+
+  install:hooks:
+    desc: Install git hooks via lefthook
+    cmds:
+      - lefthook install
+
+  # ── GitHub setup ───────────────────────────────────────────────
+  # One-time, idempotent repo settings applied via gh (safe to re-run); run once
+  # the repo exists on GitHub. The remaining setup steps need a browser or a real
+  # credential and stay manual — see docs/CHECKLIST.md (branch ruleset import,
+  # Renovate/CodeRabbit app installs, Actions secrets, the CI GitHub App).
+  setup:github:
+    desc: Apply idempotent GitHub repo settings via gh (Dependabot alerts, private vulnerability reporting, CodeQL variable)
     vars:
-      LATEST_TAG:
-        sh: git tag --sort=-version:refname | head -n1
-      VERSION:
-        sh: echo "{{.LATEST_TAG}}" | sed 's/^v//'
-      MAJOR:
-        sh: echo "{{.VERSION}}" | cut -d. -f1
-      MINOR:
-        sh: echo "{{.VERSION}}" | cut -d. -f2
-      PATCH:
-        sh: echo "{{.VERSION}}" | cut -d. -f3
-      NEW_PATCH:
-        sh: expr {{.PATCH}} + 1
-      NEW_VERSION: v{{.MAJOR}}.{{.MINOR}}.{{.NEW_PATCH}}
+      REPO: "evanharmon1/evan-harmon"
     cmds:
-      - echo "Latest tag is {{.LATEST_TAG}}"
-      - echo "Current version is {{.VERSION}}"
-      - echo "Bumping patch version to {{.NEW_VERSION}}"
-      - git tag {{.NEW_VERSION}}
-      - git push origin {{.NEW_VERSION}}
-      - gh release create
-  vBumpMinor:
-    desc: Bump to the next minor version
+      - gh api "repos/{{.REPO}}/vulnerability-alerts" --method PUT
+      # Private vulnerability reporting is a public-repo-only feature; harmon-init
+      # creates repos --private, so guard on visibility to avoid a 404 that would
+      # abort the task. Applies cleanly if the repo is later made public.
+      - |
+        if [ "$(gh api "repos/{{.REPO}}" --jq '.private')" = "false" ]; then
+          gh api "repos/{{.REPO}}/private-vulnerability-reporting" --method PUT
+        else
+          echo "Skipping private vulnerability reporting ({{.REPO}} is private; public-repo-only feature)."
+        fi
+      - gh variable set FULL_SECURITY_SCAN --repo "{{.REPO}}" --body true
+
+  setup:github-project:
+    desc: Idempotently create/sync the owner's GitHub Project V2 board + Status pipeline + Size number field (on a personal account also the other metadata fields). Requires `gh auth refresh -s project`.
+    cmds:
+      - ./scripts/setup-github-project.sh --owner "evanharmon1" --title "evanharmon1 Project"
+
+  setup:github-labels:
+    desc: Idempotently create/update this repo's starter labels (see docs/project-management.md). Requires `gh` with repo write.
     vars:
-      LATEST_TAG:
-        sh: git tag --sort=-version:refname | head -n1
-      VERSION:
-        sh: echo "{{.LATEST_TAG}}" | sed 's/^v//'
-      MAJOR:
-        sh: echo "{{.VERSION}}" | cut -d. -f1
-      MINOR:
-        sh: echo "{{.VERSION}}" | cut -d. -f2
-      NEW_MINOR:
-        sh: expr {{.MINOR}} + 1
-      NEW_VERSION: v{{.MAJOR}}.{{.NEW_MINOR}}.0
+      REPO: "evanharmon1/evan-harmon"
     cmds:
-      - echo "Latest tag is {{.LATEST_TAG}}"
-      - echo "Current version is {{.VERSION}}"
-      - echo "Bumping minor version to {{.NEW_VERSION}}"
-      - git tag {{.NEW_VERSION}}
-      - git push origin {{.NEW_VERSION}}
-      - gh release create {{.NEW_VERSION}} --generate-notes
-  vBumpMajor:
-    desc: Bump to the next major version
+      - ./scripts/setup-github-labels.sh --repo "{{.REPO}}"
+
+  # ── Release ────────────────────────────────────────────────────
+  # Releases are intentional via release-please (.github/workflows/release.yml):
+  # merge the rolling release PR to cut a release. release:init seeds the first
+  # v0.1.0 tag; the release:patch/minor/major tasks remain as a manual override.
+  release:init:
+    desc: Create initial v0.1.0 tag
+    cmds:
+      - git tag -a v0.1.0 -m "Initial release"
+      - git push origin v0.1.0
+      - gh release create v0.1.0 --generate-notes --title "v0.1.0"
+
+  release:patch:
+    desc: Bump patch version and release
     vars:
-      LATEST_TAG:
-        sh: git tag --sort=-version:refname | head -n1
-      VERSION:
-        sh: echo "{{.LATEST_TAG}}" | sed 's/^v//'
-      MAJOR:
-        sh: echo "{{.VERSION}}" | cut -d. -f1
-      NEW_MAJOR:
-        sh: expr {{.MAJOR}} + 1
-      NEW_VERSION: v{{.NEW_MAJOR}}.0.0
+      CURRENT_TAG:
+        sh: git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0"
+      NEXT_TAG:
+        sh: echo "{{.CURRENT_TAG}}" | awk -F. '{printf "%s.%s.%d", $1, $2, $3+1}'
     cmds:
-      - echo "Latest tag is {{.LATEST_TAG}}"
-      - echo "Current version is {{.VERSION}}"
-      - echo "Bumping major version to {{.NEW_VERSION}}"
-      - git tag {{.NEW_VERSION}}
-      - git push origin {{.NEW_VERSION}}
-      - gh release create
-  bunchAdd:
+      - echo "Releasing {{.NEXT_TAG}} (was {{.CURRENT_TAG}})"
+      - git tag -a {{.NEXT_TAG}} -m "Release {{.NEXT_TAG}}"
+      - git push origin {{.NEXT_TAG}}
+      - gh release create {{.NEXT_TAG}} --generate-notes --title "{{.NEXT_TAG}}"
+
+  release:minor:
+    desc: Bump minor version and release
+    vars:
+      CURRENT_TAG:
+        sh: git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0"
+      NEXT_TAG:
+        sh: echo "{{.CURRENT_TAG}}" | awk -F. '{printf "%s.%d.0", $1, $2+1}'
+    cmds:
+      - echo "Releasing {{.NEXT_TAG}} (was {{.CURRENT_TAG}})"
+      - git tag -a {{.NEXT_TAG}} -m "Release {{.NEXT_TAG}}"
+      - git push origin {{.NEXT_TAG}}
+      - gh release create {{.NEXT_TAG}} --generate-notes --title "{{.NEXT_TAG}}"
+
+  release:major:
+    desc: Bump major version and release
+    vars:
+      CURRENT_TAG:
+        sh: git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0"
+      NEXT_TAG:
+        sh: echo "{{.CURRENT_TAG}}" | awk -F. '{printf "v%d.0.0", substr($1,2)+1}'
+    cmds:
+      - echo "Releasing {{.NEXT_TAG}} (was {{.CURRENT_TAG}})"
+      - git tag -a {{.NEXT_TAG}} -m "Release {{.NEXT_TAG}}"
+      - git push origin {{.NEXT_TAG}}
+      - gh release create {{.NEXT_TAG}} --generate-notes --title "{{.NEXT_TAG}}"
+
+  # ── Clean ──────────────────────────────────────────────────────
+  clean:
+    desc: Remove build artifacts and caches
+    cmds:
+      - rm -rf .task
+      - rm -rf dist/ .astro/ node_modules/ playwright-report/ test-results/
+
+  # ── Status ─────────────────────────────────────────────────────
+  status:
+    desc: Project status dashboard
+    cmds:
+      - ./scripts/status.sh
+
+  status:git:
+    desc: Git status section
+    cmds:
+      - ./scripts/status.sh git
+
+  status:gh:
+    desc: GitHub status section
+    cmds:
+      - ./scripts/status.sh gh
+
+  status:code:
+    desc: Codebase stats section
+    cmds:
+      - ./scripts/status.sh code
+
+  status:env:
+    desc: Environment info section
+    cmds:
+      - ./scripts/status.sh env
+
+  status:setup:
+    desc: Setup completeness audit (GitHub, toolchain, devcontainer, dev env)
+    cmds:
+      - ./scripts/status.sh setup
+
+  status:site:
+    desc: Site overview section (page count, build output)
+    cmds:
+      - ./scripts/status.sh site
+
+  # ── Utilities ──────────────────────────────────────────────────
+  util:bunch-add:
+    desc: Scaffold the Bunch launcher in .meta (mirrors what the template generates)
+    cmds:
+      - ./scripts/meta-create.sh bunch 'Evan Harmon Website' 'evan-harmon' '~/git'
+
+  util:bunch-install:
+    desc: Move the Bunch file to iCloud and replace it with a symlink (macOS)
     cmds:
       - mv '.meta/Code Project - Evan Harmon Website.bunch' '/Users/evan/Library/Mobile Documents/com~apple~CloudDocs/Bunches/'
       - ln -s '/Users/evan/Library/Mobile Documents/com~apple~CloudDocs/Bunches/Code Project - Evan Harmon Website.bunch' .meta
-    silent: false
-  obsidianAdd:
+
+  util:obsidian-add:
+    desc: Scaffold the Obsidian project note in .meta (mirrors what the template generates)
+    cmds:
+      - ./scripts/meta-create.sh obsidian 'Evan Harmon Website' 'Evan Harmon'
+
+  util:obsidian-install:
+    desc: Move the Obsidian note to the vault and replace it with a symlink (macOS)
     cmds:
       - mv '.meta/Evan Harmon Website.md' '/Users/evan/Local/Memex/Personal/Digital'
       - ln -s '/Users/evan/Local/Memex/Personal/Digital/Evan Harmon Website.md' .meta
-    silent: false
