@@ -1,0 +1,16 @@
+# Gitleaks configuration for Evan Harmon Website
+# https://github.com/gitleaks/gitleaks
+
+[extend]
+useDefault = true
+
+[allowlist]
+paths = [
+    '''\.git/''',
+    '''\.task/''',
+    '''\.worktrees/''',
+    '''node_modules/''',
+    '''dist/''',
+    '''\.astro/''',
+    '''\.pnpm-store/''',
+]

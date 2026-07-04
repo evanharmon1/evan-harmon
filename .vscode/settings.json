@@ -1,15 +1,57 @@
 {
+  "editor.formatOnSave": true,
+  "[astro]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[javascript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[javascriptreact]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[typescript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[typescriptreact]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[json]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[jsonc]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[css]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[shellscript]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format"
+  },
+  "[yaml]": {
+    "editor.defaultFormatter": "redhat.vscode-yaml"
+  },
+  "[markdown]": {
+    "files.trimTrailingWhitespace": false
+  },
+  "[mdx]": {
+    "files.trimTrailingWhitespace": false
+  },
+  "files.trimTrailingWhitespace": true,
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/**": true,
+    "**/.venv/**": true,
+    "**/.terraform/**": true,
+    "**/dist/**": true,
+    "**/.task/**": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/.venv": true,
+    "**/.terraform": true,
+    "**/dist": true,
+    "**/uv.lock": true,
+    "**/.task": true,
+    "**/playwright-report": true,
+    "**/test-results": true
+  },
+  "search.smartCase": true,
+  "terminal.integrated.defaultProfile.linux": "zsh",
+  "npm.packageManager": "pnpm",
   "css.customData": ["./vscode.tailwind.json"],
   "eslint.validate": ["javascript", "javascriptreact", "astro", "typescript", "typescriptreact"],
+  "eslint.useFlatConfig": true,
   "files.associations": {
     "*.mdx": "markdown"
   },
   "prettier.documentSelectors": ["**/*.astro"],
-  "[astro]": {
-    "editor.defaultFormatter": "astro-build.astro-vscode"
-  },
   "yaml.schemas": {
     "./.vscode/astrowind/config-schema.json": "/src/config.yaml"
   },
-  "eslint.useFlatConfig": true
+  "snyk.advanced.autoSelectOrganization": true
 }
