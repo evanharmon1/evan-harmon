@@ -107,9 +107,9 @@ utilities, and static WCAG AA token contrast (`test/check-contrast.mjs`).
 
 ## Deployment
 
-Static site. `netlify.toml` (publish `dist`, `pnpm build`) is primary and defines redirects for
-`/memex/*` (→ Obsidian Publish) and `/now/*` (→ omg.lol); `vercel.json` mirrors caching/clean-URL
-config. GitHub Actions in `.github/workflows/` run lint/security/template checks (`build.yml`),
+Static site. `netlify.toml` (publish `dist`, `pnpm build`) defines redirects for
+`/memex/*` (→ Obsidian Publish) and `/now/*` (→ omg.lol). GitHub Actions in
+`.github/workflows/` run lint/security/template checks (`build.yml`),
 CodeQL, the devcontainer image build, and release-please (`release.yml`).
 
 ## Conventions
