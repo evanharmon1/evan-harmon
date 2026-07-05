@@ -50,8 +50,5 @@
     "*.mdx": "markdown"
   },
   "prettier.documentSelectors": ["**/*.astro"],
-  "yaml.schemas": {
-    "./.vscode/astrowind/config-schema.json": "/src/config.yaml"
-  },
   "snyk.advanced.autoSelectOrganization": true
 }

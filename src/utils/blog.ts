@@ -1,4 +1,4 @@
-// blog.ts — tiny content helpers (no astrowind:config dependency).
+// blog.ts — tiny, self-contained content helpers.
 import { getCollection, type CollectionEntry } from 'astro:content';
 import type { LedgerPost } from '~/components/almanac/Ledger.astro';
 
