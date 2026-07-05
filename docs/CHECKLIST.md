@@ -11,9 +11,9 @@ config, toolchain, devcontainer, and dev environment — against the items below
 
 - [ ] `task install` — Brewfile deps, `pnpm install`, and lefthook git hooks
 - [ ] `task verify` passes locally
-- [ ] Verify `evan-harmon.code-workspace` opens the repo's folder in VS Code and has a unique VS Code Workspace color. Then add any other related repos (e.g. other org repos) to the `folders` list in the workspace file so you have quick access to those repos
+- [ ] Verify `evanharmon-site.code-workspace` opens the repo's folder in VS Code and has a unique VS Code Workspace color. Then add any other related repos (e.g. other org repos) to the `folders` list in the workspace file so you have quick access to those repos
 - [ ] Extend `.gitignore` for your stack — the template ships a base; add stack-specific entries via [gitignore.io](https://www.toptal.com/developers/gitignore)
-- [ ] macOS: add a Raycast quicklink/alias that opens the `evan-harmon.code-workspace`
+- [ ] macOS: add a Raycast quicklink/alias that opens the `evanharmon-site.code-workspace`
 - [ ] macOS (Bunch): scaffold the launcher with `task util:bunch-add` (if not generated at copier time), then `task util:bunch-install` to move it to iCloud and leave a `.meta/*.bunch` symlink (re-run install if missing)
 
 ## 2. GitHub repo settings
@@ -44,7 +44,7 @@ config, toolchain, devcontainer, and dev environment — against the items below
       the UI. Drives release-please, the
       claude-* workflows, and project-automation. See docs/architecture/security.md.
 - [ ] GHCR: ensure the org/user allows publishing packages; the first
-      devcontainer prebuild populates `ghcr.io/evanharmon1/evan-harmon-devcontainer` on merge to main
+      devcontainer prebuild populates `ghcr.io/evanharmon1/evanharmon-site-devcontainer` on merge to main
 - [ ] GitHub Project: run `task setup:github-project` (needs
       `gh auth refresh -s project`) to create the owner's default project (titled
       `evanharmon1 Project`) and idempotently sync its `Status` pipeline and

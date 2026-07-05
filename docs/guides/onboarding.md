@@ -4,7 +4,7 @@ Getting productive in Evan Harmon Website.
 
 ## Setup
 
-1. Clone the repo: `git clone https://github.com/evanharmon1/evan-harmon.git`
+1. Clone the repo: `git clone https://github.com/evanharmon1/evanharmon-site.git`
 2. One-time machine setup (Homebrew, Node, pnpm): `task bootstrap`
 3. Install dependencies and git hooks: `task install`
 4. Verify everything works: `task verify`

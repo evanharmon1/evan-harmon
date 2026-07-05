@@ -15,7 +15,7 @@ islands. Output is fully `static` (SSG). Package manager is **pnpm**.
 The design is documented in **`DESIGN.md`** (AI-facing intent). The **canonical runtime token source
 is `src/styles/global.css`** — when the two disagree, `global.css` wins.
 
-Repo: https://github.com/evanharmon1/evan-harmon — see [docs/README.md](docs/README.md) for the
+Repo: https://github.com/evanharmon1/evanharmon-site — see [docs/README.md](docs/README.md) for the
 documentation map, [docs/architecture/README.md](docs/architecture/README.md)
 for the architecture, and [DESIGN.md](DESIGN.md) for design/UX intent.
 

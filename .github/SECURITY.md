@@ -9,7 +9,7 @@ Only the latest version on the main branch is supported.
 If you discover a security vulnerability, please report it responsibly:
 
 1. **Do not** open a public GitHub issue.
-2. Use [GitHub Private Vulnerability Reporting](https://github.com/evanharmon1/evan-harmon/security/advisories/new)
+2. Use [GitHub Private Vulnerability Reporting](https://github.com/evanharmon1/evanharmon-site/security/advisories/new)
    to submit a report directly.
 3. You will receive an acknowledgment within 48 hours.
 

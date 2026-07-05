@@ -16,7 +16,7 @@ obsidian_project_add: false
 project_description: My personal website
 project_management: github
 project_name: Evan Harmon Website
-project_slug: evan-harmon
+project_slug: evanharmon-site
 project_type: web-astro
 run_task_install: false
 use_release_please: true

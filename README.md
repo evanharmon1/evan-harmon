@@ -8,7 +8,7 @@ TypeScript, and standardized with
 
 Author: Evan Harmon
 
-[![Build](https://github.com/evanharmon1/evan-harmon/actions/workflows/build.yml/badge.svg)](https://github.com/evanharmon1/evan-harmon/actions/workflows/build.yml)
+[![Build](https://github.com/evanharmon1/evanharmon-site/actions/workflows/build.yml/badge.svg)](https://github.com/evanharmon1/evanharmon-site/actions/workflows/build.yml)
 
 ## Setup & Installation
 
