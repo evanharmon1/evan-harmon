@@ -27,7 +27,7 @@ safe because it is container-scoped — it is never set on the host.
 - **CLI:** `devcontainer up --workspace-folder . --config .devcontainer/dev/devcontainer.json`
 
 Prebuilt images are pulled from GHCR as a build cache
-(`ghcr.io/evanharmon1/evan-harmon-devcontainer` / `ghcr.io/evanharmon1/evan-harmon-devcontainer-dev`), so a warm rebuild
+(`ghcr.io/evanharmon1/evanharmon-site-devcontainer` / `ghcr.io/evanharmon1/evanharmon-site-devcontainer-dev`), so a warm rebuild
 is fast. A cache miss is non-fatal — it just rebuilds from the `Dockerfile`.
 
 ## Secrets — 1Password Environments (the standard)
@@ -83,11 +83,11 @@ repo** (one template serves every repo). To stand this repo up in Coder:
    [harmonops/harmon-infra](https://github.com/harmonops/harmon-infra)). It uses
    the Coder `git-clone` + `devcontainers-cli` modules.
 2. Create a workspace from it and set the parameters:
-   - **repo** → `https://github.com/evanharmon1/evan-harmon`
+   - **repo** → `https://github.com/evanharmon1/evanharmon-site`
    - secrets → `GH_TOKEN`, `CLAUDE_CODE_OAUTH_TOKEN`, `AGENT_DECK_TELEGRAM_KEY`
      (+ `TS_AUTHKEY` if you want Tailscale). Coder passes these into the
      workspace's host environment, where `init-env.sh` picks them up.
-3. The build pulls `ghcr.io/evanharmon1/evan-harmon-devcontainer` from GHCR as a cache. If that
+3. The build pulls `ghcr.io/evanharmon1/evanharmon-site-devcontainer` from GHCR as a cache. If that
    package is private, give the Coder builder a read token (or make the package
    public); a cache miss only makes the first build slower.
 

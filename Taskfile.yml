@@ -325,8 +325,8 @@ tasks:
         else
           rc=0
           gitleaks detect --no-banner --redact --source . \
-            --report-format json --report-path /tmp/evan-harmon-gitleaks.json || rc=$?
-          node scripts/summarize-gitleaks.mjs /tmp/evan-harmon-gitleaks.json
+            --report-format json --report-path /tmp/evanharmon-site-gitleaks.json || rc=$?
+          node scripts/summarize-gitleaks.mjs /tmp/evanharmon-site-gitleaks.json
           exit $rc
         fi
 
@@ -379,7 +379,7 @@ tasks:
   setup:github:
     desc: Apply idempotent GitHub repo settings via gh (Dependabot alerts, private vulnerability reporting, CodeQL variable)
     vars:
-      REPO: "evanharmon1/evan-harmon"
+      REPO: "evanharmon1/evanharmon-site"
     cmds:
       - gh api "repos/{{.REPO}}/vulnerability-alerts" --method PUT
       # Private vulnerability reporting is a public-repo-only feature; harmon-init
@@ -401,7 +401,7 @@ tasks:
   setup:github-labels:
     desc: Idempotently create/update this repo's starter labels (see docs/project-management.md). Requires `gh` with repo write.
     vars:
-      REPO: "evanharmon1/evan-harmon"
+      REPO: "evanharmon1/evanharmon-site"
     cmds:
       - ./scripts/setup-github-labels.sh --repo "{{.REPO}}"
 
@@ -502,7 +502,7 @@ tasks:
   util:bunch-add:
     desc: Scaffold the Bunch launcher in .meta (mirrors what the template generates)
     cmds:
-      - ./scripts/meta-create.sh bunch 'Evan Harmon Website' 'evan-harmon' '~/git'
+      - ./scripts/meta-create.sh bunch 'Evan Harmon Website' 'evanharmon-site' '~/git'
 
   util:bunch-install:
     desc: Move the Bunch file to iCloud and replace it with a symlink (macOS)

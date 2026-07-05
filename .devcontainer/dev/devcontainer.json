@@ -2,8 +2,8 @@
   // Local dev profile.
   // This intentionally omits the root profile's containerEnv block because the
   // local runArgs env-file already provides TS_AUTHKEY and GH_TOKEN.
-  "name": "DEV - devcontainer-evan-harmon",
-  "containerName": "devcontainer-evan-harmon-dev",
+  "name": "DEV - devcontainer-evanharmon-site",
+  "containerName": "devcontainer-evanharmon-site-dev",
   // Minimum to run the intended workload (Playwright + agents). Codespaces
   // enforces it; local Docker / Coder may not — see
   // docs/guides/devcontainer-performance.md for recommended sizing.
@@ -14,7 +14,7 @@
   "build": {
     "dockerfile": "../Dockerfile",
     "context": "../..",
-    "cacheFrom": "ghcr.io/evanharmon1/evan-harmon-devcontainer-dev"
+    "cacheFrom": "ghcr.io/evanharmon1/evanharmon-site-devcontainer-dev"
   },
   // Dev profile is the only place TS_AUTHKEY is allowed — Tailscale is
   // installed here and tailscale-connect.sh needs the key to bring up the

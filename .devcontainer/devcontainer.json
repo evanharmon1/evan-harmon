@@ -2,8 +2,8 @@
   // Primary profile for AI agents (Claude Code, Codex, Gemini).
   // Secrets (GH_TOKEN) come from the --env-file, not containerEnv.
   // Tailscale is not installed in this profile — see dev/ for the human profile.
-  "name": "BOT - devcontainer-evan-harmon",
-  "containerName": "devcontainer-evan-harmon-bot",
+  "name": "BOT - devcontainer-evanharmon-site",
+  "containerName": "devcontainer-evanharmon-site-bot",
   // Minimum to run the intended workload (Playwright + agents). Codespaces
   // enforces it; local Docker / Coder may not — see
   // docs/guides/devcontainer-performance.md for recommended sizing.
@@ -14,7 +14,7 @@
   "build": {
     "dockerfile": "Dockerfile",
     "context": "..",
-    "cacheFrom": "ghcr.io/evanharmon1/evan-harmon-devcontainer"
+    "cacheFrom": "ghcr.io/evanharmon1/evanharmon-site-devcontainer"
   },
   // Bot profile intentionally omits TS_AUTHKEY from the allow-list — this
   // container has no Tailscale feature installed, and we don't want a tailnet

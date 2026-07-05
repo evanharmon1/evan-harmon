@@ -87,7 +87,7 @@ This mirrors the importable
   "name": "Protect Main",
   "target": "branch",
   "source_type": "Repository",
-  "source": "evanharmon1/evan-harmon",
+  "source": "evanharmon1/evanharmon-site",
   "enforcement": "active",
   "conditions": {
     "ref_name": {
