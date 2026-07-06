@@ -117,7 +117,7 @@ tasks:
         if [ -n "{{.CLI_ARGS}}" ]; then
           npx --yes markdownlint-cli2 {{.CLI_ARGS}}
         else
-          npx --yes markdownlint-cli2 '**/*.md' '#.claude/**' '#**/node_modules/**' '#dist/**' '#.worktrees/**' '#**/.terraform/**' '#**/.venv/**' '#**/.task/**'
+          npx --yes markdownlint-cli2 '**/*.md' '#.claude/**' '#specs/*/**' '#**/node_modules/**' '#dist/**' '#.worktrees/**' '#**/.terraform/**' '#**/.venv/**' '#**/.task/**'
         fi
 
   lint:actions:
@@ -197,6 +197,8 @@ tasks:
   validate:links:
     desc: Check the built site (dist/) for broken internal links (lychee, offline)
     cmds:
+      # --root-dir is required to resolve root-relative links (/about, /rss.xml)
+      # against dist/ instead of failing with "provide a root dir".
       - lychee --offline --no-progress --root-dir "{{.PWD}}/dist" ./dist
 
   guard:no-commit-to-main:

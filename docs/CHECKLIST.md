@@ -91,8 +91,21 @@ config, toolchain, devcontainer, and dev environment — against the items below
       pnpm 10+ silently ignores that field, so overrides declared there vanish on
       the next lockfile resolve
 - [ ] Review `lighthouserc.json` URLs once routes exist
+- [ ] Enable mobile device projects in `playwright.config.ts` (e.g. Pixel +
+      iPhone) — the Playwright scaffold ships them commented out, and
+      mobile-first is the convention
 
 ## 4. Secrets & environment
+
+- [ ] Cloudflare Workers deploys: create an **Account API Token** scoped to
+      **Account → Workers Scripts → Edit** only (1-year TTL + renewal
+      reminder) and add it: `gh secret set CLOUDFLARE_API_TOKEN`. The
+      `CLOUDFLARE_ACCOUNT_ID` org-level Actions variable is shared org-wide —
+      set it once per org if missing.
+- [ ] Create the `preview` and `production` GitHub Environments (production:
+      restrict to protected branches). Then bootstrap the Worker: Actions →
+      *Release Please* → *Run workflow* (main) — the first `wrangler deploy`
+      creates it; PR preview uploads work from that point.
 
 - [ ] For local `.env` needs, use **1Password Environments** (mounts a virtual
       `.env`; secrets never hit disk or git) or `op run`/`op inject`. Commit only
