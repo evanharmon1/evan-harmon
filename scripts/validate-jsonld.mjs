@@ -50,7 +50,8 @@ for (const file of pages) {
     const nodes = Array.isArray(data) ? data : data['@graph'] || [data];
     const ctx = data['@context'] || nodes.find((n) => n && n['@context'])?.['@context'];
     // @context may be a string or an array of strings/objects; anchor the match
-    // to the schema.org origin (a bare substring test would accept lookalike hosts).
+    // to the schema.org origin (a bare substring test would accept lookalike hosts
+    // — flagged by CodeQL as js/incomplete-url-substring-sanitization).
     const ctxStrings = (Array.isArray(ctx) ? ctx : [ctx]).filter((s) => typeof s === 'string');
     if (!ctxStrings.some((s) => /^https?:\/\/(www\.)?schema\.org([/#]|$)/i.test(s.trim()))) {
       console.error(`FAIL [${label}] JSON-LD missing a schema.org @context`);

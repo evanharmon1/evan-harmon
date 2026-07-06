@@ -40,6 +40,11 @@ node_modules/
 # Git worktrees
 .worktrees/
 
+# Design-handoff bundles (Claude Design exports) live as specs/ subdirectories
+# while being implemented and are deleted at sign-off — never committed.
+# Top-level specs/*.md (README, _template, feature specs) stay tracked.
+specs/*/
+
 # Lefthook local overrides (not committed)
 .lefthook-local.yml
 
@@ -77,6 +82,9 @@ screenshots/
 # coverage / test output
 coverage/
 .nyc_output/
+
+# Lighthouse CI output
+.lighthouseci/
 
 # Devcontainer env files (injected locally via 1Password, never committed)
 .devcontainer/**/devcontainer.env

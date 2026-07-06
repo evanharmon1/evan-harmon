@@ -16,8 +16,10 @@ pre-commit:
     prettier:
       glob: "*.{js,jsx,ts,tsx,astro,md,mdx,json,jsonc,yml,yaml,css,scss,html}"
       # CLAUDE.md / GEMINI.md / copilot-instructions.md are symlinks to AGENTS.md,
-      # and the .meta note is a symlink into the Obsidian vault; prettier errors
-      # when a symlink is passed explicitly (traversal during `--check .` skips them).
+      # and a v2-era `.meta/*.md` note may be a symlink into the Obsidian vault
+      # (obsidian_project_add moved the file and left a link); prettier errors
+      # when a symlink is passed explicitly (traversal during `--check .` skips
+      # them).
       exclude:
         - CLAUDE.md
         - GEMINI.md

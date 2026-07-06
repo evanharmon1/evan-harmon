@@ -54,6 +54,7 @@ export default [
     },
   },
   {
-    ignores: ['dist', 'node_modules', '.github', 'types.generated.d.ts', '.astro', 'docs/design'],
+    // specs/ holds vendored design-handoff bundles (deleted at sign-off).
+    ignores: ['dist', 'node_modules', '.github', 'types.generated.d.ts', '.astro', 'docs/design', 'specs'],
   },
 ];
