@@ -25,24 +25,42 @@ config, toolchain, devcontainer, and dev environment — against the items below
 
 - [ ] Install the [Renovate app](https://github.com/apps/renovate) on the repo
 - [ ] Install the [CodeRabbit app](https://github.com/apps/coderabbitai) on the repo (`.coderabbit.yaml` is pre-configured)
-- [ ] Actions secret: `CLAUDE_CODE_OAUTH_TOKEN` (claude-* workflows)
+- [ ] Actions secret: `CLAUDE_CODE_OAUTH_TOKEN` (claude-* workflows) — generate
+      with `claude setup-token`; the value must start **`sk-ant-oat01-`** (an OAuth
+      token, billed to your Claude subscription), **not** `sk-ant-api03-` (a raw API
+      key, billed at pay-as-you-go API rates). Then `gh secret set CLAUDE_CODE_OAUTH_TOKEN`
 - [ ] Snyk is **optional and local-only**: `task security:sast`/`security:sca` are
       opt-in — they are NOT in CI or `task security`, so run them by hand with
       `SNYK_TOKEN` in your local env / 1Password (no Actions secret needed). If the
       **Snyk GitHub App** is installed it posts `code/snyk`/`security/snyk` PR checks,
       which the branch ruleset does **not** require; remove the app (or this repo from
       it) to drop them.
-- [ ] CI GitHub App `evanharmon1-ci`: create it by hand for this org (one App
-      per org; **Settings → Developer settings → GitHub Apps**), or reuse the
-      org's existing one;
-      install it on this repo, then set `CI_APP_CLIENT_ID` (Actions
-      **variable**) + `CI_APP_PRIVATE_KEY` (Actions **secret**) — org-level for
-      an org, per-repo for a personal account. Set the private key by piping the
-      `.pem` in (`gh secret set CI_APP_PRIVATE_KEY … < key.pem`), not by pasting —
-      flattened newlines make the key undecodable. For an org, scope it
-      (`--visibility selected --repos …`) and then finalize/audit repo access in
-      the UI. Drives release-please, the
-      claude-* workflows, and project-automation. See docs/architecture/security.md.
+- [ ] **Create** the CI GitHub App `evanharmon1-ci` by hand (one App per org;
+      **Settings → Developer settings → GitHub Apps**), or reuse the org's existing one.
+- [ ] **Install** the App on this repo — **Install App → Only select repositories**
+      (the harmon-init repos that run release-please / claude-* / project-automation),
+      **not "All"**. **Creating the App is not enough:** an App whose credentials are
+      set but which is *not installed* on the repo makes
+      `actions/create-github-app-token` fail at runtime with a **404**
+      (`Not Found` — "not installed on this repository"). This is the single
+      easiest step to miss.
+- [ ] Set `CI_APP_CLIENT_ID` (Actions **variable**) + `CI_APP_PRIVATE_KEY` (Actions
+      **secret**) — **pipe the `.pem` in** (never paste it; flattened newlines break
+      the key), and **scope both to those same repos** (least privilege — the key can
+      act as the App: commits, PRs, releases, workflow edits):
+
+      ```bash
+      gh secret set CI_APP_PRIVATE_KEY --org evanharmon1 \
+        --visibility selected --repos <repo-a>,<repo-b> < evanharmon1-ci.private-key.pem
+      gh variable set CI_APP_CLIENT_ID --org evanharmon1 \
+        --visibility selected --repos <repo-a>,<repo-b> --body "<client-id>"  # Iv…-style, not the numeric App ID
+      ```
+
+      Personal account: use `--repo evanharmon1/evanharmon-site` instead of
+      `--org`/`--visibility`/`--repos`. Re-running `--repos` **replaces** the list —
+      re-run with the full list to add a repo. Drives release-please, the claude-*
+      workflows, and project-automation; blast-radius + rotation in
+      docs/architecture/security.md.
 - [ ] GHCR: ensure the org/user allows publishing packages; the first
       devcontainer prebuild populates `ghcr.io/evanharmon1/evanharmon-site-devcontainer` on merge to main
 - [ ] GitHub Project: run `task setup:github-project` (needs
@@ -82,14 +100,16 @@ config, toolchain, devcontainer, and dev environment — against the items below
       `pnpm add -D eslint @eslint/js typescript-eslint eslint-plugin-astro globals`
 - [ ] Install the shipped prettier config's plugins:
       `pnpm add -D prettier prettier-config-standard prettier-plugin-astro prettier-plugin-tailwindcss`
-- [ ] Approve build scripts so `astro build` works — pnpm 10+ blocks dependency
-      build scripts by default. Add an `onlyBuiltDependencies` list to
-      `pnpm-workspace.yaml` (e.g. `esbuild`, `sharp`, plus `lefthook` if it is a
-      pnpm dep), or run `pnpm approve-builds`
-- [ ] Put pnpm `overrides` and `auditConfig` (security version floors, audit CVE
-      ignores) in `pnpm-workspace.yaml`, **not** the `package.json` `pnpm` field —
-      pnpm 10+ silently ignores that field, so overrides declared there vanish on
-      the next lockfile resolve
+- [ ] Build-script approvals + version pins already ship in
+      **`pnpm-workspace.yaml`** — the template pre-approves `esbuild` + `sharp`
+      (and **`workerd`** when deploying to Cloudflare Workers, so `wrangler deploy`
+      doesn't fail `ERR_PNPM_IGNORED_BUILDS`) under `allowBuilds`, and floors
+      `esbuild` at the patched `>=0.28.1` under `overrides` (pnpm 10+ blocks
+      dependency build scripts by default). Add any other packages whose build
+      scripts your deps need to `allowBuilds` (or run `pnpm approve-builds`); keep
+      all pnpm `overrides` / `auditConfig` there too, **not** in the `package.json`
+      `pnpm` field — pnpm 10+ silently ignores that field, so entries there vanish
+      on the next lockfile resolve
 - [ ] Review `lighthouserc.json` URLs once routes exist
 - [ ] Enable mobile device projects in `playwright.config.ts` (e.g. Pixel +
       iPhone) — the Playwright scaffold ships them commented out, and
