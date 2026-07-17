@@ -3,7 +3,7 @@
 // surfaces plus the colour-block hero text (the line a regression once hit).
 // Every colour is resolved to 0–255 RGB via an in-page canvas, so any CSS colour
 // syntax works. Colour-block text sits on a gradient, so it is measured against a
-// sampled block pixel. Run: node test/_rendered-contrast.mjs  (needs preview on :4321)
+// sampled block pixel. Run: node tests/_rendered-contrast.mjs  (needs preview on :4321)
 import { chromium } from 'playwright';
 
 const BASE = 'http://localhost:4321';

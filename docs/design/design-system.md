@@ -10,7 +10,7 @@ for interactive islands) · self-hosted `@fontsource` fonts · deploys static.
 
 ## Tokens & theming
 
-`src/styles/global.css` is the **single source of truth** for runtime colour.
+`src/styles/globals.css` is the **single source of truth** for runtime colour.
 
 - Semantic colour tokens (`--c-paper`, `--c-ink`, `--c-accent`, …) are defined
   per theme and **swap at runtime** off `data-palette` on `<html>`
@@ -53,7 +53,7 @@ Bespoke Astro components live in `src/components/almanac/`:
   disabled), and the two alternate heroes `HeroFrontispiece` / `HeroPlate`.
 
 Cross-cutting classes (`.catalog`, `.ledger`, `.cta--bold`, `.sec-grid`, …) live
-in `global.css`; leaf components carry their own scoped styles. shadcn primitives
+in `globals.css`; leaf components carry their own scoped styles. shadcn primitives
 go under `src/components/ui/` and use `cn()` from `src/lib/utils.ts`.
 
 ## Pages
@@ -67,7 +67,7 @@ go under `src/components/ui/` and use `cn()` from `src/lib/utils.ts`.
 
 - **`task lint:design`** — checks the canonical files exist, bans off-palette
   Tailwind colour utilities, and runs a **static WCAG token-contrast gate**
-  (`test/check-contrast.mjs`) over the palette in both themes.
+  (`tests/check-contrast.mjs`) over the palette in both themes.
 - **Contrast is verified twice:** the static token gate above, plus a rendered
   measurement on the running page (token math alone misses third-party overrides
   — that's how an illegible dark-mode prose colour once slipped through).

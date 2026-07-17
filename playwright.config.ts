@@ -3,10 +3,10 @@ import { defineConfig, devices } from '@playwright/test';
 // Cross-browser / cross-viewport screenshot sweep for the design-handoff
 // verification gate. Engines: Chromium, Firefox, WebKit (desktop) + mobile
 // Safari (iPhone) and a tablet (iPad). The route × theme axis is in
-// test/brand-screenshots.spec.ts. The site is static — build first, then
+// tests/brand-screenshots.spec.ts. The site is static — build first, then
 // `pnpm preview` serves dist/ on :4321.
 export default defineConfig({
-  testDir: './test',
+  testDir: './tests',
   testMatch: /(brand-screenshots|a11y)\.spec\.ts/,
   fullyParallel: true,
   reporter: [['list']],

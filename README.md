@@ -59,7 +59,7 @@ targets (`task check`, `task lint:design`, …). See
 - **Astro** (static output) + **Tailwind CSS v4** (CSS-first) + **TypeScript**
 - **React + shadcn/ui** for interactive islands
 - **pnpm** package manager
-- Design system in [DESIGN.md](./DESIGN.md); runtime tokens in `src/styles/global.css`
+- Design system in [DESIGN.md](./DESIGN.md); runtime tokens in `src/styles/globals.css`
 
 ## Deployment
 

@@ -11,7 +11,7 @@
 The repo already implemented the Almanac design system almost in full (it was
 rebuilt from an earlier version of this same export — commit `8423cd8`). A fresh
 export of the system was handed off. Diffing the bundle against the canonical
-`src/styles/global.css` showed the tokens matched ~95%; the bundle added one new
+`src/styles/globals.css` showed the tokens matched ~95%; the bundle added one new
 token and a set of components the repo did not yet have. This is the first
 recorded design decision, so it also **establishes the DDR convention and pins the
 baseline at `1.0.0`** (the shipped system) and this change at `1.1.0`.
@@ -28,18 +28,18 @@ Adopt the genuinely-new parts of the export, additively:
    island needed): brand marks **Crest** + **Bookplate**; alternate heroes
    **HeroFrontispiece** + **HeroPlate**; form components **Tag** + **Input**.
    **Button** was extended (`size="sm"`, `disabled`, generic `glyph`).
-3. **`.btn` family consolidated into `global.css`** as the single source of truth
+3. **`.btn` family consolidated into `globals.css`** as the single source of truth
    (moved out of `Button.astro`'s scoped style) so the hero colour-block overrides
    (`.cover-inlay .btn`) can reach the buttons. Shared hero scaffolding
    (`.hero/.kicker/.sun/.corners/.book-cover/.cover-inlay/.plate/.device/.monogram`)
-   also lives in `global.css`, alongside the existing `.catalog`/`.ledger` classes.
+   also lives in `globals.css`, alongside the existing `.catalog`/`.ledger` classes.
 4. All new pieces are **showcased on `/brand`** (Ceremonial marks, Heroes, Forms).
 
 ## Conflicts resolved
 
 - **Midnight `--c-cta-line`.** The bundle emits `#d8b45a`; the repo deliberately
   overrode it to `#e9ad3a` (vivid gilt gold) with an explicit code comment. Per
-  "`global.css` is the canonical runtime source," **the repo value is kept** — the
+  "`globals.css` is the canonical runtime source," **the repo value is kept** — the
   bundle proposal is not applied here.
 - **Default theme.** The bundle frames Midnight as the `:root` default; the repo
   expresses Parchment as `:root` but `ThemeScript` always sets `data-palette` and

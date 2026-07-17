@@ -1,21 +1,21 @@
 #!/usr/bin/env node
 // check-contrast.mjs — static WCAG contrast gate for the Almanac design tokens.
 //
-// Parses the semantic colour tokens out of src/styles/global.css (both themes)
+// Parses the semantic colour tokens out of src/styles/globals.css (both themes)
 // and checks the foreground/background pairs the design relies on against WCAG
 // AA. This is the FAST, STATIC half of the contrast story: it proves the tokens
 // themselves are sound. It does NOT prove what actually paints on the page —
 // a third-party cascade layer can still override a token at runtime — so the
 // rendered/computed contrast must ALSO be measured on the running pages.
 //
-// Usage: node test/check-contrast.mjs   (exit 1 on any failure)
+// Usage: node tests/check-contrast.mjs   (exit 1 on any failure)
 
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const cssPath = join(__dirname, '..', 'src', 'styles', 'global.css');
+const cssPath = join(__dirname, '..', 'src', 'styles', 'globals.css');
 const css = readFileSync(cssPath, 'utf8');
 
 // --- WCAG relative luminance + contrast ratio ---

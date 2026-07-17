@@ -8,8 +8,8 @@ The brand and design system for **evanharmon.com**.
 > "Midnight" theme.
 
 This file is the **AI-facing statement of intent**. The **canonical runtime
-token source is [`src/styles/global.css`](src/styles/global.css)** — when the two
-disagree, `global.css` wins for runtime. Stack: **Astro + Tailwind CSS v4**
+token source is [`src/styles/globals.css`](src/styles/globals.css)** — when the two
+disagree, `globals.css` wins for runtime. Stack: **Astro + Tailwind CSS v4**
 (CSS-first `@theme`), with **shadcn/ui** wired onto these tokens via a thin role
 layer, and **Lucide** for icons.
 
@@ -60,7 +60,7 @@ Dual-theme: a light **Parchment** theme (brand-primary palette) and a dark
 **Midnight** theme. The site **boots in Midnight** (the live default); a saved
 choice always wins. Colours are semantic CSS variables (`--c-*`) that swap per
 theme; Tailwind utilities (`bg-paper`, `text-ink`, `text-accent`…) are
-theme-aware. Raw hex lives only in the theme blocks of `global.css`.
+theme-aware. Raw hex lives only in the theme blocks of `globals.css`.
 
 ### 2.1 Parchment — light (brand-primary palette)
 
@@ -92,7 +92,7 @@ theme-aware. Raw hex lives only in the theme blocks of `global.css`.
 | `error`   | `#e08a7a`           | Terracotta — invalid fields, notes  |
 | CTA block | `#101a30`→`#18284a` | Blue colour-block                   |
 
-(Full Midnight set lives in `global.css`.)
+(Full Midnight set lives in `globals.css`.)
 
 ### 2.3 Foil & fixed colours
 
@@ -135,7 +135,7 @@ Self-hosted via `@fontsource/*` (all OFL). Roles are declared under `@theme` as
 `--font-display`, `--font-body`, `--font-numeral`, `--font-cover`.
 
 Fluid `clamp()` scale (`--text-hero`, `--text-cta`, `--text-section`, …) lives in
-`global.css @theme`. Display: `line-height ~1.0`, `letter-spacing 0.004em`,
+`globals.css @theme`. Display: `line-height ~1.0`, `letter-spacing 0.004em`,
 `text-wrap: balance`, 1px emboss. Body: `1.62` leading, max measure ~52–62ch.
 Eyebrows/labels/nav: small-caps, uppercase, widely tracked (`0.16`–`0.28em`).
 Numerals: always Playfair Display italic in `accent`. The bio uses a raised
@@ -209,7 +209,7 @@ semantic tokens:
 ### shadcn/ui
 
 shadcn components are wired onto these tokens via a thin **role layer** in
-`global.css` (`--background`/`--foreground`/`--primary`/`--border`/… → Almanac
+`globals.css` (`--background`/`--foreground`/`--primary`/`--border`/… → Almanac
 `--c-*`), so any shadcn component is on-brand and follows the same `data-palette`
 switch. See `src/components/ui/button.tsx` for the reference wiring. The site's
 own UI is Astro; reach for shadcn (React island) only when a component needs
