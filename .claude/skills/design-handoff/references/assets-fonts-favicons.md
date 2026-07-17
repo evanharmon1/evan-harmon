@@ -30,8 +30,24 @@ with the build; user media is runtime data and must never be committed.
   smaller than shipping many static cuts.
 - Declare with `@font-face` + **`font-display: swap`** so text renders immediately in the fallback and
   swaps in when the webfont arrives (no flash of invisible text).
-- Convert TTF/OTF → woff2 with Google's `woff2` tools, or use **Fontsource**, which ships `.woff2`
-  directly.
+- **The lowest-friction self-hosting path is Fontsource as an npm dependency** — it _is_
+  self-hosting (the woff2 ships from your origin via the bundler), version-pinned, and each package
+  carries the font's LICENSE file (handy for the licensing gate and for redistributing woff2 +
+  license inside a press kit). Prefer the variable packages:
+
+  ```css
+  /* globals.css — package imports are @imports: they MUST sit above tailwindcss (order rule below) */
+  @import "@fontsource-variable/space-grotesk";
+  @import "@fontsource-variable/jetbrains-mono";
+  @import "tailwindcss";
+  @theme {
+    /* Fontsource variable families register as "<Family> Variable" */
+    --font-sans: "Space Grotesk Variable", "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  }
+  ```
+
+  Manual alternative: convert TTF/OTF → woff2 with Google's `woff2` tools and declare `@font-face`
+  yourself (the block below).
 - Define families by **role** in `globals.css` under `@theme` — `--font-sans`, `--font-display`,
   `--font-mono`. Components use `font-sans` / `font-display`; never hardcode a family name in a
   component.
@@ -39,7 +55,8 @@ with the build; user media is runtime data and must never be committed.
   `<link rel="preload" href="/fonts/inter-variable.woff2" as="font" type="font/woff2" crossorigin>`.
 
 ```css
-/* globals.css — mind the @import ORDER rule below */
+/* globals.css — imports FIRST (order rule below), @font-face after them */
+@import "tailwindcss";
 @font-face {
   font-family: "Inter";
   src: url("/fonts/inter-variable.woff2") format("woff2");
@@ -47,7 +64,6 @@ with the build; user media is runtime data and must never be committed.
   font-style: normal;
   font-display: swap;
 }
-@import "tailwindcss";
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
 }
@@ -55,12 +71,18 @@ with the build; user media is runtime data and must never be committed.
 
 ## The `@import` order rule (this _will_ bite you)
 
-If you load a hosted font via a CSS **`@import url(...)`** (e.g. a Google Fonts URL), that `@import`
-**must** sit **above** `@import "tailwindcss";`. Per the CSS spec, a browser ignores any `@import`
-that appears after other rules — and Tailwind's import expands into rules — so a font `@import` placed
-_after_ it is silently dropped and the font never loads. `@font-face` blocks (which are not
-`@import`s) can go anywhere; only `url()`-`@import`s are order-sensitive. Self-hosting with
-`@font-face` sidesteps the trap entirely — one more reason to prefer it.
+Per the CSS spec, an `@import` that appears after **any other rule** is silently ignored — and
+"other rule" includes a `@font-face` block, not just Tailwind's expanded rules. Two consequences:
+
+- **Every `@import` goes at the very top of the stylesheet**, before `@font-face`, `@theme`, or
+  anything else. A `@font-face` placed above `@import "tailwindcss";` kills the Tailwind import —
+  the whole framework silently fails to load.
+- **Order among the imports matters too:** a hosted-font `@import url(...)` (e.g. a Google Fonts
+  URL) or a Fontsource package import must sit **above** `@import "tailwindcss";`, because
+  Tailwind's import expands into rules that would invalidate any `@import` after it.
+
+Self-hosting with `@font-face` avoids the hosted-font `@import` — one more reason to prefer it —
+but the `@font-face` block itself still belongs **after** all the imports.
 
 ## Favicons: generate the whole set from the mark
 
@@ -83,6 +105,12 @@ at build time:
   ideally preloaded.
 - **SVG** for logos, icons, and vector art — crisp at any size, tiny, and themeable via
   `currentColor`.
+- **SVG marks that use live `<text>`** (wordmarks set in the brand font) render correctly on the
+  site — the self-hosted font is loaded — but are **font-dependent as standalone files**: opened
+  elsewhere they fall back to whatever the viewer has installed. For press kits and downloads,
+  either outline the text or ship **font-true PNG renders** alongside (render the SVG in headless
+  Chromium with a `file://` `@font-face` pointing at the repo's woff2, then screenshot — zero new
+  dependencies; see the collateral pattern in `brand-page.md`).
 
 ## Then
 

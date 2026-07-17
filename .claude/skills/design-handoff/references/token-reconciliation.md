@@ -71,6 +71,10 @@ the bundle's `--color-primary` is a paint value and is **not** necessarily shadc
 ```css
 /* Any hosted-font @import MUST sit above this line — see assets-fonts-favicons.md. */
 @import "tailwindcss";
+/* Current shadcn CLIs also emit these two — KEEP them (behavioral CSS only:
+   data-state variants, accordion keyframes, utilities; they carry no tokens): */
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 @custom-variant dark (&:is(.dark *));
 
 :root {
@@ -140,7 +144,10 @@ reference, or you break dark mode and theming. `@theme inline` is wiring, not va
 3. **Fill the gaps shadcn needs but the bundle lacks.** `card`/`popover` are often `--background` or a
    near neighbor; `muted`/`accent` are subtle neutral surfaces; `destructive` is a red sourced
    outside the brand palette; `ring` is usually the brand/primary hue. Derive these — the bundle
-   won't have them.
+   won't have them. **Overlays need a scrim**, which the shadcn default set omits: either add a
+   `--scrim` token (the design's own tokens probably had one) or use the shadcn convention `bg-black/60`
+   on the `Dialog`/`Sheet` overlay — a constant translucent black that reads on any theme (it's not a
+   theming token, so the off-palette gate allows the `bg-black/*` form).
 4. **Author the `.dark` block.** The bundle can't give you a reliable one. The dependable rule: **hold
    the brand accent hue constant** across modes and **invert neutral lightness**. For `--primary`,
    keep the same `H` (and similar `C`), nudging only `L`; for neutrals
@@ -186,6 +193,39 @@ in `.dark`, prose then follows dark mode automatically — you don't need `dark:
   --tw-prose-td-borders: var(--border);
 }
 ```
+
+## Surfaces that don't theme (constant chrome, always-dark slabs, fixed specimens)
+
+Most tokens flip between `:root` and `.dark`. But real designs have surfaces that must stay a **fixed
+appearance regardless of the active theme** — persistent chrome (a black nav / sidebar / tooltip /
+toast), marketing "always dark" hero slabs, and product-shot specimens. Painting these with the normal
+theming tokens (`bg-background text-foreground`) makes them flip when the user toggles, which is wrong.
+Three techniques, in order of reach:
+
+1. **Constant chrome → the `sidebar-*` tokens.** shadcn's `--sidebar*` set is a natural home for
+   fixed chrome — but it is **theme-aware out of the box**: `shadcn init` writes _different_
+   sidebar values under `:root` and `.dark`, so `bg-sidebar` still flips with the theme until you
+   make the blocks agree. To turn it into a "doesn't theme" surface, **delete the `.dark`
+   `sidebar-*` overrides** (the `:root` values then cascade through both themes) — or author
+   identical values in both blocks — and only then map fixed chrome (an onyx nav bar, a dark
+   tooltip/toast) to `bg-sidebar` / `text-sidebar-foreground` / `border-sidebar-border` /
+   `text-sidebar-primary`. If the design needs a real themed sidebar _and_ constant chrome, don't
+   overload `sidebar-*` — mint dedicated fixed-chrome tokens instead.
+2. **An always-dark section → wrap it in `.dark`.** Put `class="dark"` on the section
+   (`<section class="dark bg-background text-foreground">`) and its descendants resolve the **dark**
+   tokens while the rest of the page follows the active theme. Everything inside stays token-driven — a
+   `ghost` button in the slab automatically gets the bone (dark-mode) border, no bespoke chrome
+   styling. This is the clean way to build "black slab" marketing sections that stay black in light
+   mode and just deepen in dark mode.
+3. **A fixed-appearance specimen → force `.dark` on the component's own root.** For a product mockup or
+   a toast that must always render in one theme, put `.dark` on the component root so its internal
+   tokens resolve that way regardless of the page. This is also the **only** way to reach a token that
+   exists _only_ under `.dark` (e.g. a lifted danger red authored just for small text on dark cards):
+   from a light-theme context that token is otherwise unreachable.
+
+Nested `.dark` inside an already-dark page is harmless. The tell that you need one of these: you catch
+yourself reaching for a raw `text-white` / `bg-black` on a surface that should be a token — that's a
+"doesn't theme" surface asking for `sidebar-*` or a `.dark` wrapper.
 
 ## Verify the merge before moving on
 

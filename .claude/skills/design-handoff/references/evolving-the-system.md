@@ -42,9 +42,17 @@ Treat tokens like API endpoints — version, alias, and deprecate slowly:
 - **Delete only after** all references are migrated. Don't yank a token out from under the components
   that use it — that's the costly path everyone warns about.
 
+**The wholesale-replacement exception.** When the bundle replaces the brand outright and every
+consumer of the old tokens is rewritten **in the same change** (a ground-up site redesign), skip the
+aliasing window: there is no migration period because nothing downstream survives to migrate. That
+is still evolve *governance* — classify it **major**, record the DDR (note explicitly that all
+consumers were migrated in-change, which satisfies "delete only after migrated") — but the token
+write itself follows the `establish-design-system` recipe in `token-reconciliation.md`: canonical
+values fresh from the bundle, `.dark` authored, gates re-run from zero.
+
 ## 4. Record a DDR with the version bump
 
-Every system change is a **DDR** in `/decisions/` — your design-system changelog and governance trail.
+Every system change is a **DDR** in `docs/decisions/` — your design-system changelog and governance trail.
 A token-change DDR carries: a unique ID (e.g. `DDR-0xx`), status, context (why the change), the decision
 (the exact token delta), alternatives considered, consequences (which components are affected, what
 migration is needed), and the resulting **SemVer bump**. DDRs are append-only (the ADR tradition) — if a

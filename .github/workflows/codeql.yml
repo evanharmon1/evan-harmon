@@ -5,10 +5,13 @@ on:
   push:
     branches:
       - main
+  merge_group:
   schedule:
     - cron: "0 6 * * 1"
 
-# Opt-in via the FULL_SECURITY_SCAN repository variable (see docs/CHECKLIST.md).
+# Public repositories run CodeQL automatically. For a private/internal repo,
+# FULL_SECURITY_SCAN=true means the owner has deliberately enabled paid GitHub
+# Code Security. Free private repos use Semgrep CE in build.yml instead.
 
 concurrency:
   group: codeql-${{ github.ref }}
@@ -17,7 +20,7 @@ concurrency:
 jobs:
   analyze:
     if: >-
-      vars.FULL_SECURITY_SCAN == 'true' &&
+      (github.event.repository.private == false || vars.FULL_SECURITY_SCAN == 'true') &&
       (github.event_name != 'pull_request' ||
        github.event.pull_request.head.repo.full_name == github.repository)
     # Runner switch: CI_RUNS_ON repo/org variable unset -> the rendered
@@ -35,21 +38,21 @@ jobs:
           - javascript-typescript
     steps:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          persist-credentials: false
       - name: Initialize CodeQL
         uses: github/codeql-action/init@8aad20d150bbac5944a9f9d289da16a4b0d87c1e # v4
         with:
           languages: ${{ matrix.language }}
-      - name: Autobuild
-        uses: github/codeql-action/autobuild@8aad20d150bbac5944a9f9d289da16a4b0d87c1e # v4
       - name: Perform CodeQL Analysis
-        continue-on-error: true
         uses: github/codeql-action/analyze@8aad20d150bbac5944a9f9d289da16a4b0d87c1e # v4
         with:
           category: /language:${{ matrix.language }}
 
-  # Stable aggregate status (the matrixed analyze jobs have dynamic names and
-  # are skipped unless FULL_SECURITY_SCAN is set). Named codeql-verify so it
-  # does not collide with the build workflow's required `verify` check.
+  # Stable aggregate status (the matrixed analyze jobs have dynamic names).
+  # Named codeql-verify so it does not collide with the build workflow's
+  # required `verify` check. It always reports: public/paid scans must succeed;
+  # free private and fork-PR scans report a successful not-applicable gate.
   codeql-verify:
     if: always()
     needs: [analyze]
@@ -60,8 +63,21 @@ jobs:
       - name: Check analyze result
         run: |
           result="${{ needs.analyze.result }}"
+          required=true
+          if [ "${{ github.event.repository.private }}" = "true" ] && \
+             [ "${{ vars.FULL_SECURITY_SCAN }}" != "true" ]; then
+            required=false
+          fi
+          if [ "${{ github.event_name }}" = "pull_request" ] && \
+             [ "${{ github.event.pull_request.head.repo.full_name }}" != "${{ github.repository }}" ]; then
+            required=false
+          fi
+          if [ "$required" = "true" ] && [ "$result" != "success" ]; then
+            echo "CodeQL analysis is required but result was: $result"
+            exit 1
+          fi
           if [ "$result" != "success" ] && [ "$result" != "skipped" ]; then
             echo "CodeQL analyze result: $result"
             exit 1
           fi
-          echo "CodeQL analyze: $result"
+          echo "CodeQL analyze: $result (required: $required)"

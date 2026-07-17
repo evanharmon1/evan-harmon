@@ -17,6 +17,8 @@ Author: Evan Harmon
 - Homebrew
 - Python
 - [Taskfile](https://taskfile.dev/)
+- [uv](https://docs.astral.sh/uv/) (runs the pinned Semgrep CE baseline)
+- Node >= 22 and [pnpm](https://pnpm.io)
 
 ### Bootstrap
 
@@ -42,7 +44,7 @@ Install required dependencies
 
 #### Security
 
-`task security`
+`task security` — Semgrep CE + gitleaks + dependency audit
 
 #### Linting, Formatting, Conventions, Style Guidelines, etc
 

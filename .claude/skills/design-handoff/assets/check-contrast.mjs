@@ -1,9 +1,11 @@
 #!/usr/bin/env node
 // check-contrast.mjs — static WCAG-AA contrast gate for a shadcn/Tailwind-v4 globals.css
 //
-// WHAT: parses the semantic color tokens out of a globals.css (the `:root` and `.dark`
-// blocks), then proves every foreground/background pair the design relies on meets WCAG AA
-// in BOTH themes. It is the *static* half of the dual contrast gate — necessary but not
+// WHAT: parses the semantic color tokens out of a globals.css (the `@theme`, `:root` and
+// `.dark` blocks, cascade-merged so dark inherits what it doesn't redefine), resolves
+// `var(--x)` indirection to the real colors, then proves every foreground/background pair
+// the design relies on — including the status `-text` roles it auto-discovers and checks on
+// the light grounds — meets WCAG AA in BOTH themes. It is the *static* half of the dual contrast gate — necessary but not
 // sufficient (it sees the tokens, not the color that actually paints; a runtime layer like
 // the Tailwind Typography `.prose` plugin can still override a token). Always pair it with the
 // rendered-page measurement in Phase 5. See references/accessibility-verification.md.
@@ -28,7 +30,12 @@
 
 import { readFileSync } from "node:fs";
 
-// ---------- color math: OKLCH / hex / rgb -> linear sRGB -> relative luminance ----------
+// ALPHA: translucent colors are never scored as their opaque value. A translucent foreground is
+// composited over the audited background (in gamma sRGB, as browsers blend) before scoring; a
+// translucent background can't be composited statically (what's beneath is unknowable here), so
+// the pair is reported as a skip — verify it on the rendered page (Phase 5) — never as a PASS.
+
+// ---------- color math: OKLCH / hex / rgb -> gamma sRGB (+ alpha) -> relative luminance ----------
 
 // OKLCH -> linear sRGB (Björn Ottosson's reference matrices). Returns linear-light r,g,b.
 function oklchToLinearSrgb(L, C, H) {
@@ -55,14 +62,28 @@ function srgbChannelToLinear(v) {
   return v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
 }
 
-// Parse any supported CSS color into linear-light {r,g,b} in [0,1], or null if unparseable.
-// All inputs are normalized to linear light so a single luminance formula covers them.
-function parseColorToLinear(raw) {
+// linear-light channel (0..1) -> gamma sRGB (inverse of the above).
+function linearChannelToSrgb(v) {
+  return v <= 0.0031308 ? v * 12.92 : 1.055 * v ** (1 / 2.4) - 0.055;
+}
+
+// "0.6", "60%", or undefined -> alpha in [0,1] (undefined means opaque).
+function parseAlpha(part) {
+  if (part === undefined) return 1;
+  const t = part.trim();
+  const a = t.endsWith("%") ? parseFloat(t) / 100 : parseFloat(t);
+  return Number.isNaN(a) ? 1 : clamp01(a);
+}
+
+// Parse any supported CSS color into { r, g, b, alpha } — channels gamma-encoded
+// sRGB in [0,1] — or null if unparseable. Gamma (not linear) is the working space
+// so alpha compositing below matches how browsers actually blend.
+function parseColor(raw) {
   const value = raw.trim().toLowerCase();
 
   if (value.startsWith("oklch(")) {
     const inner = value.slice(6, value.lastIndexOf(")"));
-    const [coords] = inner.split("/"); // drop any "/ alpha"
+    const [coords, alphaPart] = inner.split("/");
     const nums = coords
       .trim()
       .split(/[\s,]+/)
@@ -76,7 +97,12 @@ function parseColorToLinear(raw) {
       );
     if (nums.length < 3 || nums.some(Number.isNaN)) return null;
     const lin = oklchToLinearSrgb(nums[0], nums[1], nums[2]);
-    return { r: clamp01(lin.r), g: clamp01(lin.g), b: clamp01(lin.b) };
+    return {
+      r: linearChannelToSrgb(clamp01(lin.r)),
+      g: linearChannelToSrgb(clamp01(lin.g)),
+      b: linearChannelToSrgb(clamp01(lin.b)),
+      alpha: parseAlpha(alphaPart),
+    };
   }
 
   if (value.startsWith("#")) {
@@ -88,36 +114,48 @@ function parseColorToLinear(raw) {
     const g = parseInt(hex.slice(2, 4), 16) / 255;
     const b = parseInt(hex.slice(4, 6), 16) / 255;
     if ([r, g, b].some(Number.isNaN)) return null;
-    return {
-      r: srgbChannelToLinear(r),
-      g: srgbChannelToLinear(g),
-      b: srgbChannelToLinear(b),
-    };
+    const alpha = hex.length === 8 ? parseInt(hex.slice(6, 8), 16) / 255 : 1;
+    return { r, g, b, alpha: Number.isNaN(alpha) ? 1 : alpha };
   }
 
   if (value.startsWith("rgb(") || value.startsWith("rgba(")) {
     const inner = value.slice(value.indexOf("(") + 1, value.lastIndexOf(")"));
-    const [coords] = inner.split("/");
-    const parts = coords
-      .split(/[\s,]+/)
-      .filter(Boolean)
-      .slice(0, 3);
+    const [coords, slashAlpha] = inner.split("/");
+    const parts = coords.split(/[\s,]+/).filter(Boolean);
     if (parts.length < 3) return null;
-    const chan = parts.map((p) =>
-      p.endsWith("%") ? parseFloat(p) / 100 : parseFloat(p) / 255,
-    );
+    const chan = parts
+      .slice(0, 3)
+      .map((p) => (p.endsWith("%") ? parseFloat(p) / 100 : parseFloat(p) / 255));
     if (chan.some(Number.isNaN)) return null;
+    // Alpha rides either after "/" (modern) or as the 4th component (legacy rgba()).
+    const alpha = parseAlpha(slashAlpha ?? parts[3]);
     return {
-      r: srgbChannelToLinear(clamp01(chan[0])),
-      g: srgbChannelToLinear(clamp01(chan[1])),
-      b: srgbChannelToLinear(clamp01(chan[2])),
+      r: clamp01(chan[0]),
+      g: clamp01(chan[1]),
+      b: clamp01(chan[2]),
+      alpha,
     };
   }
 
   return null; // var(), hsl(), named colors, etc. — skipped, not failed
 }
 
-const luminance = (c) => 0.2126 * c.r + 0.7152 * c.g + 0.0722 * c.b;
+// Source-over composite of a translucent color onto an opaque backdrop (gamma
+// space, matching browser blending). Returns an opaque color.
+function compositeOver(fg, backdrop) {
+  const a = fg.alpha;
+  return {
+    r: fg.r * a + backdrop.r * (1 - a),
+    g: fg.g * a + backdrop.g * (1 - a),
+    b: fg.b * a + backdrop.b * (1 - a),
+    alpha: 1,
+  };
+}
+
+const luminance = (c) =>
+  0.2126 * srgbChannelToLinear(c.r) +
+  0.7152 * srgbChannelToLinear(c.g) +
+  0.0722 * srgbChannelToLinear(c.b);
 
 function contrastRatio(c1, c2) {
   const l1 = luminance(c1);
@@ -128,14 +166,43 @@ function contrastRatio(c1, c2) {
 
 // ---------- globals.css parsing ----------
 
-// Pull the declaration body of the first matching `<selector> { ... }` rule (flat, no nesting).
+// Pull the declaration body of the first matching `<selector> { ... }` rule,
+// with balanced-brace matching so nested blocks (@keyframes inside @theme, a
+// @media inside a layer) don't truncate the capture.
 function extractBlock(css, selector) {
-  const re = new RegExp(
-    `(?:^|[}\\s])${selector.replace(".", "\\.")}\\s*\\{([^}]*)\\}`,
+  const startRe = new RegExp(
+    `(?:^|[}\\s])${selector.replace(/[.\\]/g, "\\$&")}\\s*\\{`,
     "m",
   );
-  const m = css.match(re);
-  return m ? m[1] : null;
+  const m = css.match(startRe);
+  if (!m) return null;
+  const open = m.index + m[0].length;
+  let depth = 1;
+  for (let i = open; i < css.length; i++) {
+    if (css[i] === "{") depth++;
+    else if (css[i] === "}" && --depth === 0) return css.slice(open, i);
+  }
+  return null;
+}
+
+// Every `@theme` block's declarations (constants like --color-brand), merged.
+// Needed so var() chains that terminate in @theme constants resolve.
+function extractThemeTokens(css) {
+  const tokens = new Map();
+  const re = /@theme[^{]*\{/g;
+  let m;
+  while ((m = re.exec(css)) !== null) {
+    const open = m.index + m[0].length;
+    let depth = 1;
+    for (let i = open; i < css.length; i++) {
+      if (css[i] === "{") depth++;
+      else if (css[i] === "}" && --depth === 0) {
+        for (const [k, v] of parseTokens(css.slice(open, i))) tokens.set(k, v);
+        break;
+      }
+    }
+  }
+  return tokens;
 }
 
 // Parse `--token: value;` declarations from a block body into a Map.
@@ -145,6 +212,19 @@ function parseTokens(blockBody) {
   let m;
   while ((m = re.exec(blockBody)) !== null) tokens.set(m[1], m[2].trim());
   return tokens;
+}
+
+// Resolve a value that is entirely a var() reference (with optional fallback)
+// through the token map, so the canonical indirection this skill prescribes
+// (`--background: var(--paper)`) audits the real color instead of skipping.
+function resolveVar(tokens, raw) {
+  let value = raw?.trim();
+  for (let hops = 0; hops < 16 && value; hops++) {
+    const m = value.match(/^var\(\s*--([\w-]+)\s*(?:,\s*([^)]+))?\)$/);
+    if (!m) break;
+    value = tokens.get(m[1])?.trim() ?? m[2]?.trim();
+  }
+  return value;
 }
 
 // ---------- the pairs we audit ----------
@@ -161,6 +241,39 @@ const TEXT_PAIRS = [
   ["destructive", "destructive-foreground"],
 ];
 
+// REPO-SPECIFIC text pairs — extend when the design renders text on grounds
+// beyond the shadcn defaults AND beyond the auto-discovered `-text` roles below
+// (a brand marquee, a footer well, constant on-dark chrome helpers). Names are
+// token names WITHOUT the leading `--`; @theme constants use their full name
+// (e.g. "color-blue"). Example (a constant blue marquee + an on-dark helper):
+//   ["color-blue", "color-on-dark-soft"],
+const EXTRA_TEXT_PAIRS = [];
+
+// AUTO-DISCOVERED text pairs. The skill's core rule is "status text on light uses
+// the `-text` role, never the bright fill" — so every `*-text` token
+// (success-text, info-text, warning-text, destructive-text, …) is proven as text
+// on the common light grounds (background + card) BY DEFAULT, not only when the
+// operator remembers to hand-fill EXTRA_TEXT_PAIRS. muted-foreground gets the same
+// treatment (it renders on the page and on cards, not just the muted surface).
+// This is what catches a `-text` role that's AA on paper (#fff) but sub-AA on a
+// warm/tinted page background — a real failure the fixed default pairs miss.
+function autoTextPairs(tokens) {
+  const pairs = [];
+  const on = (surface, fg) => {
+    if (tokens.has(surface) && tokens.has(fg)) pairs.push([surface, fg]);
+  };
+  for (const name of tokens.keys()) {
+    if (name.startsWith("color-")) continue; // skip the @theme mirror (var()s back → dupes)
+    if (/-text$/.test(name)) {
+      on("background", name);
+      on("card", name);
+    }
+  }
+  on("background", "muted-foreground");
+  on("card", "muted-foreground");
+  return pairs;
+}
+
 // UI/non-text pairs: reported at 3:1 but warn-only (subtle dividers are legitimately faint).
 const UI_PAIRS = [
   ["border", "background"],
@@ -173,8 +286,8 @@ function auditTheme(label, tokens) {
   let failures = 0;
 
   const evaluate = (bgName, fgName, need, kind) => {
-    const bgRaw = tokens.get(bgName);
-    const fgRaw = tokens.get(fgName);
+    const bgRaw = resolveVar(tokens, tokens.get(bgName));
+    const fgRaw = resolveVar(tokens, tokens.get(fgName));
     if (bgRaw === undefined || fgRaw === undefined) {
       const missing = bgRaw === undefined ? `--${bgName}` : `--${fgName}`;
       rows.push({
@@ -185,8 +298,8 @@ function auditTheme(label, tokens) {
       });
       return;
     }
-    const bg = parseColorToLinear(bgRaw);
-    const fg = parseColorToLinear(fgRaw);
+    const bg = parseColor(bgRaw);
+    const fg = parseColor(fgRaw);
     if (!bg || !fg) {
       rows.push({
         kind,
@@ -196,7 +309,22 @@ function auditTheme(label, tokens) {
       });
       return;
     }
-    const ratio = contrastRatio(bg, fg);
+    // A translucent BACKGROUND can't be scored statically — what it composites
+    // onto is unknowable here. Never PASS it on the opaque value: report it as
+    // unsupported and require the rendered check (Phase 5).
+    if (bg.alpha < 1) {
+      rows.push({
+        kind,
+        status: "skip",
+        pair: `${fgName} / ${bgName}`,
+        note: `translucent background (alpha ${+bg.alpha.toFixed(3)}) — unsupported statically, verify rendered (Phase 5)`,
+      });
+      return;
+    }
+    // A translucent FOREGROUND paints blended into its ground — score the
+    // composited color, not the opaque one.
+    const fgEffective = fg.alpha < 1 ? compositeOver(fg, bg) : fg;
+    const ratio = contrastRatio(bg, fgEffective);
     const pass = ratio >= need; // no rounding
     let status;
     if (pass) status = "PASS";
@@ -208,7 +336,15 @@ function auditTheme(label, tokens) {
     rows.push({ kind, status, pair: `${fgName} / ${bgName}`, ratio, need });
   };
 
-  for (const [bg, fg] of TEXT_PAIRS) evaluate(bg, fg, 4.5, "text");
+  // Text pairs from all three sources (fixed defaults, repo-specific, and the
+  // auto-discovered `-text` roles), de-duplicated on a `bg|fg` key.
+  const seen = new Set();
+  for (const [bg, fg] of [...TEXT_PAIRS, ...EXTRA_TEXT_PAIRS, ...autoTextPairs(tokens)]) {
+    const key = `${bg}|${fg}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    evaluate(bg, fg, 4.5, "text");
+  }
   for (const [bg, fg] of UI_PAIRS) evaluate(bg, fg, 3.0, "ui");
   return { label, rows, failures };
 }
@@ -244,9 +380,20 @@ function main() {
   }
   const darkBody = extractBlock(css, ".dark");
 
-  const themes = [auditTheme("light (:root)", parseTokens(rootBody))];
+  // Cascade order: @theme constants < :root < .dark overrides. Dark inherits
+  // every :root token it doesn't redefine, exactly as the browser cascades —
+  // so `--background: var(--paper)` resolves against the dark `--paper`.
+  const themeTokens = extractThemeTokens(css);
+  const lightTokens = new Map([...themeTokens, ...parseTokens(rootBody)]);
+
+  const themes = [auditTheme("light (:root)", lightTokens)];
   if (darkBody !== null)
-    themes.push(auditTheme("dark (.dark)", parseTokens(darkBody)));
+    themes.push(
+      auditTheme(
+        "dark (.dark)",
+        new Map([...lightTokens, ...parseTokens(darkBody)]),
+      ),
+    );
 
   const evaluated = themes
     .flatMap((t) => t.rows)

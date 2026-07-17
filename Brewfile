@@ -18,16 +18,19 @@ brew "yamllint"
 
 # Security
 brew "gitleaks"
-tap "snyk/tap"
-brew "snyk/tap/snyk"
 
 # Runtime for npx-based tools (commitlint, markdownlint-cli2)
 brew "node"
 brew "pnpm"
 brew "lychee"
+# Python tool runner (Semgrep CE + foreman lint use uv/uvx)
+brew "uv"
 
 # Devcontainer
 brew "hadolint"
+
+# Skills sync (scripts/sync-skills.sh reads .skills-sync.yaml)
+brew "yq"
 
 # Utilities
 brew "direnv"

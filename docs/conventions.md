@@ -17,7 +17,7 @@ it points here.
   major bump.
 - **Feature branches only.** Direct commits to `main` are blocked by the
   `guard:no-commit-to-main` pre-commit hook and the branch ruleset. Land changes
-  via a PR; code-owner review and the `verify` + `security` checks are required.
+  via a PR; code-owner review and the `verify` + `security` + `codeql-verify`  checks are required.
 - **Never bypass hooks** (`--no-verify` is forbidden) — fix the underlying issue.
   In the devcontainer a Claude Code hook actively blocks `--no-verify` and
   validates commit messages.
@@ -52,6 +52,9 @@ it points here.
 - **TypeScript / web:** Prettier (`task lint:prettier`) + ESLint
   (`task lint:eslint`) + type-check (`astro check` or `tsc --noEmit`); pnpm is
   the package manager.
+- **Documented divergence:** web-astro stays on **ESLint 9** until
+  eslint-plugin-astro supports ESLint 10 (web-app repos are on 10). This is
+  intentional, not drift — don't "fix" it in a standardize pass.
 
 ## TODOs
 
@@ -74,6 +77,9 @@ it points here.
 - **Pin third-party actions by full commit SHA** with a trailing `# vX.Y.Z`
   comment, and annotate tool versions with `# renovate: datasource=…` so
   Renovate keeps them current.
+- Third-party CI/SaaS integrations that require an account, app installation,
+  trial, or payment must be explicit opt-ins that default off. Document free-tier
+  and private-repository limitations before adding them to generated output.
 - **Least-privilege `permissions:`** per job; never log secrets.
 - CI authenticates as the **`evanharmon1-ci` GitHub App** (short-lived
   tokens), not a PAT — see [architecture/security.md](architecture/security.md).
@@ -82,12 +88,24 @@ it points here.
 
 - Local env comes from **1Password** (`op run` / `op inject`); CI reads GitHub
   Actions secrets. `gitleaks` runs on pre-push and in CI.
+- When generating or rotating secrets, keep the value **on stdin** and use the
+  destination-only helpers: `task secret:set:1p VAULT=… ITEM=… FIELD=…
+  [SECTION=…]` for existing 1Password fields, `task secret:set:gh NAME=…
+  REPO=owner/repo` for GitHub repo secrets. Never pass secret values as command
+  arguments, `--body` values, exported env vars, or Taskfile vars — they end up
+  in shell history and process listings.
 
 ## Docs & AI steering
 
 - **`AGENTS.md` is the single source of truth** for AI guidance; `CLAUDE.md`,
   `GEMINI.md`, and `.github/copilot-instructions.md` are **symlinks** to it —
   edit only `AGENTS.md`.
+- **Vendored vs local skills:** the skills sync manages ONLY the directories
+  listed on the `# managed:` line of `.claude/skills/.SKILLS_PROVENANCE`. Any
+  other directory under `.claude/skills/` is a **local skill owned by this
+  repo** — create, edit, and delete it freely; `task sync:skills` and the
+  `verify:skills*` drift checks never touch or report it. Never hand-edit the
+  managed (vendored) skills — change them in harmon-devkit and bump the pin.
 - **Doc filenames are kebab-case** (`branch-protection.md`, `ci-cd.md`). The
   conventional uppercase project files keep their names: `README.md`,
   `AGENTS.md`, `DESIGN.md`, `CHANGELOG.md`, `CONTRIBUTING.md`,

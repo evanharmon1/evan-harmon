@@ -15,10 +15,12 @@ description: >-
 # Design Handoff (Claude Design → repo)
 
 Turn a finished design from **Claude Design** (or a similar tool) into working, on-brand code in this
-repo. The export is a **handoff bundle** — commonly a `.tar.gz` from "Handoff to Claude Code" holding a
-README, the design **chat transcript**, prototype HTML/JSX/CSS, a token file, and uploads. But that
-format is an unstable research preview, not a standard, so **parse defensively**: read what's actually
-present rather than assuming exact filenames or folders. That same defensiveness lets the skill absorb
+repo. The export is a **handoff bundle** — a `.tar.gz` or `.zip` from "Handoff to Claude Code" holding a
+README, the design **chat transcript**, prototype HTML/JSX/CSS, a token file, and uploads. Identify it
+by that **content shape, not the extension**: Claude Design's separate "Download as .zip" menu item is
+a raw-assets export with no README/chats — if the archive lacks the shape, it's the wrong export
+(`ingesting-the-bundle.md`). The format is an unstable research preview, not a standard, so **parse
+defensively**: read what's actually present rather than assuming exact filenames or folders. That same defensiveness lets the skill absorb
 Claude Design's format changes and adapt to other tools (e.g. Google Stitch). The prototype code is
 **prototype-grade** (it often runs on in-browser Babel + UMD React); your job is to **port** it into
 this repo's stack, not paste it in.
@@ -91,15 +93,15 @@ Gates — post **PASS + evidence** in the chat before taking the guarded action
 Close-out (only once gate ④ is green)
 
 - [ ] Handoff bundle deleted (or a thin screenshot + intent note extracted first if states remain)
-- [ ] `docs/design/` and `/brand` updated; a system change recorded as a **DDR with a SemVer bump**
+- [ ] `docs/architecture/design-language.md` and `/brand` updated; a system change recorded as a **DDR with a SemVer bump**
 - [ ] Conventional Commit on a **feature branch**; PR opened for human review; hooks never bypassed
       (`--no-verify` prohibited); no direct merge to `main`
 
 ## Inputs & stack
 
-- A handoff bundle, usually unpacked to `docs/design/handoff-<feature>/`. If you can't find one, ask
+- A handoff bundle, usually unpacked to `specs/handoff-<feature>/`. If you can't find one, ask
   the user where the export landed (or whether they've exported yet) before proceeding.
-- The existing repo: `DESIGN.md` (root), `src/styles/globals.css`, `docs/design/`, `Taskfile.yml`, and
+- The existing repo: `DESIGN.md` (root), `src/styles/globals.css`, `docs/architecture/design-language.md`, `Taskfile.yml`, and
   the project's `CLAUDE.md`.
 - **Stack target:** TypeScript, React, Vite, pnpm, Tailwind CSS v4, shadcn/ui, Lucide, Cloudflare
   Pages/Workers. Named primary router **TanStack Router**; **React Router**/plain React and **Astro 6**
@@ -118,13 +120,13 @@ the referenced files — read the reference when you reach its phase.
 All the up-front orientation happens here, before any building:
 
 1. **Ingest (defensively).** Unpack the bundle and read it for intent — don't hard-code its layout; the
-   format is an unstable preview and varies by tool. The common Claude Design shape is a `.tar.gz` with
-   a README ("CODING AGENTS: READ THIS FIRST") → `chats/*.md` (the design conversation — the real
+   format is an unstable preview and varies by tool. The common Claude Design shape is a `.tar.gz` or
+   `.zip` with a README ("CODING AGENTS: READ THIS FIRST") → `chats/*.md` (the design conversation — the real
    intent) → the entry HTML → a token file (`tokens.css`/`site.css`) → components → `uploads/`. Read
    whatever is actually present in that spirit (intent/README → transcript → markup → tokens → assets),
    and adapt if a piece is named or shaped differently. The prototype code is prototype-grade — read it
    for structure and intent, then **port** it; don't paste markup into `src/`. Locate the bundle (often
-   `docs/design/handoff-*/`); if you can't find it, ask where the export landed. (`ingesting-the-bundle.md`)
+   `specs/handoff-*/`); if you can't find it, ask where the export landed. (`ingesting-the-bundle.md`)
 2. **Detect mode, framework & router.** **Mode** — `establish-design-system` (no design system: no real `:root` tokens
    in `globals.css` and no `/brand` route), `evolve-design-system` (a system exists and the bundle is
    token/brand-dominant, or intent says "update the design system"), or `implement-feature` (a system
@@ -147,7 +149,7 @@ All the up-front orientation happens here, before any building:
 
 If detection found no design system, stand one up before reconciling: install and configure Tailwind v4
 and shadcn for the detected framework, let `shadcn init` write the default three-layer `globals.css`,
-scaffold the `/brand` route, `DESIGN.md`, and `docs/design/`, copy `scripts/check-contrast.mjs`, and add
+scaffold the `/brand` route, `DESIGN.md`, and `docs/architecture/design-language.md`, copy `scripts/check-contrast.mjs`, and add
 the design Taskfile tasks. **Normalize whatever the bundle emits** (often HSL or inline values) into the
 canonical OKLCH three-layer form, and record a **DDR establishing the system at v1.0.0**. Assumes a
 working frontend app already exists. Use `deliverables-checklist.md` to confirm the **full** token and
@@ -168,6 +170,9 @@ The most error-prone step, and where the modes diverge — **the bundle's tokens
   extend the system additively with a DDR — never inline.
 - **`evolve-design-system`** — a three-bucket diff (added/changed/removed), classified with **SemVer**, breaking
   changes handled by **aliasing + deprecating** (not deleting), recorded as a **DDR + version bump**.
+  A **wholesale replacement** (new brand; every consumer rewritten in the same change) is still
+  evolve _governance_ — major bump + DDR — executed with establish _mechanics_: write canonical
+  tokens fresh; aliasing serves nobody when no consumer of the old tokens survives the change.
 
 Reconcile `DESIGN.md` (don't clobber it). Then run `task lint:design` (`scripts/check-contrast.mjs`) and
 fix every sub-AA pair — this static gate must be **green** before you implement. Numbers in
@@ -215,8 +220,8 @@ the user explicitly approves.** The bundle stays fully in place through this ste
 
 ### Phase 7 — Close out (only after approval)
 
-Delete `docs/design/handoff-<feature>/` (or extract a thin screenshot + intent note first if states
-remain), update `docs/design/` and `/brand`, and record a **DDR (with a SemVer bump)** in `/decisions/`
+Delete `specs/handoff-<feature>/` (or extract a thin screenshot + intent note first if states
+remain), update `docs/architecture/design-language.md` and `/brand`, and record a **DDR (with a SemVer bump)** in `docs/decisions/`
 for any design-system change — `establish-design-system` (v1.0.0), `evolve-design-system` (patch/minor/major), or a feature token
 extension. Commit with Conventional Commits on a **feature branch** (direct
 commits to `main` are blocked) and open a **PR** for human review — never merge to `main` directly. See
@@ -273,13 +278,31 @@ commits to `main` are blocked) and open a **PR** for human review — never merg
 
 Bundled assets (the skill installs these into the target repo):
 
-- **`assets/check-contrast.mjs`** — zero-dependency static WCAG-AA token-contrast checker; copy to
-  `scripts/check-contrast.mjs`.
+- **`assets/check-contrast.mjs`** — zero-dependency static WCAG-AA token-contrast checker (resolves
+  `var()` chains, merges the `@theme`/`:root`/`.dark` cascade, **auto-discovers the `*-text` status
+  roles** so the "status text on light" rule is enforced by default, and is alpha-aware: translucent
+  foregrounds are composited before scoring, translucent backgrounds are flagged for the rendered
+  check instead of passing on the opaque value); copy to `scripts/`.
+- **`assets/check-off-palette.sh`** — the off-palette half of the static gate: fails on arbitrary color
+  literals (`bg-[#…]`, gradient hex, legacy + modern color functions — rgba/hsla/hwb/lab/lch/oklch/
+  `color()` — anywhere in a style value or SVG attr); copy to `scripts/` (`chmod +x`).
+  With check-contrast.mjs it backs `task lint:design`.
+- **`assets/measure-rendered-contrast.mjs`** — the rendered half of the gate: samples computed
+  colors on real pages in both themes (parses Chromium's oklch/oklab serialization, composites
+  alpha, and fails as UNSUPPORTED any sample over a gradient/image/pseudo-element ground it can't
+  model); copy to `scripts/`, fill `SAMPLES`. Run by `task verify:contrast`.
+- **`assets/ingest-design.sh`** — safe bundle extraction for `task ingest:design`: takes
+  `BUNDLE`/`DEST` from the environment (no shell interpolation), selects tar vs unzip by validated
+  extension, and rejects unsafe archive entries (absolute paths, `..` traversal, links) before
+  extracting; copy to `scripts/` (`chmod +x`).
 - **`assets/Taskfile.design.yml`** — design task snippets (`lint:design`, `ingest:design`,
-  `verify:browsers`) to merge into the repo's `Taskfile.yml`.
+  `verify:browsers`, `verify:contrast`) to merge into the repo's `Taskfile.yml`.
+- **`assets/playwright.config.ts`** — the cross-browser config (baseURL + `build && preview` webServer +
+  the Chromium/Firefox/WebKit + mobile Safari/Chrome matrix); copy to the repo root.
 - **`assets/brand-screenshots.spec.ts`** — a parameterized Playwright sweep (route × theme × the
-  config's engine/device matrix); fill in `ROUTES`, `baseURL`/`webServer`, and `setTheme()`. Run by
-  `task verify:browsers`.
+  config's engine/device matrix, chunking pages taller than the browser capture cap) plus a
+  route × theme horizontal-overflow guard; fill in `ROUTES`, `baseURL`/`webServer`, and the theme
+  mechanism. Run by `task verify:browsers`.
 
 ## Complements
 

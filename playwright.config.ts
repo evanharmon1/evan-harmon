@@ -7,7 +7,7 @@ import { defineConfig, devices } from '@playwright/test';
 // `pnpm preview` serves dist/ on :4321.
 export default defineConfig({
   testDir: './test',
-  testMatch: /brand-screenshots\.spec\.ts/,
+  testMatch: /(brand-screenshots|a11y)\.spec\.ts/,
   fullyParallel: true,
   reporter: [['list']],
   use: {

@@ -13,9 +13,12 @@ plus an aggregate **`verify`** job; branch protection requires `verify` +
 
 ## Workflows
 
-- `build.yml` — on push/PR to `main`: lint, build-test, lighthouse, security, then the aggregate **`verify`** job.
+- `build.yml` — on push/PR to `main`: lint, build-test, lighthouse, security, then the aggregate **`verify`** job. Security always runs gitleaks + dependency audit, and uses Semgrep CE as the free private-repo SAST fallback.
 - `claude-plan` / `claude-implement` / `claude-review` — `@claude …` on issues and PRs.
-- `codeql.yml` — CodeQL analysis (opt-in via the `FULL_SECURITY_SCAN` variable).
+- `codeql.yml` — CodeQL SAST runs automatically and for free on public
+  repositories. Private/internal repositories require paid GitHub Code Security
+  plus `FULL_SECURITY_SCAN=true`; otherwise `build.yml` supplies Semgrep CE.
+  Confirm successful uploads in the Security tab.
 - `devcontainer-build.yml` — prebuilds the devcontainer images to GHCR on `.devcontainer/**` changes.
 - `release.yml` — release-please maintains the rolling release PR.
 - `close-milestone-on-release.yml` — closes the milestone matching the tag on release publish.

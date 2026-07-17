@@ -7,6 +7,11 @@ output:
     begin: "::group::{{.TASK}}"
     end: "::endgroup::"
 
+includes:
+  # Foreman — deterministic supervisor for milestone-driven agent dispatch
+  # (task foreman:plan / dispatch / shepherd / watch ...; docs/architecture/foreman.md)
+  foreman: taskfiles/foreman.yml
+
 # ── Entry Points ───────────────────────────────────────────────────
 tasks:
   default:
@@ -62,6 +67,7 @@ tasks:
       - task: build
       - task: validate
       - task: test:tasks
+      - task: foreman:test
       - task: test:hooks
 
   # ── Quality Checks ────────────────────────────────────────────
@@ -69,7 +75,7 @@ tasks:
     desc: Run all linters + typecheck (parallel)
     deps:
       - lint
-      - typecheck
+      - lint:typescript
 
   lint:
     desc: Run all linters in parallel
@@ -82,6 +88,7 @@ tasks:
       - lint:prettier
       - lint:eslint
       - lint:design
+      - foreman:lint
 
   lint:design:
     desc: Validate the Almanac design system (canonical files, semantic tokens, token contrast)
@@ -110,15 +117,11 @@ tasks:
     # Check-only (no --fix) so this is a read-only gate like lint:prettier /
     # lint:shell: CI and the pre-commit hook fail loudly instead of silently
     # mutating the tree (and, in CI, discarding the fix while reporting green).
-    # Auto-fix lives in `task format` / `task format:file`.
+    # Auto-fix lives in `task format` / `task format:file`. The bin-vs-npx
+    # dispatch + default glob set live in scripts/markdownlint.sh.
     desc: markdownlint-cli2 (check mode)
     cmds:
-      - |
-        if [ -n "{{.CLI_ARGS}}" ]; then
-          npx --yes markdownlint-cli2 {{.CLI_ARGS}}
-        else
-          npx --yes markdownlint-cli2 '**/*.md' '#.claude/**' '#specs/*/**' '#**/node_modules/**' '#dist/**' '#.worktrees/**' '#**/.terraform/**' '#**/.venv/**' '#**/.task/**'
-        fi
+      - ./scripts/markdownlint.sh check {{.CLI_ARGS}}
 
   lint:actions:
     desc: actionlint on GitHub workflows
@@ -147,44 +150,48 @@ tasks:
   lint:prettier:
     # Skip cleanly when deps aren't installed (fresh scaffold), like lint:eslint,
     # so `task check` / pre-push stay green before the app is set up. Runs the
-    # project's own prettier via `pnpm exec` so a plugin config (e.g.
-    # prettier-config-standard) resolves.
+    # project's own prettier (node_modules/.bin — package-manager-agnostic) so a
+    # plugin config (e.g. prettier-config-standard) resolves.
     desc: Prettier (check mode)
     cmds:
       - |
-        if [ ! -d node_modules ]; then
-          echo "lint:prettier: deps not installed yet -- skipping (run pnpm install)"
+        if [ ! -x node_modules/.bin/prettier ]; then
+          echo "lint:prettier: deps not installed yet -- skipping (install dependencies first)"
         else
-          pnpm exec prettier --check {{.CLI_ARGS | default "."}}
+          node_modules/.bin/prettier --check {{.CLI_ARGS | default "."}}
         fi
 
   lint:eslint:
     # Skip cleanly when ESLint can't run yet -- no config (fresh scaffold) or deps
     # not installed -- so `task check` stays green before the app is set up. Runs
-    # the project's own ESLint via `pnpm exec` so a plugin-based flat config (e.g.
-    # the web-astro eslint.config.js) resolves its plugins.
+    # the project's own ESLint via the node_modules/.bin shim (package-manager-
+    # agnostic — works under npm too, where `pnpm exec` would break) so a
+    # plugin-based flat config (e.g. the web-astro eslint.config.js) resolves.
     desc: ESLint
     cmds:
       - |
         if ! find . -maxdepth 1 \( -name 'eslint.config.*' -o -name '.eslintrc.*' \) 2>/dev/null | grep -q .; then
           echo "lint:eslint: no ESLint config yet -- skipping (add one after scaffolding the app)"
-        elif [ ! -d node_modules ]; then
-          echo "lint:eslint: deps not installed yet -- skipping (run pnpm install)"
+        elif [ ! -x node_modules/.bin/eslint ]; then
+          echo "lint:eslint: deps not installed yet -- skipping (install dependencies first)"
         else
-          pnpm exec eslint {{.CLI_ARGS | default "."}}
+          node_modules/.bin/eslint {{.CLI_ARGS | default "."}}
         fi
 
-  typecheck:
+  lint:typescript:
+    # `lint:` group naming (a read-only gate like the other linters); the old
+    # bare name still works via the alias.
+    aliases: [typecheck]
     # Skip cleanly before the app + deps exist (fresh scaffold), like lint:eslint,
     # so `task check` / pre-push stay green — otherwise `astro check` prompts to
     # install @astrojs/check and hangs CI.
     desc: TypeScript / Astro type checking
     cmds:
       - |
-        if [ ! -f package.json ] || [ ! -d node_modules ]; then
-          echo "typecheck: app/deps not set up yet -- skipping (scaffold Astro + pnpm install)"
+        if [ ! -f package.json ] || [ ! -x node_modules/.bin/astro ]; then
+          echo "lint:typescript: app/deps not set up yet -- skipping (scaffold Astro + install deps)"
         else
-          pnpm exec astro check
+          node_modules/.bin/astro check
         fi
 
   # ── Validation ─────────────────────────────────────────────────
@@ -228,17 +235,44 @@ tasks:
           exit 1
         fi
 
+  # ── Skills sync ────────────────────────────────────────────────
+  # Vendor shared agent skills from harmon-devkit, pinned in .skills-sync.yaml.
+  # The verify:skills* drift checks skip cleanly until the first `task sync:skills`,
+  # so a fresh scaffold stays green. See docs/CHECKLIST.md.
+  sync:skills:
+    desc: Vendor the pinned skill categories from harmon-devkit into .claude/skills
+    cmds:
+      - ./scripts/sync-skills.sh sync
+
+  verify:skills:
+    desc: "Skill drift check (network): fail if vendored skills differ from the pinned ref"
+    cmds:
+      - ./scripts/sync-skills.sh verify
+
+  verify:skills:offline:
+    desc: "Fast offline check that the vendored ref matches the manifest (no network)"
+    cmds:
+      - ./scripts/sync-skills.sh verify-offline
+
   format:
     desc: Auto-format code
     cmds:
-      - npx --yes prettier --write .
+      # Repo-pinned prettier when installed (plugins in prettier.config.cjs need
+      # the local install anyway); npx fallback covers the fresh scaffold. The
+      # .bin shim is invoked directly — package-manager-agnostic (npm too).
+      - |
+        if [ -x node_modules/.bin/prettier ]; then
+          node_modules/.bin/prettier --write .
+        else
+          npx --yes prettier --write .
+        fi
       - |
         files=$(git ls-files '*.sh' '*.bash')
         [ -n "$files" ] && shfmt -w $files || true
-      # Best-effort: markdownlint --fix auto-fixes what it can but must NOT abort
-      # `format` on un-auto-fixable rule violations (e.g. MD024 duplicate heading,
-      # MD040 missing fence language) — `lint:markdown` (check-only) is the gate.
-      - npx --yes markdownlint-cli2 --fix '**/*.md' '#.claude/**' '#**/node_modules/**' '#dist/**' '#.worktrees/**' || true
+      # Best-effort markdown auto-fix (bin-vs-npx dispatch in the helper); must
+      # NOT abort `format` on un-auto-fixable rule violations — `lint:markdown`
+      # (check-only) is the gate.
+      - ./scripts/markdownlint.sh fix
 
   format:file:
     desc: "Format a single file by extension (usage: task format:file -- <path>)"
@@ -248,9 +282,15 @@ tasks:
         [ -z "$f" ] && exit 0
         [ -f "$f" ] || exit 0
         case "$f" in
-        *.js | *.jsx | *.ts | *.tsx | *.json | *.css | *.astro) npx --yes prettier --write "$f" ;;
+        *.js | *.jsx | *.ts | *.tsx | *.json | *.css | *.astro)
+          if [ -x node_modules/.bin/prettier ]; then
+            node_modules/.bin/prettier --write "$f"
+          else
+            npx --yes prettier --write "$f"
+          fi
+          ;;
         *.sh | *.bash) shfmt -w "$f" ;;
-        *.md | *.mdx) npx --yes markdownlint-cli2 --fix "$f" || true ;;
+        *.md | *.mdx) ./scripts/markdownlint.sh fix "$f" ;;
         esac
 
   fix:
@@ -261,9 +301,18 @@ tasks:
 
   # ── Build ──────────────────────────────────────────────────────
   build:
+    # Skip cleanly before the app + deps exist (fresh scaffold), like lint:eslint
+    # and typecheck, so `task verify` (and CI's build step) stay green until the
+    # framework is scaffolded — see docs/CHECKLIST.md. Once package.json +
+    # node_modules exist this runs the real build unchanged.
     desc: Production build
     cmds:
-      - pnpm build
+      - |
+        if [ ! -f package.json ] || [ ! -d node_modules ]; then
+          echo "build: app/deps not set up yet -- skipping (scaffold the app + pnpm install)"
+        else
+          pnpm build
+        fi
 
   build:preview:
     desc: Preview production build locally
@@ -315,7 +364,15 @@ tasks:
 
   test:e2e:
     desc: Run Playwright end-to-end tests
+    # Local dev secrets (if any) come from .env.local; CI passes env via the
+    # workflow instead. A missing file is ignored.
+    dotenv:
+      - .env.local
     cmds:
+      # Fail closed: refuse to run e2e with production-capable credentials or
+      # targets in the environment. The guard fails until configured for this
+      # app's providers — see scripts/e2e-env-guard.sh.
+      - ./scripts/e2e-env-guard.sh
       - npx playwright test {{.CLI_ARGS}}
 
   test:e2e:screenshot:
@@ -328,10 +385,28 @@ tasks:
     cmds:
       - npx playwright pdf {{.CLI_ARGS}}
 
+  test:a11y:
+    # Accessibility (axe-core) assertions run through Playwright — catches
+    # runtime a11y problems in real rendered/interactive states (what
+    # Lighthouse-on-static-URLs can't reach). Skips cleanly until Playwright +
+    # deps exist, like lint:eslint, so `task check`/CI stay green on a fresh
+    # scaffold. a11y tests are tagged `@a11y` (see tests/a11y.spec.ts).
+    desc: Accessibility tests (axe-core via Playwright)
+    cmds:
+      - |
+        if ! find . -maxdepth 1 -name 'playwright.config.*' 2>/dev/null | grep -q .; then
+          echo "test:a11y: no Playwright config yet -- skipping (add playwright.config.ts after scaffolding the app)"
+        elif [ ! -x node_modules/.bin/playwright ]; then
+          echo "test:a11y: deps not installed yet -- skipping (install deps; add @playwright/test + @axe-core/playwright as devDependencies if missing)"
+        else
+          node_modules/.bin/playwright test --grep @a11y {{.CLI_ARGS}}
+        fi
+
   # ── Security ───────────────────────────────────────────────────
   security:
-    desc: Run all security checks (parallel)
+    desc: Run all free local security checks (Semgrep CE + gitleaks + dependency audit)
     deps:
+      - security:sast
       - security:secrets
       - security:audit
 
@@ -355,14 +430,45 @@ tasks:
       - pnpm audit --audit-level=high
 
   security:sast:
-    desc: "Static application security testing (Snyk) — optional/local, needs SNYK_TOKEN (not in CI or `task security`)"
+    desc: Static application security testing (Semgrep Community Edition)
     cmds:
-      - snyk code test --exclude=.worktrees --severity-threshold=high
+      - ./scripts/run-semgrep.sh {{.CLI_ARGS}}
 
   security:sca:
-    desc: "Software composition analysis (Snyk) — optional/local, needs SNYK_TOKEN (not in CI or `task security`)"
+    desc: Software composition analysis (free package-manager audit)
+    deps:
+      - security:audit
+
+  security:sast:snyk:
+    desc: "Optional Snyk Code second-opinion scan (manual/local or explicitly scheduled); needs SNYK_TOKEN"
     cmds:
-      - snyk test --file=pnpm-lock.yaml --severity-threshold=high --show-vulnerable-paths=all
+      - snyk code test --exclude=.worktrees,.foreman,.claude --severity-threshold=high {{.CLI_ARGS}}
+
+  security:sca:snyk:
+    desc: "Optional Snyk Open Source second-opinion scan (manual/local or explicitly scheduled); needs SNYK_TOKEN"
+    cmds:
+      - snyk test --all-projects --exclude=.worktrees,.foreman,.claude --severity-threshold=high --show-vulnerable-paths=all {{.CLI_ARGS}}
+
+  # ── Secrets ────────────────────────────────────────────────────
+  # Destination-only helpers: the secret value stays on stdin — never in argv,
+  # env vars, Taskfile vars, or shell history (see docs/conventions.md).
+  secret:set:1p:
+    desc: "Set an existing 1Password field from stdin (usage: command | task secret:set:1p VAULT=... ITEM=... FIELD=... [SECTION=...])"
+    env:
+      VAULT: '{{.VAULT | default ""}}'
+      ITEM: '{{.ITEM | default ""}}'
+      FIELD: '{{.FIELD | default ""}}'
+      SECTION: '{{.SECTION | default ""}}'
+    cmds:
+      - ./scripts/secret-set-1p.sh
+
+  secret:set:gh:
+    desc: "Set a GitHub repo secret from stdin (usage: command | task secret:set:gh NAME=... REPO=owner/repo)"
+    env:
+      NAME: '{{.NAME | default ""}}'
+      REPO: '{{.REPO | default ""}}'
+    cmds:
+      - ./scripts/secret-set-gh.sh
 
   # ── Setup ──────────────────────────────────────────────────────
   bootstrap:
@@ -396,7 +502,9 @@ tasks:
   # credential and stay manual — see docs/CHECKLIST.md (branch ruleset import,
   # Renovate/CodeRabbit app installs, Actions secrets, the CI GitHub App).
   setup:github:
-    desc: Apply idempotent GitHub repo settings via gh (Dependabot alerts, private vulnerability reporting, CodeQL variable)
+    desc: >-
+      Apply idempotent GitHub repo settings via gh (Dependabot alerts, private
+      vulnerability reporting)
     vars:
       REPO: "evanharmon1/evanharmon-site"
     cmds:
@@ -410,10 +518,12 @@ tasks:
         else
           echo "Skipping private vulnerability reporting ({{.REPO}} is private; public-repo-only feature)."
         fi
-      - gh variable set FULL_SECURITY_SCAN --repo "{{.REPO}}" --body true
 
   setup:github-project:
-    desc: Idempotently create/sync the owner's GitHub Project V2 board + Status pipeline + Size number field (on a personal account also the other metadata fields). Requires `gh auth refresh -s project`.
+    desc: >-
+      Idempotently create/sync the owner's GitHub Project V2 board + Status
+      pipeline + Size number field (on a personal account also the other
+      metadata fields). Requires `gh auth refresh -s project`.
     cmds:
       - ./scripts/setup-github-project.sh --owner "evanharmon1" --title "evanharmon1 Project"
 

@@ -43,15 +43,21 @@ task verify      # FAST local gate (<~1 min) — run constantly; safe for hooks/
 task ci          # FULL CI mirror — run before/instead of opening a PR
 task check       # all linters (includes lint:design)
 task fix         # auto-format then lint
-task test        # tests (includes the Playwright cross-browser screenshot sweep)
-task security    # gitleaks + dependency audit
+task test        # unit tests (when configured)
+task security    # Semgrep CE + gitleaks + dependency audit
 
 pnpm dev         # local dev server (astro dev)
 pnpm build       # production build to dist/
 pnpm preview     # preview built site
 pnpm check       # astro check + eslint + prettier --check
 pnpm fix         # eslint --fix + prettier -w
+task foreman:plan -- --milestone <n>  # foreman: dry-run the dispatch graph
 ```
+
+**Foreman** (`task foreman:*`) is the deterministic supervisor that dispatches
+armed issues to headless agents, verifies their output with `task ci`, opens
+PRs, and shepherds them to mergeable — merging is always a human decision.
+See `docs/architecture/foreman.md`.
 
 `verify` is deliberately kept fast (lint + typecheck + build + the quick
 Taskfile/hook guards) so editors, git hooks, and AI agents can run it on every
@@ -152,3 +158,11 @@ Full reference: [docs/conventions.md](docs/conventions.md). Highlights:
   templated by [harmon-init](https://github.com/evanharmon1/harmon-init) — repo tooling
   (Taskfile, lefthook, workflows) is template-owned; keep customizations minimal and
   intentional so `copier update` stays clean.
+- When generating or rotating secrets, keep secret values on stdin and use the
+  destination-only helpers:
+  `task secret:set:1p VAULT=... ITEM=... FIELD=... [SECTION=...]` for existing
+  1Password fields and `task secret:set:gh NAME=... REPO=owner/repo` for GitHub
+  repo secrets. Never pass secret values as command arguments, `--body` values,
+  exported env vars, or Taskfile vars. The hard rule above still applies:
+  agents must not run `secret:set:1p` or otherwise write to a password manager
+  without explicit user confirmation for that exact write.
