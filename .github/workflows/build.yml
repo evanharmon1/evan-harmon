@@ -216,6 +216,9 @@ jobs:
       - name: Install Playwright browsers
         if: steps.pw.outputs.present == 'true'
         run: pnpm exec playwright install --with-deps chromium
+      - name: Build site for accessibility tests
+        if: steps.pw.outputs.present == 'true'
+        run: task build
       - name: Accessibility (axe) tests
         run: task test:a11y
 
