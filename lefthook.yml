@@ -31,7 +31,7 @@ pre-commit:
       run: task lint:eslint -- {staged_files}
     typecheck:
       glob: "*.{ts,tsx,astro}"
-      run: task typecheck
+      run: task lint:typescript
     yaml:
       glob: "*.{yml,yaml}"
       run: task lint:yaml -- {staged_files}
@@ -44,6 +44,9 @@ pre-commit:
     actions:
       glob: ".github/workflows/*.{yml,yaml}"
       run: task lint:actions
+    foreman-lint:
+      glob: "*.py"
+      run: task foreman:lint
     hygiene:
       run: task lint:hygiene -- {staged_files}
 
@@ -57,5 +60,9 @@ pre-push:
   commands:
     secrets:
       run: task security:secrets
+    skills-drift:
+      # Offline variant (no network) so the hook never blocks on connectivity;
+      # skips cleanly until the first `task sync:skills`.
+      run: task verify:skills:offline
     typecheck:
-      run: task typecheck
+      run: task lint:typescript

@@ -17,6 +17,8 @@ Author: Evan Harmon
 - Homebrew
 - Python
 - [Taskfile](https://taskfile.dev/)
+- [uv](https://docs.astral.sh/uv/) (runs the pinned Semgrep CE baseline)
+- Node >= 22 and [pnpm](https://pnpm.io)
 
 ### Bootstrap
 
@@ -38,11 +40,13 @@ Install required dependencies
 
 #### Verify
 
-`task verify` — fast local gate (lint + typecheck + build + validate); `task ci` mirrors the full CI pipeline.
+`task check` is the fast lint + typecheck gate. `task verify` is the
+definition-of-done gate (check + build + validate + tests); `task ci` adds
+security and the devcontainer permission assertion.
 
 #### Security
 
-`task security`
+`task security` — Semgrep CE + gitleaks + dependency audit
 
 #### Linting, Formatting, Conventions, Style Guidelines, etc
 
@@ -55,7 +59,7 @@ targets (`task check`, `task lint:design`, …). See
 - **Astro** (static output) + **Tailwind CSS v4** (CSS-first) + **TypeScript**
 - **React + shadcn/ui** for interactive islands
 - **pnpm** package manager
-- Design system in [DESIGN.md](./DESIGN.md); runtime tokens in `src/styles/global.css`
+- Design system in [DESIGN.md](./DESIGN.md); runtime tokens in `src/styles/globals.css`
 
 ## Deployment
 

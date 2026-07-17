@@ -9,6 +9,7 @@ paths = [
     '''\.git/''',
     '''\.task/''',
     '''\.worktrees/''',
+    '''\.foreman/''',
     '''node_modules/''',
     '''dist/''',
     '''\.astro/''',

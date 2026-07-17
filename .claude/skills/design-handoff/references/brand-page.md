@@ -202,11 +202,16 @@ selectable buckets:
   (LinkedIn, Instagram, X, Facebook, Bluesky, TikTok, YouTube thumbnails), and podcast cover art;
   OG/share cards (static or dynamically generated); display/banner ads in standard IAB sizes. Export at
   the correct per-platform dimensions.
-- **Email** — transactional and marketing templates, a newsletter layout, and an email signature; built
-  with **React Email**, shipped as HTML/CSS bundles, and tested against major clients (Gmail, Outlook,
-  Apple Mail).
-- **Print** — business cards, letterhead, flyers, posters, brochures, stickers, and signage as
-  **print-ready PDFs** (CMYK, 300dpi, with bleed and crop marks).
+- **Email** — transactional and marketing templates, a newsletter layout, and an email signature;
+  hand-built **table-HTML with inline styles and system font stacks** (the zero-dependency pattern
+  below — email clients can't load brand fonts reliably anyway), shipped as HTML/CSS bundles and
+  tested against major clients (Gmail, Outlook, Apple Mail). React Email is an acceptable
+  alternative only when the repo already carries that dependency — don't add it just for this.
+- **Print** — business cards, letterhead, flyers, posters, brochures, stickers, and signage as PDFs.
+  The zero-dependency recipe below yields **digital-proof PDFs** (RGB, rendered at bleed size);
+  true **print-ready** output (CMYK color, 300dpi, bleed _plus crop marks_) needs a dedicated
+  production export/conversion step and print-vendor validation before packaging — never label the
+  CSS-generated PDFs print-ready.
 - **Presentations & documents** — an **editable** `.pptx` (and/or Google Slides) deck with real text and
   shapes (never a flat, image-based deck), a pitch deck, and a one-pager/sales sheet; plus document
   templates (proposals, reports, case studies, invoices, résumé) for Word / Google Docs / Notion.
@@ -224,6 +229,33 @@ Pick **Other** and name it for the long tail:
 These groups map onto the design suite's artifact taxonomy in `ai/skills/README.md` (Tokens /
 Components / Pages & Templates / Assets / Collateral), so `/brand` stays aligned with the broader
 design-suite roadmap.
+
+### Zero-dependency collateral rendering (the proven pattern)
+
+Collateral does **not** need image/PDF libraries (`satori`, `astro-og-canvas`, `sharp`, React
+Email…) — the repo's existing Playwright renders everything, driven by one script (e.g.
+`scripts/build-brand-assets.mjs`, wired to a `task brand:assets`):
+
+- **Parse the live tokens** from `globals.css` (same extraction approach as `check-contrast.mjs`)
+  so every artifact is _generated from_ the system and can't drift; regenerate after any token
+  change, never hand-edit outputs.
+- **HTML template strings + `page.setContent()`** — no server needed. Load brand fonts with a
+  `file://` `@font-face` pointing at the repo's woff2 (Fontsource packages work:
+  `node_modules/@fontsource-variable/<font>/files/…`), inline the logo SVGs, and
+  `await page.evaluate(() => document.fonts.ready)` before capturing.
+- **PNGs** via `page.screenshot` with an exact-size viewport/clip (OG cards 1200×630, platform
+  banners, avatars); **PDFs** via `page.pdf({ printBackground: true, preferCSSPageSize: true })`
+  with `@page { size: … }` — print pieces render at **bleed size** (e.g. a 3.5×2in card at
+  3.75×2.25in) with type inside the safe zone. These are **digital proofs**, not print-ready
+  files: they're RGB with no crop marks, and the CMYK values in the spec sheet are
+  digital-derived — a print vendor must convert and validate before production (see the Print
+  bucket above).
+- **Email** stays hand-built table-HTML with inline styles and system font stacks (email clients
+  can't load brand fonts reliably); a slide deck works well as an unlisted print-styled route the
+  user exports via Print → PDF.
+- Emit **`kit.json`** (versioned manifest: colors in hex/rgb/oklch/cmyk, font names + licenses,
+  asset URLs, boilerplate copy) from the same parsed tokens, and assemble `brand-kit.zip` from the
+  generated tree — the Tier 2 endpoint and the zip stay in lockstep by construction.
 
 ## Where `/brand` lives per framework
 

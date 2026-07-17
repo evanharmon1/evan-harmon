@@ -13,7 +13,7 @@ woodcut-engraving brand with dual **Parchment** (light) and **Midnight** (dark) 
 islands. Output is fully `static` (SSG). Package manager is **pnpm**.
 
 The design is documented in **`DESIGN.md`** (AI-facing intent). The **canonical runtime token source
-is `src/styles/global.css`** — when the two disagree, `global.css` wins.
+is `src/styles/globals.css`** — when the two disagree, `globals.css` wins.
 
 Repo: https://github.com/evanharmon1/evanharmon-site — see [docs/README.md](docs/README.md) for the
 documentation map, [docs/architecture/README.md](docs/architecture/README.md)
@@ -39,31 +39,35 @@ git hooks, and humans run the same targets); day-to-day app development uses
 pnpm scripts:
 
 ```bash
-task verify      # FAST local gate (<~1 min) — run constantly; safe for hooks/agents
+task check       # FAST gate (<~1 min) — run constantly; safe for hooks/agents
+task verify      # definition-of-done gate — check + build + validate + test
 task ci          # FULL CI mirror — run before/instead of opening a PR
-task check       # all linters (includes lint:design)
 task fix         # auto-format then lint
-task test        # tests (includes the Playwright cross-browser screenshot sweep)
-task security    # gitleaks + dependency audit
+task test        # unit tests (when configured)
+task security    # Semgrep CE + gitleaks + dependency audit
 
 pnpm dev         # local dev server (astro dev)
 pnpm build       # production build to dist/
 pnpm preview     # preview built site
 pnpm check       # astro check + eslint + prettier --check
 pnpm fix         # eslint --fix + prettier -w
+task foreman:plan -- --milestone <n>  # foreman: dry-run the dispatch graph
 ```
 
-`verify` is deliberately kept fast (lint + typecheck + build + the quick
-Taskfile/hook guards) so editors, git hooks, and AI agents can run it on every
-change without getting bogged down. `ci` is the full pipeline — everything CI
-runs (`verify` + `test` + `security` + the devcontainer permission assert) — so you
-can reproduce a CI run locally on demand instead of waiting on a PR.
+**Foreman** (`task foreman:*`) is the deterministic supervisor that dispatches
+armed issues to headless agents, verifies their output with `task ci`, opens
+PRs, and shepherds them to mergeable — merging is always a human decision.
+See `docs/architecture/foreman.md`.
+
+`check` is the fast inner-loop gate (lint + typecheck). `verify` is the
+definition-of-done gate: check, build, validation, Taskfile/hook guards, and
+tests. `ci` adds security and the devcontainer permission assertion.
 
 `task lint:design` validates the Almanac design system: canonical files exist
-(`DESIGN.md`, `src/styles/global.css`), no off-palette Tailwind colour
-utilities, and static WCAG AA token contrast (`test/check-contrast.mjs`).
+(`DESIGN.md`, `src/styles/globals.css`), no off-palette Tailwind colour
+utilities, and static WCAG AA token contrast (`tests/check-contrast.mjs`).
 `task test:e2e` runs the route × theme × engine/device screenshot sweep in
-`test/brand-screenshots.spec.ts` (build first: `pnpm build`).
+`tests/brand-screenshots.spec.ts` (build first: `pnpm build`).
 
 ## Definition of Done
 
@@ -84,8 +88,8 @@ utilities, and static WCAG AA token contrast (`test/check-contrast.mjs`).
 
 - **Tailwind v4 is CSS-first.** There is **no** `@astrojs/tailwind` integration; it's the Vite
   plugin (`@tailwindcss/vite` in `astro.config.ts`) plus `@import "tailwindcss"` inside
-  `src/styles/global.css`, imported once from `src/layouts/Layout.astro`.
-- **`src/styles/global.css`** is the heart: semantic `--c-*` tokens that swap per theme (via the
+  `src/styles/globals.css`, imported once from `src/layouts/Layout.astro`.
+- **`src/styles/globals.css`** is the heart: semantic `--c-*` tokens that swap per theme (via the
   `data-palette` attribute on `<html>`), an `@theme` block exposing them as Tailwind utilities
   (`bg-paper`, `text-accent`, `font-display`, `text-section`, …), a thin **shadcn role layer**
   (`--background`/`--foreground`/`--primary`/… → `--c-*`), base styles, `@utility` helpers
@@ -114,7 +118,7 @@ utilities, and static WCAG AA token contrast (`test/check-contrast.mjs`).
 - **`src/components/almanac/`** — the bespoke Astro UI: `Header`, `Hero`, `About`, `Projects`,
   `BlogLedger`, `Contact`, `Footer`, plus primitives (`Button`, `BrandMark`, `Divider`, `RuleOrn`,
   `SectionHead`, `SocialIcon`, `ThemeScript`, `ThemeToggle`). Leaf components carry scoped `<style>`;
-  cross-cutting classes (`.catalog`, `.ledger`, `.cta--bold`, `.display`, …) live in `global.css`.
+  cross-cutting classes (`.catalog`, `.ledger`, `.cta--bold`, `.display`, …) live in `globals.css`.
 - **`src/components/ui/`** — shadcn/ui React components (e.g. `button.tsx`), wired to the Almanac
   token bridge. `src/lib/utils.ts` exports `cn()`. Config in `components.json`. Use these only for
   client-interactive islands; the site's own UI is Astro.
@@ -152,3 +156,11 @@ Full reference: [docs/conventions.md](docs/conventions.md). Highlights:
   templated by [harmon-init](https://github.com/evanharmon1/harmon-init) — repo tooling
   (Taskfile, lefthook, workflows) is template-owned; keep customizations minimal and
   intentional so `copier update` stays clean.
+- When generating or rotating secrets, keep secret values on stdin and use the
+  destination-only helpers:
+  `task secret:set:1p VAULT=... ITEM=... FIELD=... [SECTION=...]` for existing
+  1Password fields and `task secret:set:gh NAME=... REPO=owner/repo` for GitHub
+  repo secrets. Never pass secret values as command arguments, `--body` values,
+  exported env vars, or Taskfile vars. The hard rule above still applies:
+  agents must not run `secret:set:1p` or otherwise write to a password manager
+  without explicit user confirmation for that exact write.

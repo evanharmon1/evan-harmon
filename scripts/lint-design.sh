@@ -10,8 +10,8 @@ if [ ! -f DESIGN.md ]; then
     echo "✗ DESIGN.md missing (AI-facing design intent)" >&2
     exit 1
 fi
-if [ ! -f src/styles/global.css ]; then
-    echo "✗ src/styles/global.css missing (runtime tokens)" >&2
+if [ ! -f src/styles/globals.css ]; then
+    echo "✗ src/styles/globals.css missing (runtime tokens)" >&2
     exit 1
 fi
 
@@ -26,6 +26,6 @@ fi
 
 # 3) STATIC token contrast — prove the palette's fg/bg pairs meet WCAG AA in
 #    both themes.
-node test/check-contrast.mjs
+node tests/check-contrast.mjs
 
 echo "✓ design lint passed"

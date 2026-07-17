@@ -17,15 +17,52 @@ the bundle treated as a proposal.
 
 ## What the export actually is
 
-"Handoff to Claude Code" produces a **gzipped tarball** (`.tar.gz`, served as `application/gzip`) —
-**not** a `.zip`. (Claude Design's separate "Download as .zip" menu item is a different raw-assets
-export; the coding handoff is the tarball.) Decompress it into the repo's design folder:
+"Handoff to Claude Code" has shipped as a **gzipped tarball** (`.tar.gz`, served as
+`application/gzip`) and, in newer exports, as a `.zip` — the format is a moving target, so identify
+the coding handoff by its **contents** (the README + `chats/` + project shape below), never by
+extension alone. Claude Design's separate "Download as .zip" menu item is a different **raw-assets
+export**: it has no README/chats and is _not_ the coding handoff — if what you extracted lacks that
+shape, ask the user for the "Handoff to Claude Code" export.
+
+**Treat the archive as untrusted input.** A crafted bundle entry with an absolute path, a `..`
+component, or a link entry can write outside `specs/` during extraction (zip-slip). List and
+validate the entries before extracting — `task ingest:design` (backed by the skill's
+`ingest-design.sh`, which the skill copies into `scripts/`) does exactly that, and is the
+preferred path:
 
 ```bash
-tar -xzf <bundle>.tar.gz -C docs/design/        # or: task ingest:design BUNDLE=<bundle>.tar.gz
+task ingest:design BUNDLE=<bundle>.tar.gz   # validates entries (no absolute/.. /link paths), then extracts to specs/
+# manual equivalent — the listing grep MUST come back empty before any tar -xzf:
+tar -tzf <bundle>.tar.gz | grep -E '^/|(^|/)\.\.(/|$)'   # any hit → refuse to extract
+tar -xzf <bundle>.tar.gz -C specs/
 ```
 
-It extracts to a single project directory. Move/rename it to `docs/design/handoff-<feature>/`.
+It extracts to a single project directory. Move/rename it to `specs/handoff-<feature>/` — do this
+**even when the user pre-placed it under another name**: consistent naming is what the repo's ignore
+conventions and future sessions key off.
+
+## Shield the bundle from repo tooling (do this at ingest, not when CI breaks)
+
+The bundle is vendored prototype content sitting inside a linted repo — left unshielded, it fails
+`verify` in ways that look like your bugs: prettier/eslint attack its `.jsx` (and prettier would
+_reformat the sign-off reference_), markdownlint its `readme.md`, yamllint any `.yml` it carries,
+JSON-hygiene checks choke on empty manifest files (hygiene scripts often scan **untracked** files
+too), and framework typechecks (`astro check`, `tsc`) sweep its bundled JS. Cover every surface the
+repo lints:
+
+- `.gitignore` → `specs/*/` (bundles are deleted at sign-off, never committed; top-level
+  `specs/*.md` stay tracked)
+- `.prettierignore` → `specs/*/`
+- eslint flat config `ignores` → `'specs/'`
+- `.yamllint` `ignore:` → `specs/*/`
+- markdownlint invocation → `'#specs/*/**'`
+- `tsconfig.json` → `"exclude": ["specs"]` (this is what `astro check` respects)
+
+Repos standardized with **harmon-init** ship these ignores out of the box — check before adding
+duplicates. One more anatomy note: bundles sometimes contain a copy of **this skill itself** under
+`uploads/` (the designer uploaded it so the design would be handoff-aware) — treat it as reference
+input like any other upload; the canonical skill lives in the repo, and skill scripts inside the
+bundle may be renamed `.txt` to keep Claude Design's compiler happy.
 
 ## Anatomy (verified, current as of mid-2026)
 
@@ -90,5 +127,5 @@ Inventory what you got — the `tokens.css` palette/scales, the component list u
 referenced, the `uploads/` — then **detect the framework, router, and mode** (SKILL.md Phase 0):
 `establish-design-system` (no system yet — `greenfield-bootstrap.md`), `evolve-design-system`
 (changing the system — `evolving-the-system.md`), or `implement-feature` (a feature against an existing
-system). Leave the bundle in `docs/design/handoff-<feature>/` **untouched**: it is the reference the
+system). Leave the bundle in `specs/handoff-<feature>/` **untouched**: it is the reference the
 user signs off against in Phase 6 and is not removed until Phase 7, after explicit approval.

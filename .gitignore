@@ -86,6 +86,15 @@ coverage/
 # Lighthouse CI output
 .lighthouseci/
 
+# Wrangler local state (Cloudflare Workers)
+.wrangler/
+
+# Foreman runtime artifacts (logs, prompts, resume states — never state-of-record)
+.foreman/
+.foreman-stop
+__pycache__/
+*.pyc
+
 # Devcontainer env files (injected locally via 1Password, never committed)
 .devcontainer/**/devcontainer.env
 
@@ -97,3 +106,5 @@ coverage/
 .env.*
 **/.env.*
 .env/
+# ...but keep the committed example (documents required vars; contains no secrets).
+!/.env.example

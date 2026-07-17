@@ -1,0 +1,42 @@
+import { test, expect } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
+
+// Automated accessibility checks — the WCAG 2.x A/AA rules axe can detect.
+// axe finds only ~a third to half of WCAG issues: this is the automated FLOOR,
+// not a substitute for keyboard / screen-reader testing. Tag a11y tests
+// `@a11y` so `task test:a11y` selects them. Requires @playwright/test and
+// @axe-core/playwright as devDependencies (add them if missing) plus an
+// install run with your package manager — until then `tsc` / `astro check`
+// can't type-check this file.
+
+// Chromium only: axe analyzes the DOM, so results don't vary by engine, and
+// CI installs just chromium — any firefox/webkit projects in the playwright
+// config would fail to launch there. Skipped before fixtures, so no browser
+// binary is needed for the skipped projects.
+test.skip(({ browserName }) => browserName !== 'chromium', 'a11y (axe) runs on chromium only');
+
+// Emulate prefers-reduced-motion: entrance animations otherwise race axe —
+// mid-animation opacity blends foreground colors into false color-contrast
+// violations on styles that are AA-clean when settled. Reduced motion renders
+// final styles immediately (and exercises the site's own reduced-motion
+// support). Since Playwright 1.61, reducedMotion lives under use.contextOptions.
+test.use({ contextOptions: { reducedMotion: 'reduce' } });
+
+test('homepage has no detectable accessibility violations @a11y', async ({ page }) => {
+  await page.goto('/');
+  const results = await new AxeBuilder({ page })
+    // Tags are not cumulative — the 2.2 tags must be listed alongside 2.0/2.1
+    // to actually assert the WCAG 2.2 AA floor the docs commit to.
+    .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22a', 'wcag22aa'])
+    .analyze();
+  expect(results.violations).toEqual([]);
+});
+
+// The reason axe-in-Playwright beats Lighthouse: test INTERACTIVE states too.
+// Uncomment and adapt once the app has real UI:
+// test('nav menu (open) has no violations @a11y', async ({ page }) => {
+//   await page.goto('/')
+//   await page.getByRole('button', { name: /menu/i }).click()
+//   const results = await new AxeBuilder({ page }).analyze()
+//   expect(results.violations).toEqual([])
+// })
