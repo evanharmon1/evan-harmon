@@ -39,9 +39,9 @@ git hooks, and humans run the same targets); day-to-day app development uses
 pnpm scripts:
 
 ```bash
-task verify      # FAST local gate (<~1 min) — run constantly; safe for hooks/agents
+task check       # FAST gate (<~1 min) — run constantly; safe for hooks/agents
+task verify      # definition-of-done gate — check + build + validate + test
 task ci          # FULL CI mirror — run before/instead of opening a PR
-task check       # all linters (includes lint:design)
 task fix         # auto-format then lint
 task test        # unit tests (when configured)
 task security    # Semgrep CE + gitleaks + dependency audit
@@ -59,11 +59,9 @@ armed issues to headless agents, verifies their output with `task ci`, opens
 PRs, and shepherds them to mergeable — merging is always a human decision.
 See `docs/architecture/foreman.md`.
 
-`verify` is deliberately kept fast (lint + typecheck + build + the quick
-Taskfile/hook guards) so editors, git hooks, and AI agents can run it on every
-change without getting bogged down. `ci` is the full pipeline — everything CI
-runs (`verify` + `test` + `security` + the devcontainer permission assert) — so you
-can reproduce a CI run locally on demand instead of waiting on a PR.
+`check` is the fast inner-loop gate (lint + typecheck). `verify` is the
+definition-of-done gate: check, build, validation, Taskfile/hook guards, and
+tests. `ci` adds security and the devcontainer permission assertion.
 
 `task lint:design` validates the Almanac design system: canonical files exist
 (`DESIGN.md`, `src/styles/global.css`), no off-palette Tailwind colour

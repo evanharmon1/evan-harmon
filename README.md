@@ -40,7 +40,9 @@ Install required dependencies
 
 #### Verify
 
-`task verify` — fast local gate (lint + typecheck + build + validate); `task ci` mirrors the full CI pipeline.
+`task check` is the fast lint + typecheck gate. `task verify` is the
+definition-of-done gate (check + build + validate + tests); `task ci` adds
+security and the devcontainer permission assertion.
 
 #### Security
 
