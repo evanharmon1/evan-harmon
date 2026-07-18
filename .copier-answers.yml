@@ -1,5 +1,5 @@
 # Changes here will be overwritten by Copier
-_commit: v4.0.0
+_commit: v4.1.1
 _src_path: https://github.com/evanharmon1/harmon-init
 bunch_add: false
 ci_runner: ubuntu-latest
@@ -20,11 +20,16 @@ project_management: github
 project_name: Evan Harmon Website
 project_slug: evanharmon-site
 project_type: web-astro
+release_content_paths: ''
 run_task_install: false
 skill_categories:
 - universal
 - frontend
 snyk_scan_schedule: 'off'
 use_foreman: true
+use_codeql: true
+codeql_languages:
+- javascript-typescript
+- python
 use_release_please: true
 use_skills_sync: true
