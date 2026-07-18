@@ -47,9 +47,9 @@ tasks:
   ci:
     # Full local mirror of the CI pipeline — run before (or instead of) opening
     # a PR to catch everything CI would, on demand, without waiting on a PR run.
-    # Builds on `verify` and adds the heavier / environment-dependent checks
-    # (the devcontainer permission assert needs a Docker daemon, like CI has).
-    desc: Full CI mirror (verify → [test:devcontainer:permissions →] security)
+    # Builds on `verify` and adds the devcontainer permission assertion plus the
+    # heavier security checks.
+    desc: Full CI mirror (verify → test:devcontainer:permissions → security)
     cmds:
       - task: verify
       - task: test:devcontainer:permissions
@@ -59,14 +59,14 @@ tasks:
     # The definition-of-done gate — everything that must pass before a change
     # is done. Foreman v2 calls this the "check + build + test" tier; the desc
     # below lists this repo's exact steps. For the fast inner loop use `check`;
-    # heavier environment-dependent checks (security, the devcontainer
-    # permission assert) stay in `ci`.
+    # heavier security checks and the devcontainer permission assertion stay in `ci`.
     desc: Definition-of-done gate (check → build → validate → guards → test)
     cmds:
       - task: check
       - task: build
       - task: validate
       - task: test:tasks
+      - task: test:release-title
       - task: foreman:test
       - task: test:hooks
       - task: test
@@ -344,6 +344,11 @@ tasks:
     desc: Guard the Taskfile itself (compiles; setup tasks are safe no-ops)
     cmds:
       - ./scripts/test-tasks.sh
+
+  test:release-title:
+    desc: Unit-test the release-content title guard (require-release-title.sh)
+    cmds:
+      - ./scripts/test-release-title.sh
 
   test:devcontainer:root:
     desc: Smoke test the primary (AI bot) devcontainer via the devcontainers CLI
