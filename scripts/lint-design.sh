@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # lint-design.sh — validate the Almanac design system: canonical sources exist,
 # only semantic tokens are used, and the palette's fg/bg pairs meet WCAG AA.
-# (Static checks only — rendered contrast is measured by the design-handoff
+# (Static checks only — rendered contrast is measured by the implement-design
 # skill's verification step against the running pages.)
 set -euo pipefail
 

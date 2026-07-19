@@ -1,4 +1,4 @@
-// brand-screenshots.spec.ts — the design-handoff cross-browser sweep.
+// brand-screenshots.spec.ts — the implement-design cross-browser sweep.
 //
 // Runs under `task verify:browsers` (npx playwright test). The engine × device
 // axis comes from playwright.config.ts `projects`; this spec adds the

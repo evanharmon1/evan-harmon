@@ -1,6 +1,6 @@
 import { defineConfig, devices } from '@playwright/test';
 
-// Cross-browser / cross-viewport screenshot sweep for the design-handoff
+// Cross-browser / cross-viewport screenshot sweep for the implement-design
 // verification gate. Engines: Chromium, Firefox, WebKit (desktop) + mobile
 // Safari (iPhone) and a tablet (iPad). The route × theme axis is in
 // tests/brand-screenshots.spec.ts. The site is static — build first, then

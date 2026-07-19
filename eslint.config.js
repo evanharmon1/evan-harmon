@@ -6,7 +6,7 @@ import tseslint from 'typescript-eslint';
 import typescriptParser from '@typescript-eslint/parser';
 
 export default [
-  // specs/*/ holds vendored design-handoff bundles (deleted at sign-off);
+  // specs/*/ holds vendored design handoff bundles (deleted at sign-off);
   // .claude/ holds vendored agent skills whose .ts/.mjs assets must never be linted.
   { ignores: ['**/dist/', '**/.astro/', 'specs/', '.claude/'] },
   js.configs.recommended,
@@ -57,7 +57,7 @@ export default [
     },
   },
   {
-    // specs/ holds vendored design-handoff bundles (deleted at sign-off).
+    // specs/ holds vendored design handoff bundles (deleted at sign-off).
     ignores: ['dist', 'node_modules', '.github', 'types.generated.d.ts', '.astro', 'docs/design', 'specs'],
   },
 ];

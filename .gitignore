@@ -40,7 +40,7 @@ node_modules/
 # Git worktrees
 .worktrees/
 
-# Design-handoff bundles (Claude Design exports) live as specs/ subdirectories
+# Design handoff bundles (Claude Design exports) live as specs/ subdirectories
 # while being implemented and are deleted at sign-off — never committed.
 # Top-level specs/*.md (README, _template, feature specs) stay tracked.
 specs/*/
@@ -73,7 +73,7 @@ pnpm-debug.log*
 test-results/
 playwright-report/
 .playwright-cli/
-# design-handoff verification sweep output (test/brand-screenshots.spec.ts)
+# implement-design verification sweep output (tests/brand-screenshots.spec.ts)
 screenshots/
 
 # Snyk local cache
