@@ -1,4 +1,4 @@
-// One-off rendered-contrast probe for the design-handoff verification gate.
+// One-off rendered-contrast probe for the implement-design verification gate.
 // Loads the RUNNING site in both themes and reports WCAG ratios for the new
 // surfaces plus the colour-block hero text (the line a regression once hit).
 // Every colour is resolved to 0–255 RGB via an in-page canvas, so any CSS colour
