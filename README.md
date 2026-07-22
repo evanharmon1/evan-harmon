@@ -42,7 +42,9 @@ Install required dependencies
 
 `task check` is the fast lint + typecheck gate. `task verify` is the
 definition-of-done gate (check + build + validate + tests); `task ci` adds
-security and the devcontainer permission assertion.
+security and the devcontainer permission assertion. `task challenge` /
+`task review` run the optional Codex second-model reviews (advisory,
+local-only — see [docs/guides/codex-review.md](./docs/guides/codex-review.md)).
 
 #### Security
 

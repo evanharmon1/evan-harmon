@@ -66,6 +66,7 @@ tasks:
       - task: build
       - task: validate
       - task: test:tasks
+      - task: test:codex-review
       - task: test:release-title
       - task: foreman:test
       - task: test:hooks
@@ -105,16 +106,8 @@ tasks:
 
   lint:shell:
     desc: shellcheck + shfmt
-    vars:
-      SHELL_FILES:
-        sh: git ls-files '*.sh' '*.bash' 2>/dev/null | tr '\n' ' '
     cmds:
-      - |
-        files="{{.CLI_ARGS}}"
-        [ -z "$files" ] && files="{{.SHELL_FILES}}"
-        [ -z "$files" ] && exit 0
-        shellcheck --severity=error $files
-        shfmt -d $files
+      - ./scripts/lint-shell.sh {{.CLI_ARGS}}
 
   lint:markdown:
     # Check-only (no --fix) so this is a read-only gate like lint:prettier /
@@ -269,9 +262,7 @@ tasks:
         else
           npx --yes prettier --write .
         fi
-      - |
-        files=$(git ls-files '*.sh' '*.bash')
-        [ -n "$files" ] && shfmt -w $files || true
+      - ./scripts/format-shell.sh
       # Best-effort markdown auto-fix (bin-vs-npx dispatch in the helper); must
       # NOT abort `format` on un-auto-fixable rule violations — `lint:markdown`
       # (check-only) is the gate.
@@ -345,6 +336,11 @@ tasks:
     cmds:
       - ./scripts/test-tasks.sh
 
+  test:codex-review:
+    desc: Unit-test codex-review.sh target selection (offline, stubbed codex)
+    cmds:
+      - ./scripts/test-codex-review.sh
+
   test:release-title:
     desc: Unit-test the release-content title guard (require-release-title.sh)
     cmds:
@@ -409,6 +405,48 @@ tasks:
         else
           node_modules/.bin/playwright test --grep @a11y {{.CLI_ARGS}}
         fi
+
+  # ── Second-model review (Codex) ───────────────────────────────
+  # Optional second AI model (the OpenAI Codex CLI) reviewing the current
+  # change — local and advisory only, never part of verify/ci. Findings are
+  # hypotheses for the primary agent to adjudicate (AGENTS.md "Second-Model
+  # Review"). The codex:gate:* tasks toggle the Claude Code codex plugin's
+  # automatic stop-time review for this repo + machine. See
+  # docs/guides/codex-review.md for setup, mechanics, and the loop caps.
+  review:
+    desc: Second-model verification review of the current change (Codex)
+    cmds:
+      - task: review:codex
+
+  challenge:
+    desc: Second-model adversarial review of the current change (Codex)
+    cmds:
+      - task: challenge:codex
+
+  review:codex:
+    desc: "Codex verification review (usage: task review:codex -- [--base <ref>|--uncommitted] [focus text])"
+    cmds:
+      - ./scripts/codex-review.sh review {{.CLI_ARGS}}
+
+  challenge:codex:
+    desc: "Codex adversarial review (usage: task challenge:codex -- [--base <ref>|--uncommitted] [focus text])"
+    cmds:
+      - ./scripts/codex-review.sh challenge {{.CLI_ARGS}}
+
+  codex:gate:enable:
+    desc: Enable the automatic Claude → Codex stop-gate review (this repo, this machine)
+    cmds:
+      - ./scripts/codex-gate.sh enable
+
+  codex:gate:disable:
+    desc: Disable the automatic Claude → Codex stop-gate review
+    cmds:
+      - ./scripts/codex-gate.sh disable
+
+  codex:gate:status:
+    desc: Show whether the Claude → Codex stop-gate review is enabled
+    cmds:
+      - ./scripts/codex-gate.sh status
 
   # ── Security ───────────────────────────────────────────────────
   security:
