@@ -25,6 +25,9 @@ brew "pnpm"
 brew "lychee"
 # Python tool runner (Semgrep CE + foreman lint use uv/uvx)
 brew "uv"
+# foreman runs as bare `python3 -m foreman` and needs >= 3.11 (tomllib);
+# stock macOS ships 3.9, so the interpreter itself is a dependency.
+brew "python"
 
 # Devcontainer
 brew "hadolint"
@@ -33,6 +36,9 @@ brew "hadolint"
 brew "yq"
 
 # Utilities
+# coreutils provides `timeout`, which stock macOS lacks — scripts/status.sh
+# bounds its network probes with it.
+brew "coreutils"
 brew "direnv"
 brew "jq"
 brew "fzf"

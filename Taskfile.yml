@@ -66,6 +66,7 @@ tasks:
       - task: build
       - task: validate
       - task: test:tasks
+      - task: test:ci-results
       - task: test:release-title
       - task: foreman:test
       - task: test:hooks
@@ -105,16 +106,8 @@ tasks:
 
   lint:shell:
     desc: shellcheck + shfmt
-    vars:
-      SHELL_FILES:
-        sh: git ls-files '*.sh' '*.bash' 2>/dev/null | tr '\n' ' '
     cmds:
-      - |
-        files="{{.CLI_ARGS}}"
-        [ -z "$files" ] && files="{{.SHELL_FILES}}"
-        [ -z "$files" ] && exit 0
-        shellcheck --severity=error $files
-        shfmt -d $files
+      - ./scripts/lint-shell.sh {{.CLI_ARGS}}
 
   lint:markdown:
     # Check-only (no --fix) so this is a read-only gate like lint:prettier /
@@ -269,9 +262,7 @@ tasks:
         else
           npx --yes prettier --write .
         fi
-      - |
-        files=$(git ls-files '*.sh' '*.bash')
-        [ -n "$files" ] && shfmt -w $files || true
+      - ./scripts/format-shell.sh
       # Best-effort markdown auto-fix (bin-vs-npx dispatch in the helper); must
       # NOT abort `format` on un-auto-fixable rule violations — `lint:markdown`
       # (check-only) is the gate.
@@ -344,6 +335,11 @@ tasks:
     desc: Guard the Taskfile itself (compiles; setup tasks are safe no-ops)
     cmds:
       - ./scripts/test-tasks.sh
+
+  test:ci-results:
+    desc: Unit-test the fail-closed CI aggregate result helper
+    cmds:
+      - ./scripts/test-ci-results.sh
 
   test:release-title:
     desc: Unit-test the release-content title guard (require-release-title.sh)
@@ -486,12 +482,12 @@ tasks:
       # official installer's NONINTERACTIVE mode demands sudo up front and aborts
       # even when there is nothing to install, so guard on `brew` existing.
       - command -v brew >/dev/null 2>&1 || NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-      - brew install node
-      - npm install -g pnpm
+      - ./scripts/bootstrap-pnpm.sh
 
   install:
     desc: Install all project dependencies and tools
     cmds:
+      - ./scripts/bootstrap-pnpm.sh
       # Use THIS repo's Brewfile by absolute path (never a user/global one), and
       # don't cascade-upgrade unrelated already-installed brew dependents.
       - HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1 brew bundle --file={{.ROOT_DIR}}/Brewfile

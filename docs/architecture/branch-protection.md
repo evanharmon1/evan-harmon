@@ -250,9 +250,10 @@ Requiring the aggregate `verify` (rather than each leaf job) keeps the required-
 list stable as jobs are added inside `build.yml`.
 
 `codeql-verify` is stable across visibility: public and paid-private CodeQL must
-succeed; free private repositories and fork PRs get a successful not-applicable
-result while the required `security` job carries the Semgrep fallback. It runs
-on `merge_group`, so it is safe for the merge queue.
+succeed for the selected `codeql_languages`; free private repositories and fork
+PRs get a successful not-applicable result while the required `security` job
+carries the Semgrep fallback. It runs on `merge_group`, so it is safe for the
+merge queue.
 Snyk PR/App checks are absent by default. Only a high-consequence repository that deliberately adopts
 paid Snyk should consider per-PR scans and whether to make them merge
 requirements. See [security.md](security.md) for the scanner policy.
