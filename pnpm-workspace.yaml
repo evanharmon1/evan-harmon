@@ -15,6 +15,9 @@ allowBuilds:
 # the patched line until they catch up.
 overrides:
   esbuild: '>=0.28.1'
+  # sharp <0.35.0 inherits libvips vulnerabilities (pnpm audit high). Astro
+  # still resolves 0.34.x — force the patched line until it catches up.
+  sharp: '>=0.35.0'
 
 # Local customization (not from the harmon-init template): expose Astro's
 # transitive deps at the root node_modules so direct imports like
