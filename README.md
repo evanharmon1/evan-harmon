@@ -48,6 +48,12 @@ security and the devcontainer permission assertion.
 
 `task security` — Semgrep CE + gitleaks + dependency audit
 
+#### Second-model review
+
+`task challenge` runs an adversarial Codex review; `task review` runs the
+verification checkpoint. Both are advisory and local-only. See
+[docs/guides/codex-review.md](./docs/guides/codex-review.md) for setup and usage.
+
 #### Linting, Formatting, Conventions, Style Guidelines, etc
 
 Git hooks are managed by [lefthook](./lefthook.yml) and delegate to Taskfile

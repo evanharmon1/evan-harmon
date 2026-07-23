@@ -10,11 +10,20 @@ allowBuilds:
   # time; approve its build or `wrangler deploy` fails ERR_PNPM_IGNORED_BUILDS.
   workerd: true
 
+minimumReleaseAgeExclude:
+  - brace-expansion@1.1.16 || 5.0.7
+  - js-yaml@4.3.0
+  - '@astrojs/rss@4.0.19'
+  - svgo@4.0.2
+  - fast-uri@3.1.3 || 3.1.4
+  - sharp@0.35.3
+
 # Security floor: esbuild <0.28.1 allows arbitrary file reads via the dev server
 # on Windows (GHSA; pnpm audit + Snyk). Astro/Vite still resolve 0.27.x — force
 # the patched line until they catch up.
 overrides:
   esbuild: '>=0.28.1'
+  sharp@<0.35.0: 0.35.3
 
 # Local customization (not from the harmon-init template): expose Astro's
 # transitive deps at the root node_modules so direct imports like
@@ -22,6 +31,7 @@ overrides:
 # replaces the old `.npmrc` `shamefully-hoist=true` — pnpm 10+ reads hoisting
 # settings only from pnpm-workspace.yaml, not `.npmrc`.
 shamefullyHoist: true
+
 # pnpm 11 defaults minimumReleaseAge to 1440 (1 day) — freshly published
 # versions won't resolve until they age. To install a pinned release younger
 # than that, add version-pinned entries here (they become harmless no-ops once

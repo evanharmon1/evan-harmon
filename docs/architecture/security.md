@@ -29,7 +29,7 @@ repositories and for profiles without a CodeQL workflow.
 | Axis | Catches | Default tool | Where it runs |
 |---|---|---|---|
 | **SAST** — flaws in *your own code* | injection, XSS, SSRF, path traversal, crypto/auth misuse | **CodeQL** for public repos; **Semgrep CE** for free private repos | CodeQL runs automatically in public CI. Private CI uses Semgrep unless paid GitHub Code Security + `FULL_SECURITY_SCAN=true` opts into CodeQL |
-| **SCA** — CVEs in *dependencies* | vulnerable third-party packages | **Dependabot alerts** + **`task security:audit`** (`pnpm audit` / `pip-audit`) | Dependabot continuous; audit in the CI `security` job + `task security` locally |
+| **SCA** — CVEs in *dependencies* | vulnerable third-party packages | **Dependabot alerts** + **`task security:audit`** (`pnpm audit`) | Dependabot continuous; audit in the CI `security` job + `task security` locally |
 | **Secrets** — committed credentials | keys, tokens, certs, `.env` | **gitleaks** (`task security:secrets`) | pre-push git hook + CI `security` job |
 | **IaC** — insecure infrastructure | open security groups, public buckets, … | **checkov** (`task lint:terraform:security`) | CI `lint` job + `task check` locally (Terraform repos) |
 | **Freshness/remediation** — stale or vulnerable dependencies | a widening exposure window | **Renovate** (`minimumReleaseAge: 3 days`, Dependabot-alert remediation enabled) | continuous update and vulnerability-fix PRs |
@@ -64,7 +64,8 @@ It is the private-repository floor, not a claim of full vulnerability coverage.
 
 ### Enable CodeQL when the repository is eligible
 
-The template includes `codeql.yml` for Node and Python profiles. It runs
+The template includes `codeql.yml` when `use_codeql=true` and analyzes exactly
+the first-party languages recorded in `codeql_languages`. It runs
 automatically on every **public** repository: GitHub code scanning and standard
 GitHub-hosted Actions runners are free there. CodeQL is preferred over Semgrep CE
 for these stacks because its queries include deeper interprocedural and data-flow
