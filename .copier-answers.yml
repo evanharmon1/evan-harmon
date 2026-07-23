@@ -30,7 +30,7 @@ skill_categories:
 - frontend
 snyk_scan_schedule: 'off'
 use_codeql: true
-use_codex_review: false
+use_codex_review: true
 use_foreman: true
 use_release_please: true
 use_skills_sync: true
