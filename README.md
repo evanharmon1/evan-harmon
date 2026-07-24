@@ -8,7 +8,11 @@ TypeScript, and standardized with
 
 Author: Evan Harmon
 
-[![Build](https://github.com/evanharmon1/evanharmon-site/actions/workflows/build.yml/badge.svg)](https://github.com/evanharmon1/evanharmon-site/actions/workflows/build.yml)
+[![Build](https://github.com/evanharmon1/evanharmon-site/actions/workflows/build.yml/badge.svg?branch=main&event=push)](https://github.com/evanharmon1/evanharmon-site/actions/workflows/build.yml)
+[![CodeQL](https://github.com/evanharmon1/evanharmon-site/actions/workflows/codeql.yml/badge.svg?branch=main&event=push)](https://github.com/evanharmon1/evanharmon-site/actions/workflows/codeql.yml)
+[![Website](https://img.shields.io/website?url=https%3A%2F%2Fevanharmon.com&up_message=online&down_message=offline&label=website)](https://evanharmon.com)
+[![Release](https://img.shields.io/github/v/release/evanharmon1/evanharmon-site?sort=semver&display_name=tag)](https://github.com/evanharmon1/evanharmon-site/releases/latest)
+[![License](https://img.shields.io/github/license/evanharmon1/evanharmon-site)](./LICENSE)
 
 ## Setup & Installation
 
