@@ -9,9 +9,9 @@ config, toolchain, devcontainer, and dev environment — against the items below
 
 ## 1. Local setup
 
-- [ ] `task install` — Brewfile deps, `pnpm install`, and lefthook git hooks
-- [ ] `task verify` passes locally
-- [ ] **Vendor shared agent skills**: `.skills-sync.yaml` pins which harmon-devkit
+- [x] `task install` — Brewfile deps, `pnpm install`, and lefthook git hooks
+- [x] `task verify` passes locally
+- [x] **Vendor shared agent skills**: `.skills-sync.yaml` pins which harmon-devkit
       skill categories this repo gets (from your `skill_categories` answer). Set
       `ref` to the latest
       [harmon-devkit release](https://github.com/evanharmon1/harmon-devkit/releases)
@@ -31,7 +31,7 @@ config, toolchain, devcontainer, and dev environment — against the items below
 
 ## 2. GitHub repo settings
 
-- [ ] **Automated settings** — run `task setup:github` (idempotent, safe to
+- [x] **Automated settings** — run `task setup:github` (idempotent, safe to
       re-run): enables **Dependabot alerts** and **private vulnerability
       reporting** when public. Do not add `dependabot.yml`: Renovate owns routine
       and vulnerability-remediation PRs; Dependabot owns advisory alerts.
@@ -41,43 +41,45 @@ config, toolchain, devcontainer, and dev environment — against the items below
       resource owner, so a **new owner needs a new PAT**. Both layers are required —
       the collaborator grant above sets the ceiling, the PAT's repo list reaches it.
       Procedure: [guides/bot-account.md](guides/bot-account.md).
-- [ ] Import the branch ruleset (see [architecture/branch-protection.md](architecture/branch-protection.md)) — do this once `build.yml` and `codeql.yml` are on `main` so the required `verify`/`security`/`codeql-verify` checks resolve. **Use the UI import:** Settings → Rules → Rulesets → **New ruleset ▸ Import a ruleset** → select `.github/Branch Protection Ruleset - Protect Main.json`. (Prefer the UI over `gh api … rulesets`: the API `POST` is not idempotent — re-running creates a duplicate ruleset — and currently rejects the `merge_queue` rule. To later change the ruleset, edit the existing one in the UI rather than re-importing.)
+- [x] Import the branch ruleset (see [architecture/branch-protection.md](architecture/branch-protection.md)) — do this once `build.yml` and `codeql.yml` are on `main` so the required `verify`/`security`/`codeql-verify` checks resolve. **Use the UI import:** Settings → Rules → Rulesets → **New ruleset ▸ Import a ruleset** → select `.github/Branch Protection Ruleset - Protect Main.json`. (Prefer the UI over `gh api … rulesets`: the API `POST` is not idempotent — re-running creates a duplicate ruleset — and currently rejects the `merge_queue` rule. To later change the ruleset, edit the existing one in the UI rather than re-importing.)
 
-- [ ] Install the [Renovate app](https://github.com/apps/renovate) on the repo
-- [ ] Install the [CodeRabbit app](https://github.com/apps/coderabbitai) on the repo (`.coderabbit.yaml` is pre-configured)
-- [ ] Actions secret: `CLAUDE_CODE_OAUTH_TOKEN` (claude-* workflows) — generate
+- [x] Install the [Renovate app](https://github.com/apps/renovate) on the repo
+- [x] **CodeRabbit posture chosen** — do not install the
+      [CodeRabbit app](https://github.com/apps/coderabbitai) on this repo
+      (`.coderabbit.yaml` remains available if that decision changes)
+- [x] Actions secret: `CLAUDE_CODE_OAUTH_TOKEN` (claude-* workflows) — generate
       with `claude setup-token`; the value must start **`sk-ant-oat01-`** (an OAuth
       token, billed to your Claude subscription), **not** `sk-ant-api03-` (a raw API
       key, billed at pay-as-you-go API rates). Then `gh secret set CLAUDE_CODE_OAUTH_TOKEN`
-- [ ] **SAST coverage** — public repositories run CodeQL automatically and for
+- [x] **SAST coverage** — public repositories run CodeQL automatically and for
       free for the selected `codeql_languages`; confirm a successful upload in
       the Security tab. Free private repos
       run Semgrep CE in `build.yml`. Only set `FULL_SECURITY_SCAN=true` on a
       private/internal repository after enabling paid GitHub Code Security; the
       variable is a run switch, not an entitlement. It cannot disable public
       CodeQL.
-- [ ] **Choose the Snyk posture** — the default is manual/local only via
+- [x] **Choose the Snyk posture** — the default is manual/local only via
       `task security:sast:snyk` and `task security:sca:snyk`; it is not part of
       `task security` or required PR CI. Free private-repository tests share the
       Snyk Organization's monthly quota, including local CLI tests. Leave the
       Snyk GitHub App off unless deliberately adopting its PR integration; its
       checks are not required by the default branch ruleset.
-- [ ] **Optional scheduled Snyk** — leave this off for ordinary and free private
+- [x] **Optional scheduled Snyk left disabled** — leave this off for ordinary and free private
       repos. For a selected important public repo, re-render with
       `snyk_scan_schedule=weekly` (conservative) or `daily` (public or accepted
       unlimited OSS), set the generated workflow's `SNYK_TOKEN` Actions secret,
       and verify one manual run. Confirm Snyk classifies the public Git remote
       correctly. The workflow is advisory and never a required PR check.
-- [ ] **Create** the CI GitHub App `evanharmon1-ci` by hand (one App per org;
+- [x] **Create** the CI GitHub App `evanharmon1-ci` by hand (one App per org;
       **Settings → Developer settings → GitHub Apps**), or reuse the org's existing one.
-- [ ] **Install** the App on this repo — **Install App → Only select repositories**
+- [x] **Install** the App on this repo — **Install App → Only select repositories**
       (the harmon-init repos that run release-please / claude-* / project-automation),
       **not "All"**. **Creating the App is not enough:** an App whose credentials are
       set but which is *not installed* on the repo makes
       `actions/create-github-app-token` fail at runtime with a **404**
       (`Not Found` — "not installed on this repository"). This is the single
       easiest step to miss.
-- [ ] Set `CI_APP_CLIENT_ID` (Actions **variable**) + `CI_APP_PRIVATE_KEY` (Actions
+- [x] Set `CI_APP_CLIENT_ID` (Actions **variable**) + `CI_APP_PRIVATE_KEY` (Actions
       **secret**) — **pipe the `.pem` in** (never paste it; flattened newlines break
       the key), and **scope both to those same repos** (least privilege — the key can
       act as the App: commits, PRs, releases, workflow edits):
@@ -94,9 +96,9 @@ config, toolchain, devcontainer, and dev environment — against the items below
       re-run with the full list to add a repo. Drives release-please, the claude-*
       workflows, and project-automation; blast-radius + rotation in
       docs/architecture/security.md.
-- [ ] GHCR: ensure the org/user allows publishing packages; the first
+- [x] GHCR: ensure the org/user allows publishing packages; the first
       devcontainer prebuild populates `ghcr.io/evanharmon1/evanharmon-site-devcontainer` on merge to main
-- [ ] GitHub Project: run `task setup:github-project` (needs
+- [x] GitHub Project: run `task setup:github-project` (needs
       `gh auth refresh -s project`) to create the owner's default project (titled
       `evanharmon1 Project`) and idempotently sync its `Status` pipeline and
       `Size` number field — see
@@ -104,7 +106,7 @@ config, toolchain, devcontainer, and dev environment — against the items below
       On a personal account it also creates Priority/Product/Agent/Size as
       project fields (issue fields are org-only); status automation is a separate
       follow-up — the board is set up, but issue/PR status isn't auto-synced yet.
-- [ ] Labels: run `task setup:github-labels` to seed this repo's starter label
+- [x] Labels: run `task setup:github-labels` to seed this repo's starter label
       families (concerns/source/workflow/layer/domain — see
       [project-management.md](project-management.md)). Labels are per-repo, so run
       it in each repo; org default labels (org Settings → Repository, UI-only) only
@@ -113,7 +115,7 @@ config, toolchain, devcontainer, and dev environment — against the items below
       Planning / Mine) in the Project UI — Projects V2 has no view API,
       so this is a one-time manual step. Filters/layouts are in
       [project-management.md](project-management.md).
-- [ ] GitHub Project auto-add (**adds every issue to the board**): in the
+- [x] GitHub Project auto-add (**adds every issue to the board**): in the
       Project's **Settings → Workflows**, turn on **"Auto-add to project"** and
       point it at this repo (filter `is:issue`, `is:pr`) so *every* new issue and
       PR lands on the board automatically, however it's created. GitHub's native
@@ -124,7 +126,7 @@ config, toolchain, devcontainer, and dev environment — against the items below
 
 ## 3. Framework scaffolding (conventions-only template)
 
-- [ ] Scaffold Astro: `pnpm create astro@latest . --template minimal` (or preferred template)
+- [x] Scaffold Astro: `pnpm create astro@latest . --template minimal` (or preferred template)
 - [ ] Add the standard stack: Tailwind v4 (`@tailwindcss/vite`), zod, vitest, lucide
 - [ ] Move lint tooling into devDependencies (prettier, eslint, markdownlint-cli2,
       @commitlint/cli); switch the `lint:prettier` / `lint:markdown` `npx --yes`
@@ -186,8 +188,8 @@ config, toolchain, devcontainer, and dev environment — against the items below
 ## 5. Docs & meta
 
 - [ ] Fill in the `TODO:` markers in README.md and docs/ (architecture diagram first)
-- [ ] Confirm README badges render (Actions URLs are correct once CI runs)
-- [ ] Initial release when ready: `task release:init` (v0.1.0) — releases stay manual
+- [x] Confirm README badges render (Actions URLs are correct once CI runs)
+- [x] Initial release completed as `v0.0.1` — releases stay manual
 - [ ] Stay current with harmon-init: periodically run `copier update --trust` to pull
       template improvements (a three-way merge — your own edits are preserved). The
       standardize-repo skill (`update` mode) automates this and verifies the result.
