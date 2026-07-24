@@ -1,5 +1,14 @@
 # Post-Generation Checklist — Evan Harmon Website
 
+<!--
+AI AGENTS: This checklist is a human-maintained record for humans to check off.
+Do not check, uncheck, rewrite, remove, reorder, normalize, validate, reconcile,
+or otherwise update its items based on repository state. Do not try to keep it
+consistent with code, configuration, tags, releases, or external services.
+Only edit a checklist item when the human user clearly and explicitly asks for
+that specific checklist update.
+-->
+
 Work through this after generating the repo from harmon-init. Delete items
 that don't apply, then keep this file as a record of what was configured.
 
@@ -44,9 +53,7 @@ config, toolchain, devcontainer, and dev environment — against the items below
 - [x] Import the branch ruleset (see [architecture/branch-protection.md](architecture/branch-protection.md)) — do this once `build.yml` and `codeql.yml` are on `main` so the required `verify`/`security`/`codeql-verify` checks resolve. **Use the UI import:** Settings → Rules → Rulesets → **New ruleset ▸ Import a ruleset** → select `.github/Branch Protection Ruleset - Protect Main.json`. (Prefer the UI over `gh api … rulesets`: the API `POST` is not idempotent — re-running creates a duplicate ruleset — and currently rejects the `merge_queue` rule. To later change the ruleset, edit the existing one in the UI rather than re-importing.)
 
 - [x] Install the [Renovate app](https://github.com/apps/renovate) on the repo
-- [x] **CodeRabbit posture chosen** — do not install the
-      [CodeRabbit app](https://github.com/apps/coderabbitai) on this repo
-      (`.coderabbit.yaml` remains available if that decision changes)
+- [-] Install the [CodeRabbit app](https://github.com/apps/coderabbitai) on the repo (`.coderabbit.yaml` is pre-configured)
 - [x] Actions secret: `CLAUDE_CODE_OAUTH_TOKEN` (claude-* workflows) — generate
       with `claude setup-token`; the value must start **`sk-ant-oat01-`** (an OAuth
       token, billed to your Claude subscription), **not** `sk-ant-api03-` (a raw API
@@ -64,7 +71,7 @@ config, toolchain, devcontainer, and dev environment — against the items below
       Snyk Organization's monthly quota, including local CLI tests. Leave the
       Snyk GitHub App off unless deliberately adopting its PR integration; its
       checks are not required by the default branch ruleset.
-- [x] **Optional scheduled Snyk left disabled** — leave this off for ordinary and free private
+- [-] **Optional scheduled Snyk** — leave this off for ordinary and free private
       repos. For a selected important public repo, re-render with
       `snyk_scan_schedule=weekly` (conservative) or `daily` (public or accepted
       unlimited OSS), set the generated workflow's `SNYK_TOKEN` Actions secret,
@@ -127,7 +134,7 @@ config, toolchain, devcontainer, and dev environment — against the items below
 ## 3. Framework scaffolding (conventions-only template)
 
 - [x] Scaffold Astro: `pnpm create astro@latest . --template minimal` (or preferred template)
-- [ ] Add the standard stack: Tailwind v4 (`@tailwindcss/vite`), zod, vitest, lucide
+- [x] Add the standard stack: Tailwind v4 (`@tailwindcss/vite`), zod, vitest, lucide
 - [ ] Move lint tooling into devDependencies (prettier, eslint, markdownlint-cli2,
       @commitlint/cli); switch the `lint:prettier` / `lint:markdown` `npx --yes`
       calls to `pnpm exec` (`lint:eslint` already uses it once a config + deps exist)
@@ -189,7 +196,7 @@ config, toolchain, devcontainer, and dev environment — against the items below
 
 - [ ] Fill in the `TODO:` markers in README.md and docs/ (architecture diagram first)
 - [x] Confirm README badges render (Actions URLs are correct once CI runs)
-- [x] Initial release completed as `v0.0.1` — releases stay manual
+- [x] Initial release when ready: `task release:init` (v0.1.0) — releases stay manual
 - [ ] Stay current with harmon-init: periodically run `copier update --trust` to pull
       template improvements (a three-way merge — your own edits are preserved). The
       standardize-repo skill (`update` mode) automates this and verifies the result.
